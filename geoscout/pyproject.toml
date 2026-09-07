@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geoscout"
+version = "0.1.0"
+description = "An evidence-grounded agent for environmental geospatial analysis."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = { text = "MIT" }
+authors = [
+    { name = "Unekwuojo James Abah" }
+]
+
+dependencies = [
+    "pydantic>=2.7,<3",
+    "python-dotenv>=1.0,<2",
+    "numpy>=1.26,<3",
+    "pandas>=2.2,<3",
+    "geopandas>=1.0,<2",
+    "shapely>=2.0,<3",
+    "pyproj>=3.6,<4",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8,<9",
+    "pytest-cov>=5,<8",
+    "ruff>=0.6,<1",
+]
+
+[project.scripts]
+geoscout = "geoscout.__main__:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "I",
+    "B",
+    "UP",
+]
+
+[tool.coverage.run]
+source = ["geoscout"]
+
+[tool.coverage.report]
+show_missing = true
