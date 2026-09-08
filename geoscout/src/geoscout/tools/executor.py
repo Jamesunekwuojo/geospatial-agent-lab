@@ -8,7 +8,6 @@ from geoscout.tools.geospatial import (
     summarize_hotspots,
 )
 
-
 TOOL_FUNCTIONS = {
     "get_region": get_region,
     "calculate_ndvi_change": calculate_ndvi_change,
@@ -47,10 +46,7 @@ def execute_tool(
     if tool_name not in TOOL_FUNCTIONS:
         available = ", ".join(TOOL_FUNCTIONS.keys())
 
-        raise ValueError(
-            f"Unknown tool '{tool_name}'. "
-            f"Available tools: {available}"
-        )
+        raise ValueError(f"Unknown tool '{tool_name}'. Available tools: {available}")
 
     function = TOOL_FUNCTIONS[tool_name]
 

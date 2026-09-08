@@ -7,7 +7,6 @@ from geoscout.tools.schemas import (
     ToolDefinition,
 )
 
-
 TOOLS = [
     ToolDefinition(
         name="get_region",
@@ -37,8 +36,7 @@ TOOLS = [
     ToolDefinition(
         name="calculate_statistics",
         description=(
-            "Calculate summary statistics describing vegetation "
-            "change across the study region."
+            "Calculate summary statistics describing vegetation change across the study region."
         ),
         input_schema=CalculateStatisticsInput.model_json_schema(),
     ),
