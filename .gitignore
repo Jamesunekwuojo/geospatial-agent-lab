@@ -1,47 +1,31 @@
 # Python
 __pycache__/
 *.py[cod]
-*.so
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
 
 # Virtual environments
 .venv/
-venv/
-env/
 
 # Environment variables
 .env
 
-# Jupyter
-.ipynb_checkpoints/
-
-# IDEs
+# IDE
 .vscode/
 .idea/
 
 # OS
 .DS_Store
 
+# Generated data
+data/processed/
+data/synthetic/generated/
+
+# Evaluation results
+evaluation/results/
+
 # Logs
 *.log
-
-# Test / coverage
-.pytest_cache/
-.coverage
-htmlcov/
-
-# Build artifacts
-build/
-dist/
-*.egg-info/
-
-# Data artifacts
-geoscout/data/raw/*
-geoscout/data/processed/*
-geoscout/evaluation/results/*
-
-# Keep directory structure
-!.gitkeep
-
-# Generated files
-*.tmp
-*.cache
