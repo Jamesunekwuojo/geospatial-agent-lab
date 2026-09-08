@@ -2,8 +2,8 @@ import json
 
 from geoscout.agent.groq_planner import GroqAgentRunner
 from geoscout.evaluation.benchmark import (
-    load_benchmark,
     evaluate_task,
+    load_benchmark,
     summarize_results,
 )
 
@@ -21,7 +21,8 @@ def main() -> None:
     for task in tasks:
 
         print(
-            f"Running {task['id']}..."
+            f"Running {task['id']} "
+            f"({task['difficulty']})..."
         )
 
         result = evaluate_task(
@@ -39,8 +40,9 @@ def main() -> None:
 
         print(
             f"  {status} | "
-            f"{result['tool_selected']} | "
-            f"{result['actual_arguments']}"
+            f"tool={result['tool_selected']} | "
+            f"expected={result['expected_tool']} | "
+            f"failure={result['failure_type']}"
         )
 
     summary = summarize_results(
@@ -68,11 +70,32 @@ def main() -> None:
     )
 
     print(
+        f"Execution success rate: "
+        f"{summary['execution_success_rate']:.2%}"
+    )
+
+    print(
         f"Task success rate: "
         f"{summary['task_success_rate']:.2%}"
     )
 
     print()
+    print("Failure analysis:")
+
+    if summary["failure_counts"]:
+
+        for failure_type, count in (
+            summary["failure_counts"].items()
+        ):
+            print(
+                f"  {failure_type}: {count}"
+            )
+
+    else:
+        print("  No failures.")
+
+    print()
+    print("Summary JSON:")
     print(
         json.dumps(
             summary,

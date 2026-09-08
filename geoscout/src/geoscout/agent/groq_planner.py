@@ -150,11 +150,18 @@ class GroqAgentRunner:
                     )
 
                 except Exception as exc:
-                    state.status = "failed"
-                    state.error = (
+                    error_message = (
                         f"Tool '{tool_name}' failed: "
                         f"{exc}"
                     )
+
+                    state.tool_execution_errors.append(
+                    error_message
+                    )
+
+                    state.status = "failed"
+                    state.error = error_message
+
                     return state
 
                 state.observations.append(

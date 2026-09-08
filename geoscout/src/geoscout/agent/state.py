@@ -37,5 +37,9 @@ class AgentState:
     status: str = "running"
 
     steps: int = 0
+    
+    tool_execution_errors: list[str] = field(
+    default_factory=list
+    )
 
     error: str | None = None
