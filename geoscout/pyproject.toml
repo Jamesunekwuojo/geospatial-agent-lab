@@ -62,3 +62,7 @@ source = ["geoscout"]
 
 [tool.coverage.report]
 show_missing = true
+
+markers = [
+    "integration: tests that call external services such as Groq",
+]

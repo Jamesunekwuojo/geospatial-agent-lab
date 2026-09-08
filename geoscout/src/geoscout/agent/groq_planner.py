@@ -4,8 +4,14 @@ from typing import Any
 from groq import Groq
 
 from geoscout.agent.llm import create_groq_client, get_model
-from geoscout.agent.planner import PlannedAction, Planner
+from geoscout.agent.serialization import serialize_tool_result
+from geoscout.agent.state import (
+    AgentState,
+    ToolCall,
+    ToolObservation,
+)
 from geoscout.agent.tool_adapter import get_groq_tools
+from geoscout.tools import execute_tool
 
 SYSTEM_PROMPT = """
 You are GeoScout, an environmental geospatial research agent.
@@ -16,8 +22,8 @@ questions by using the available deterministic GIS tools.
 IMPORTANT RULES:
 
 1. Do not invent spatial measurements.
-2. Do not calculate GIS values yourself when a GIS tool can
-   provide the evidence.
+2. Do not perform GIS calculations yourself when a GIS tool
+   can provide the evidence.
 3. Use the available tools to obtain evidence.
 4. Tool arguments must be appropriate for the user's question.
 5. After receiving tool results, determine whether additional
@@ -26,27 +32,32 @@ IMPORTANT RULES:
    evidence-grounded answer.
 7. Never claim that a spatial analysis was performed unless the
    corresponding tool was actually executed.
+8. Clearly distinguish evidence from interpretation.
 """
 
 
-class GroqPlanner(Planner):
-    """LLM-powered planner using Groq GPT-OSS models."""
+class GroqAgentRunner:
+    """
+    Executes the complete multi-turn Groq tool-calling loop.
+    """
 
     def __init__(
         self,
         client: Groq | None = None,
         model: str | None = None,
+        max_steps: int = 10,
     ) -> None:
         self.client = client or create_groq_client()
         self.model = model or get_model()
+        self.max_steps = max_steps
 
-    def plan(
-        self,
-        question: str,
-        observations: list[Any],
-    ) -> PlannedAction:
+    def run(self, question: str) -> AgentState:
 
-        messages = [
+        state = AgentState(
+            question=question,
+        )
+
+        messages: list[dict[str, Any]] = [
             {
                 "role": "system",
                 "content": SYSTEM_PROMPT,
@@ -57,46 +68,114 @@ class GroqPlanner(Planner):
             },
         ]
 
-        if observations:
-            observation_text = json.dumps(
-                observations,
-                default=str,
+        state.messages = messages
+
+        for step in range(1, self.max_steps + 1):
+
+            state.steps = step
+
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                tools=get_groq_tools(),
+                tool_choice="auto",
+                temperature=0,
+                max_completion_tokens=2048,
+            )
+
+            message = response.choices[0].message
+
+            assistant_message = message.model_dump(
+                exclude_none=True
             )
 
             messages.append(
-                {
-                    "role": "user",
-                    "content": (
-                        "Here are the observations already collected "
-                        "from previous GIS tool executions:\n\n"
-                        f"{observation_text}\n\n"
-                        "Determine whether another tool is required. "
-                        "If the evidence is sufficient, provide the "
-                        "final answer."
-                    ),
-                }
+                assistant_message
             )
 
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=messages,
-            tools=get_groq_tools(),
-            tool_choice="auto",
-            temperature=0,
-            max_completion_tokens=2048,
+            state.messages = messages
+
+            if not message.tool_calls:
+
+                state.status = "completed"
+
+                state.final_answer = (
+                    message.content
+                    or "The agent returned no final answer."
+                )
+
+                return state
+
+            for tool_call in message.tool_calls:
+
+                tool_name = (
+                    tool_call.function.name
+                )
+
+                try:
+                    arguments = json.loads(
+                        tool_call.function.arguments
+                    )
+
+                except json.JSONDecodeError as exc:
+                    state.status = "failed"
+                    state.error = (
+                        f"Invalid JSON arguments for "
+                        f"{tool_name}: {exc}"
+                    )
+                    return state
+                
+                recorded_call = ToolCall(
+                    tool_call_id=tool_call.id,
+                    tool_name=tool_name,
+                    arguments=arguments,
+
+                )
+
+                state.tool_calls.append(
+                    recorded_call
+                )
+
+                try:
+                    result = execute_tool(
+                        tool_name,
+                        arguments,
+                    )
+
+                    serialized_result = (
+                        serialize_tool_result(result)
+                    )
+
+                except Exception as exc:
+                    state.status = "failed"
+                    state.error = (
+                        f"Tool '{tool_name}' failed: "
+                        f"{exc}"
+                    )
+                    return state
+
+                state.observations.append(
+                    ToolObservation(
+                        tool_call_id=tool_call.id,
+                        tool_name=tool_name,
+                        result=result,
+                    )
+                )
+
+                messages.append(
+                    {
+                        "role": "tool",
+                        "tool_call_id": tool_call.id,
+                        "name": tool_name,
+                        "content": serialized_result,
+                    }
+                )
+
+            state.messages = messages
+
+        state.status = "failed"
+        state.error = (
+            "Agent reached the maximum number of steps."
         )
 
-        message = response.choices[0].message
-
-        if message.tool_calls:
-            tool_call = message.tool_calls[0]
-
-            return PlannedAction(
-                action_type="tool_call",
-                tool_name=tool_call.function.name,
-                arguments=json.loads(tool_call.function.arguments),
-            )
-
-        return PlannedAction(
-            action_type="finish",
-        )
+        return state
