@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 from typing import Any
 
 from groq import Groq
@@ -11,6 +12,7 @@ from geoscout.agent.state import (
     ToolObservation,
 )
 from geoscout.agent.tool_adapter import get_groq_tools
+from geoscout.evaluation.trajectory import save_trajectory
 from geoscout.tools import execute_tool
 
 SYSTEM_PROMPT = """
@@ -50,6 +52,7 @@ class GroqAgentRunner:
         self.client = client or create_groq_client()
         self.model = model or get_model()
         self.max_steps = max_steps
+
 
     def run(self, question: str) -> AgentState:
 
@@ -179,3 +182,18 @@ class GroqAgentRunner:
         )
 
         return state
+
+    def run_and_save(
+        self,
+        question: str,
+    ) -> tuple[AgentState, Path]:
+        """Run the agent and persist its trajectory."""
+
+        state = self.run(question)
+
+        output_path = save_trajectory(
+            state=state,
+            model=self.model,
+        )
+
+        return state, output_path
