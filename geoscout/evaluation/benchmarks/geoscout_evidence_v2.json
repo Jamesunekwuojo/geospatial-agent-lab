@@ -49,7 +49,10 @@
         "field": "hotspot_cells",
         "expected_value": null
       }
-    ]
+    ],
+    "expected_arguments": {
+      "threshold": -0.1
+    }
   },
   {
     "id": "GE-005",
@@ -114,7 +117,10 @@
         "field": "hotspot_count",
         "expected_value": 9
       }
-    ]
+    ],
+    "expected_arguments": {
+      "threshold": -0.1
+    }
   },
   {
     "id": "GE-010",
@@ -127,7 +133,10 @@
         "field": "mean_ndvi_change",
         "expected_value": null
       }
-    ]
+    ],
+    "expected_arguments": {
+      "threshold": -0.1
+    }
   },
   {
     "id": "GE-011",
@@ -181,7 +190,10 @@
         "field": "cell_count",
         "expected_value": 100
       }
-    ]
+    ],
+    "expected_arguments": {
+      "threshold": -0.1
+    }
   },
   {
     "id": "GE-014",
@@ -222,7 +234,10 @@
         "field": "hotspot_count",
         "expected_value": 9
       }
-    ]
+    ],
+    "expected_arguments": {
+      "threshold": -0.1
+    }
   },
   {
     "id": "GE-016",
@@ -240,7 +255,10 @@
         "field": "minimum_change",
         "expected_value": null
       }
-    ]
+    ],
+    "expected_arguments": {
+      "threshold": -0.1
+    }
   },
   {
     "id": "GE-017",
@@ -253,7 +271,10 @@
         "field": "hotspot_count",
         "expected_value": 9
       }
-    ]
+    ],
+    "expected_arguments": {
+      "threshold": -0.1
+    }
   },
   {
     "id": "GE-018",
@@ -266,7 +287,10 @@
         "field": "hotspot_cells",
         "expected_value": null
       }
-    ]
+    ],
+    "expected_arguments": {
+      "threshold": -0.1
+    }
   },
   {
     "id": "GE-019",

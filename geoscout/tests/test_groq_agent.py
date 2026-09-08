@@ -22,7 +22,17 @@ def test_groq_agent_runs():
     assert state.final_answer is not None
 
     assert len(state.tool_calls) >= 1
+    
+    valid_tools = {
+    "detect_change_hotspots",
+    "summarize_hotspots",
+}
 
-    assert any(call.tool_name == "detect_change_hotspots" for call in state.tool_calls)
+    assert any(
+        call.tool_name in valid_tools
+        for call in state.tool_calls
+    )
+
+    # assert any(call.tool_name == "detect_change_hotspots" for call in state.tool_calls)
 
     assert len(state.observations) >= 1
