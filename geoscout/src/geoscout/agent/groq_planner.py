@@ -40,6 +40,11 @@ IMPORTANT RULES:
 8. Clearly distinguish evidence from interpretation.
 9. Supply only arguments explicitly defined in the selected tool's schema.
    Do not invent arguments such as baseline_year or current_year.
+10. Prefer compact tools when they answer the question: use
+    calculate_statistics for counts, averages, minima, maxima, or regional
+    summaries; use summarize_hotspots to identify or list degraded cells.
+11. Use calculate_ndvi_change only when the user explicitly needs NDVI-change
+    values for every spatial cell. Do not use it for a count or summary.
 """
 
 
@@ -85,7 +90,7 @@ class GroqAgentRunner:
                         tools=get_groq_tools(),
                         tool_choice="auto",
                         temperature=0,
-                        max_completion_tokens=2084,
+                        max_completion_tokens=384,
                     )
 
                 usage = getattr(response, "usage", None)

@@ -10,10 +10,15 @@ from geoscout.evaluation.evidence import (
 from geoscout.evaluation.performance import (
     summarize_performance,
 )
+from geoscout.tools.geospatial import (
+    calculate_statistics,
+    detect_change_hotspots,
+    summarize_hotspots,
+)
 
 BENCHMARK_PATH = Path(
     "evaluation/benchmarks/"
-    "geoscout_evidence_ground_truth.json"
+    "geoscout_evidence_v2.json"
 )
 
 MODELS = [
@@ -31,6 +36,42 @@ def load_benchmark(
     ) as file:
         return json.load(file)
 
+def resolve_ground_truth(
+    requirements: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Resolve dynamic ground-truth values from deterministic GIS tools."""
+
+    statistics = calculate_statistics()
+    hotspot_summary = summarize_hotspots()
+    hotspots = detect_change_hotspots()
+
+    resolved = []
+
+    for requirement in requirements:
+        item = dict(requirement)
+
+        if item.get("expected_value") is None:
+            tool = item["tool"]
+            field = item["field"]
+
+            if tool == "calculate_statistics":
+                item["expected_value"] = statistics[field]
+
+            elif tool == "summarize_hotspots":
+                item["expected_value"] = hotspot_summary[field]
+
+            elif tool == "detect_change_hotspots":
+                if field == "hotspot_count":
+                    item["expected_value"] = len(hotspots)
+
+                elif field == "hotspot_cells":
+                    item["expected_value"] = (
+                        hotspots["cell_id"].tolist()
+                    )
+
+        resolved.append(item)
+
+    return resolved
 
 def evaluate_model(
     model: str,
@@ -56,14 +97,24 @@ def evaluate_model(
         observations = observations_from_state(
             state
         )
+        
+        requirements = resolve_ground_truth(
+            task["required_evidence"]
+        )
 
         evaluation = evaluate_grounded_correctness(
             answer=state.final_answer,
             observations=observations,
-            requirements=task[
-                "required_evidence"
-            ],
+            requirements=requirements,
         )
+
+        # evaluation = evaluate_grounded_correctness(
+        #     answer=state.final_answer,
+        #     observations=observations,
+        #     requirements=task[
+        #         "required_evidence"
+        #     ],
+        # )
 
         performance = summarize_performance(
             state

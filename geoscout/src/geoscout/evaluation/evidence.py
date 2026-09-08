@@ -41,9 +41,7 @@ def compare_values(
         expected,
         (int, float),
     ):
-        return abs(
-            float(actual) - float(expected)
-        ) <= tolerance
+        return abs(float(actual) - float(expected)) <= tolerance
 
     return actual == expected
 
@@ -63,9 +61,7 @@ def evaluate_evidence(
     for requirement in requirements:
         tool_name = requirement["tool"]
         field = requirement["field"]
-        expected = requirement.get(
-            "expected_value"
-        )
+        expected = requirement.get("expected_value")
 
         actual = get_tool_field_value(
             observations=observations,
@@ -89,20 +85,12 @@ def evaluate_evidence(
             }
         )
 
-    grounded = all(
-        item["supported"]
-        for item in evidence_results
-    )
+    grounded = all(item["supported"] for item in evidence_results)
 
     return {
         "grounded": grounded,
-        "evidence_count": len(
-            evidence_results
-        ),
-        "supported_count": sum(
-            item["supported"]
-            for item in evidence_results
-        ),
+        "evidence_count": len(evidence_results),
+        "supported_count": sum(item["supported"] for item in evidence_results),
         "evidence": evidence_results,
     }
 
@@ -121,35 +109,55 @@ def observations_from_state(
     ]
 
 
+def qualitative_values_appear_in_answer(
+    answer: str | None,
+    expected_values: list[Any],
+) -> bool:
+    """Check whether expected text or list values appear in an answer."""
+
+    if not answer:
+        return False
+
+    normalized_answer = answer.casefold()
+
+    for expected in expected_values:
+        if isinstance(expected, str):
+            values = [expected]
+        elif isinstance(expected, list):
+            values = [str(value) for value in expected]
+        else:
+            continue
+
+        if not all(value.casefold() in normalized_answer for value in values):
+            return False
+
+    return True
+
+
 def evaluate_grounded_correctness(
     answer: str | None,
     observations: list[dict[str, Any]],
     requirements: list[dict[str, Any]],
     tolerance: float = 0.0,
-    
 ) -> dict[str, Any]:
     """
-    Evaluate whether the final answer is numerically correct
-    and supported by the agent's observed evidence.
+    Evaluate whether the final answer is correct and supported by evidence.
     """
 
     from geoscout.evaluation.numerical import (
         evaluate_numeric_answer,
     )
 
-    expected_values: dict[str, float] = {}
+    numeric_expected_values: dict[str, float] = {}
+    qualitative_expected_values: list[Any] = []
 
     for requirement in requirements:
-        expected = requirement.get(
-            "expected_value"
-        )
+        expected = requirement.get("expected_value")
 
-        if expected is None:
-            continue
-
-        expected_values[
-            requirement["field"]
-        ] = expected
+        if isinstance(expected, (int, float)) and not isinstance(expected, bool):
+            numeric_expected_values[requirement["field"]] = float(expected)
+        elif expected is not None:
+            qualitative_expected_values.append(expected)
 
     evidence_result = evaluate_evidence(
         observations=observations,
@@ -159,26 +167,24 @@ def evaluate_grounded_correctness(
 
     numerical_result = evaluate_numeric_answer(
         answer=answer,
-        expected_values=expected_values,
+        expected_values=numeric_expected_values,
         tolerance=tolerance,
     )
 
-    evidence_supported = (
-        evidence_result["grounded"]
+    evidence_supported = evidence_result["grounded"]
+
+    qualitative_answer_correct = qualitative_values_appear_in_answer(
+        answer=answer,
+        expected_values=qualitative_expected_values,
     )
 
-    answer_correct = (
-        numerical_result["correct"]
-    )
+    answer_correct = numerical_result["correct"] and qualitative_answer_correct
 
-    grounded_correct = (
-        evidence_supported
-        and answer_correct
-    )
-    
+    grounded_correct = evidence_supported and answer_correct
+
     failure_type = classify_grounded_failure(
-    evidence_supported=evidence_supported,
-    answer_correct=answer_correct,
+        evidence_supported=evidence_supported,
+        answer_correct=answer_correct,
     )
 
     return {
@@ -188,6 +194,7 @@ def evaluate_grounded_correctness(
         "failure_type": failure_type,
         "evidence": evidence_result,
         "numerical": numerical_result,
+        "qualitative_answer_correct": qualitative_answer_correct,
     }
 
 
@@ -207,4 +214,3 @@ def classify_grounded_failure(
         return "ungrounded_answer"
 
     return "answer_factual_error"
-

@@ -28,8 +28,9 @@ def serialize_tool_result(result: Any) -> str:
             ]
             if column in data.columns
         ]
-
-        compact = data[columns].to_dict(orient="records")
+        
+        max_records = 20
+        compact = data[columns].head(max_records).to_dict(orient="records")
 
         return str(
             {
@@ -37,8 +38,20 @@ def serialize_tool_result(result: Any) -> str:
                 "row_count": len(data),
                 "columns": columns,
                 "records": compact,
+                "truncated": len(data) > max_records,
             }
         )
+
+        # compact = data[columns].to_dict(orient="records")
+
+        # return str(
+        #     {
+        #         "type": "geospatial_table",
+        #         "row_count": len(data),
+        #         "columns": columns,
+        #         "records": compact,
+        #     }
+        # )
 
     if isinstance(result, pd.DataFrame):
         return str(
