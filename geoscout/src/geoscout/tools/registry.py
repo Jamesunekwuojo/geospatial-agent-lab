@@ -20,8 +20,9 @@ TOOLS = [
     ToolDefinition(
         name="calculate_ndvi_change",
         description=(
-            "Calculate the change in NDVI between the baseline year "
-            "and the current year for every spatial cell."
+            "Calculate NDVI change between the fixed baseline and current "
+            "years stored in the dataset for every spatial cell. "
+            "This tool accepts no arguments."
         ),
         input_schema=CalculateNDVIChangeInput.model_json_schema(),
     ),

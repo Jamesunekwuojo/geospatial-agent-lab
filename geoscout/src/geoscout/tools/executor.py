@@ -1,3 +1,4 @@
+import inspect
 from typing import Any
 
 from geoscout.tools.geospatial import (
@@ -52,5 +53,14 @@ def execute_tool(
 
     if arguments is None:
         arguments = {}
+        
+    supported_arguments = inspect.signature(function).parameters
+    
+    arguments = {
+    name: value
+    for name, value in arguments.items()
+    if name in supported_arguments
+    }
+
 
     return function(**arguments)

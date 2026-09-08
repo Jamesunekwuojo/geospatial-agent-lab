@@ -12,7 +12,12 @@ def test_groq_agent_runs():
 
     state = agent.run("Which areas experienced significant vegetation deterioration?")
 
-    assert state.status == "completed"
+    # assert state.status == "completed"
+    assert state.status == "completed", (
+    f"Agent error: {state.error}; "
+    f"steps: {state.steps}; "
+    f"tools: {[call.tool_name for call in state.tool_calls]}"
+    )
 
     assert state.final_answer is not None
 

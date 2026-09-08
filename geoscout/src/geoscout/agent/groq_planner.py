@@ -35,6 +35,8 @@ IMPORTANT RULES:
 7. Never claim that a spatial analysis was performed unless the
    corresponding tool was actually executed.
 8. Clearly distinguish evidence from interpretation.
+9. Supply only arguments explicitly defined in the selected tool's schema.
+   Do not invent arguments such as baseline_year or current_year.
 """
 
 

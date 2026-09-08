@@ -6,10 +6,9 @@ from geoscout.agent.groq_planner import (
 )
 from geoscout.evaluation.benchmark import (
     evaluate_multistep_task,
-    summarize_multistep_results,
     load_benchmark,
+    summarize_multistep_results,
 )
-
 
 BENCHMARK_PATH = Path(
     "evaluation/benchmarks/"

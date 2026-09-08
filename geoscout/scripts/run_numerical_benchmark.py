@@ -6,7 +6,6 @@ from geoscout.evaluation.numerical import (
     evaluate_numeric_answer,
 )
 
-
 BENCHMARK_PATH = Path(
     "evaluation/benchmarks/"
     "geoscout_ground_truth.json"
