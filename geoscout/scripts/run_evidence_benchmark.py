@@ -6,11 +6,12 @@ from geoscout.evaluation.evidence import (
     evaluate_grounded_correctness,
     observations_from_state,
 )
-
-BENCHMARK_PATH = Path(
-    "evaluation/benchmarks/"
-    "geoscout_evidence_ground_truth.json"
+from geoscout.evaluation.performance import (
+    summarize_benchmark_performance,
+    summarize_performance,
 )
+
+BENCHMARK_PATH = Path("evaluation/benchmarks/geoscout_evidence_ground_truth.json")
 
 
 def load_benchmark(
@@ -24,36 +25,25 @@ def load_benchmark(
 
 
 def main() -> None:
-    tasks = load_benchmark(
-        BENCHMARK_PATH
-    )
+    tasks = load_benchmark(BENCHMARK_PATH)
 
-    agent = GroqAgentRunner(
-        max_steps=6
-    )
+    agent = GroqAgentRunner(max_steps=6)
 
     results = []
 
     for task in tasks:
-        print(
-            f"Running {task['id']}..."
-        )
+        print(f"Running {task['id']}...")
 
-        state = agent.run(
-            task["question"]
-        )
+        state = agent.run(task["question"])
 
-        observations = observations_from_state(
-            state
-        )
+        observations = observations_from_state(state)
 
         evaluation = evaluate_grounded_correctness(
             answer=state.final_answer,
             observations=observations,
-            requirements=task[
-                "required_evidence"
-            ],
+            requirements=task["required_evidence"],
         )
+        performance = summarize_performance(state)
 
         result = {
             "task_id": task["id"],
@@ -61,6 +51,7 @@ def main() -> None:
             "status": state.status,
             "final_answer": state.final_answer,
             **evaluation,
+            "performance": performance,
         }
 
         results.append(result)
@@ -76,74 +67,48 @@ def main() -> None:
 
         print(f"  Status: {status}")
 
-        print(
-            f"  Evidence supported: "
-            f"{evaluation['evidence_supported']}"
-        )
+        print(f"  Evidence supported: {evaluation['evidence_supported']}")
 
-        print(
-            f"  Answer correct: "
-            f"{evaluation['answer_correct']}"
-        )
+        print(f"  Answer correct: {evaluation['answer_correct']}")
 
-        print(
-            f"  Grounded correct: "
-            f"{evaluation['grounded_correct']}"
-        )
+        print(f"  Grounded correct: {evaluation['grounded_correct']}")
 
-        print(
-            f"  Tools: "
-            f"{[call.tool_name for call in state.tool_calls]}"
-        )
+        print(f"  Tools: {[call.tool_name for call in state.tool_calls]}")
 
-        print(
-            f"  Answer: "
-            f"{state.final_answer}"
-        )
+        print(f"  Answer: {state.final_answer}")
 
         print()
 
     total = len(results)
 
-    evidence_supported = sum(
-        result["evidence_supported"]
-        for result in results
-    )
+    evidence_supported = sum(result["evidence_supported"] for result in results)
 
-    answer_correct = sum(
-        result["answer_correct"]
-        for result in results
-    )
+    answer_correct = sum(result["answer_correct"] for result in results)
 
-    grounded_correct = sum(
-        result["grounded_correct"]
-        for result in results
+    grounded_correct = sum(result["grounded_correct"] for result in results)
+    performance_summary = summarize_benchmark_performance(
+        [result["performance"] for result in results]
     )
 
     print("=" * 60)
-    print(
-        "GeoScout Grounded Correctness Benchmark"
-    )
+    print("GeoScout Grounded Correctness Benchmark")
     print("=" * 60)
 
-    print(
-        f"Tasks: {total}"
-    )
+    print(f"Tasks: {total}")
 
-    print(
-        f"Evidence support rate: "
-        f"{evidence_supported / total:.2%}"
-    )
+    print(f"Evidence support rate: {evidence_supported / total:.2%}")
 
-    print(
-        f"Answer correctness: "
-        f"{answer_correct / total:.2%}"
-    )
+    print(f"Answer correctness: {answer_correct / total:.2%}")
 
-    print(
-        f"Grounded correctness: "
-        f"{grounded_correct / total:.2%}"
-    )
+    print(f"Grounded correctness: {grounded_correct / total:.2%}")
+
+    print()
+    print("Performance:")
+    print(f"  Total latency: {performance_summary['total_latency_ms']:.2f} ms")
+    print(f"  Mean task latency: {performance_summary['mean_task_latency_ms']:.2f} ms")
+    print(f"  LLM calls: {performance_summary['llm_call_count']}")
+    print(f"  Tool calls: {performance_summary['tool_call_count']}")
+    print(f"  Tokens: {performance_summary['total_tokens']}")
 
 
 if __name__ == "__main__":

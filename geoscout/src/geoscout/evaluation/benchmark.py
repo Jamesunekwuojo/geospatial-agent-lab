@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Any
 
 from geoscout.agent.groq_planner import GroqAgentRunner
+from geoscout.agent.state import AgentState
 
 DEFAULT_BENCHMARK = Path(
     "evaluation/benchmarks/geoscout_v1.json"
@@ -57,6 +58,18 @@ def evaluate_task(
     state = agent.run(
         task["question"]
     )
+
+    return evaluate_state(
+        state=state,
+        task=task,
+    )
+
+
+def evaluate_state(
+    state: AgentState,
+    task: dict[str, Any],
+) -> dict[str, Any]:
+    """Evaluate an already-executed agent state against a benchmark task."""
 
     expected_tool = task["expected_tool"]
 

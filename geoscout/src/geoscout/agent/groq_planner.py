@@ -8,12 +8,15 @@ from geoscout.agent.llm import create_groq_client, get_model
 from geoscout.agent.serialization import serialize_tool_result
 from geoscout.agent.state import (
     AgentState,
+    LLMCall,
     ToolCall,
+    ToolExecution,
     ToolObservation,
 )
 from geoscout.agent.tool_adapter import get_groq_tools
 from geoscout.evaluation.trajectory import save_trajectory
 from geoscout.tools import execute_tool
+from geoscout.utils.timing import timer
 
 SYSTEM_PROMPT = """
 You are GeoScout, an environmental geospatial research agent.
@@ -55,12 +58,8 @@ class GroqAgentRunner:
         self.model = model or get_model()
         self.max_steps = max_steps
 
-
     def run(self, question: str) -> AgentState:
-
-        state = AgentState(
-            question=question,
-        )
+        state = AgentState(question=question)
 
         messages: list[dict[str, Any]] = [
             {
@@ -75,121 +74,115 @@ class GroqAgentRunner:
 
         state.messages = messages
 
-        for step in range(1, self.max_steps + 1):
+        with timer() as total_timer:
+            for step in range(1, self.max_steps + 1):
+                state.steps = step
 
-            state.steps = step
-
-            response = self.client.chat.completions.create(
-                model=self.model,
-                messages=messages,
-                tools=get_groq_tools(),
-                tool_choice="auto",
-                temperature=0,
-                max_completion_tokens=2048,
-            )
-
-            message = response.choices[0].message
-
-            assistant_message = message.model_dump(
-                exclude_none=True
-            )
-
-            messages.append(
-                assistant_message
-            )
-
-            state.messages = messages
-
-            if not message.tool_calls:
-
-                state.status = "completed"
-
-                state.final_answer = (
-                    message.content
-                    or "The agent returned no final answer."
-                )
-
-                return state
-
-            for tool_call in message.tool_calls:
-
-                tool_name = (
-                    tool_call.function.name
-                )
-
-                try:
-                    arguments = json.loads(
-                        tool_call.function.arguments
+                with timer() as llm_timer:
+                    response = self.client.chat.completions.create(
+                        model=self.model,
+                        messages=messages,
+                        tools=get_groq_tools(),
+                        tool_choice="auto",
+                        temperature=0,
+                        max_completion_tokens=1084,
                     )
 
-                except json.JSONDecodeError as exc:
-                    state.status = "failed"
-                    state.error = (
-                        f"Invalid JSON arguments for "
-                        f"{tool_name}: {exc}"
-                    )
-                    return state
-                
-                recorded_call = ToolCall(
-                    tool_call_id=tool_call.id,
-                    tool_name=tool_name,
-                    arguments=arguments,
+                usage = getattr(response, "usage", None)
+                input_tokens = getattr(usage, "prompt_tokens", None)
+                output_tokens = getattr(usage, "completion_tokens", None)
+                total_tokens = getattr(usage, "total_tokens", None)
 
-                )
-
-                state.tool_calls.append(
-                    recorded_call
-                )
-
-                try:
-                    result = execute_tool(
-                        tool_name,
-                        arguments,
-                    )
-
-                    serialized_result = (
-                        serialize_tool_result(result)
-                    )
-
-                except Exception as exc:
-                    error_message = (
-                        f"Tool '{tool_name}' failed: "
-                        f"{exc}"
-                    )
-
-                    state.tool_execution_errors.append(
-                    error_message
-                    )
-
-                    state.status = "failed"
-                    state.error = error_message
-
-                    return state
-
-                state.observations.append(
-                    ToolObservation(
-                        tool_call_id=tool_call.id,
-                        tool_name=tool_name,
-                        result=result,
+                state.llm_calls.append(
+                    LLMCall(
+                        call_number=len(state.llm_calls) + 1,
+                        latency_ms=llm_timer["elapsed_ms"],
+                        input_tokens=input_tokens,
+                        output_tokens=output_tokens,
+                        total_tokens=total_tokens,
                     )
                 )
 
-                messages.append(
-                    {
-                        "role": "tool",
-                        "tool_call_id": tool_call.id,
-                        "name": tool_name,
-                        "content": serialized_result,
-                    }
-                )
+                message = response.choices[0].message
+                messages.append(message.model_dump(exclude_none=True))
+                state.messages = messages
 
-            state.messages = messages
+                if not message.tool_calls:
+                    state.status = "completed"
+                    state.final_answer = message.content or "The agent returned no final answer."
+                    break
 
-        state.status = "failed"
-        state.error = (
-            "Agent reached the maximum number of steps."
-        )
+                for tool_call in message.tool_calls:
+                    tool_name = tool_call.function.name
 
+                    try:
+                        arguments = json.loads(tool_call.function.arguments)
+                    except json.JSONDecodeError as exc:
+                        state.status = "failed"
+                        state.error = f"Invalid JSON arguments for {tool_name}: {exc}"
+                        break
+
+                    state.tool_calls.append(
+                        ToolCall(
+                            tool_call_id=tool_call.id,
+                            tool_name=tool_name,
+                            arguments=arguments,
+                        )
+                    )
+
+                    with timer() as tool_timer:
+                        try:
+                            result = execute_tool(tool_name, arguments)
+                            serialized_result = serialize_tool_result(result)
+                            tool_success = True
+                            tool_error = None
+                        except Exception as exc:
+                            tool_success = False
+                            tool_error = str(exc)
+                            result = None
+                            serialized_result = f"Tool execution failed: {exc}"
+
+                    state.tool_executions.append(
+                        ToolExecution(
+                            tool_call_id=tool_call.id,
+                            tool_name=tool_name,
+                            latency_ms=tool_timer["elapsed_ms"],
+                            success=tool_success,
+                            error=tool_error,
+                        )
+                    )
+
+                    if not tool_success:
+                        state.tool_execution_errors.append(tool_error or "Unknown tool error")
+                        state.status = "failed"
+                        state.error = tool_error or "Tool execution failed."
+                        break
+
+                    state.observations.append(
+                        ToolObservation(
+                            tool_call_id=tool_call.id,
+                            tool_name=tool_name,
+                            result=result,
+                        )
+                    )
+                    messages.append(
+                        {
+                            "role": "tool",
+                            "tool_call_id": tool_call.id,
+                            "name": tool_name,
+                            "content": serialized_result,
+                        }
+                    )
+
+                state.messages = messages
+
+                if state.status == "failed":
+                    break
+            else:
+                state.status = "failed"
+                state.error = "Agent reached the maximum number of steps."
+
+        state.total_latency_ms = total_timer["elapsed_ms"]
         return state
 
     def run_and_save(

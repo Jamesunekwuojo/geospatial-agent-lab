@@ -49,6 +49,52 @@ def build_trajectory(
             }
             for call in state.tool_calls
         ],
+        "llm_calls": [
+            {
+                "call_number": call.call_number,
+                "latency_ms": call.latency_ms,
+                "input_tokens": call.input_tokens,
+                "output_tokens": call.output_tokens,
+                "total_tokens": call.total_tokens,
+            }
+            for call in state.llm_calls
+        ],
+        "tool_executions": [
+            {
+                "tool_call_id": execution.tool_call_id,
+                "tool_name": execution.tool_name,
+                "latency_ms": execution.latency_ms,
+                "success": execution.success,
+                "error": execution.error,
+            }
+            for execution in state.tool_executions
+        ],
+        
+        "telemetry": {
+            "total_latency_ms": state.total_latency_ms,
+            "llm_call_count": len(
+                state.llm_calls
+            ),
+            "tool_call_count": len(
+                state.tool_calls
+            ),
+            "tool_execution_error_count": len(
+            state.tool_execution_errors
+            ),
+            "total_input_tokens": sum(
+            call.input_tokens or 0
+            for call in state.llm_calls
+            ),
+            "total_output_tokens": sum(
+            call.output_tokens or 0
+            for call in state.llm_calls
+            ),
+            "total_tokens": sum(
+            call.total_tokens or 0
+            for call in state.llm_calls
+            ),
+        },
+        
         "observations": [
             {
                 "tool_call_id": observation.tool_call_id,
