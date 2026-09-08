@@ -1,0 +1,522 @@
+{
+  "experiment": "GPT-OSS 20B vs GPT-OSS 120B",
+  "benchmark": "evaluation/benchmarks/geoscout_evidence_ground_truth.json",
+  "summaries": [
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_count": 4,
+      "grounded_correctness": 0.5,
+      "answer_correctness": 1.0,
+      "evidence_support_rate": 0.5,
+      "mean_latency_ms": 7195.689455750085,
+      "mean_tool_calls": 1.5,
+      "mean_llm_calls": 2.5,
+      "mean_total_tokens": 2444.75
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_count": 4,
+      "grounded_correctness": 0.5,
+      "answer_correctness": 1.0,
+      "evidence_support_rate": 0.5,
+      "mean_latency_ms": 2192.572741500044,
+      "mean_tool_calls": 1.25,
+      "mean_llm_calls": 2.25,
+      "mean_total_tokens": 1590.25
+    }
+  ],
+  "results": [
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "EG-001",
+      "question": "How many degraded cells are present in the study region?",
+      "status": "completed",
+      "final_answer": "**Answer**\n\nThere are **9 degraded cells** in the study region (using the default NDVI\u2011change threshold of \u20130.1).  \n\n**Evidence**\n\n- The `summarize_hotspots` tool returned a `hotspot_count` of 9 for the threshold \u20130.1.  \n- The list of hotspot cell identifiers confirms that all nine cells meet the degradation criterion.",
+      "tool_calls": [
+        "detect_change_hotspots",
+        "summarize_hotspots"
+      ],
+      "evidence_supported": false,
+      "answer_correct": true,
+      "grounded_correct": false,
+      "failure_type": "ungrounded_answer",
+      "evidence": {
+        "grounded": false,
+        "evidence_count": 1,
+        "supported_count": 0,
+        "evidence": [
+          {
+            "tool": "calculate_statistics",
+            "field": "degraded_cells",
+            "expected_value": 9,
+            "actual_value": null,
+            "supported": false
+          }
+        ]
+      },
+      "numerical": {
+        "answer_available": true,
+        "correct": true,
+        "expected_values": {
+          "degraded_cells": 9
+        },
+        "extracted_numbers": [
+          9.0,
+          0.1,
+          9.0,
+          0.1
+        ],
+        "matched_values": {
+          "degraded_cells": 9.0
+        },
+        "missing_values": []
+      },
+      "performance": {
+        "total_latency_ms": 1968.6415910000505,
+        "llm_call_count": 3,
+        "tool_call_count": 2,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 3711,
+        "total_output_tokens": 228,
+        "total_tokens": 3939,
+        "mean_llm_latency_ms": 634.3212103333826,
+        "mean_tool_latency_ms": 32.69947400008277,
+        "max_tool_latency_ms": 55.47020599988173
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "EG-002",
+      "question": "How many cells are in the study region?",
+      "status": "completed",
+      "final_answer": "The study region contains **100 spatial cells**.",
+      "tool_calls": [
+        "get_region"
+      ],
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "failure_type": "none",
+      "evidence": {
+        "grounded": true,
+        "evidence_count": 1,
+        "supported_count": 1,
+        "evidence": [
+          {
+            "tool": "get_region",
+            "field": "cell_count",
+            "expected_value": 100,
+            "actual_value": 100,
+            "supported": true
+          }
+        ]
+      },
+      "numerical": {
+        "answer_available": true,
+        "correct": true,
+        "expected_values": {
+          "cell_count": 100
+        },
+        "extracted_numbers": [
+          100.0
+        ],
+        "matched_values": {
+          "cell_count": 100.0
+        },
+        "missing_values": []
+      },
+      "performance": {
+        "total_latency_ms": 996.7022760001782,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1170,
+        "total_output_tokens": 45,
+        "total_tokens": 1215,
+        "mean_llm_latency_ms": 494.17246699977113,
+        "mean_tool_latency_ms": 8.216625999921234,
+        "max_tool_latency_ms": 8.216625999921234
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "EG-003",
+      "question": "What is the mean NDVI change across the study region?",
+      "status": "completed",
+      "final_answer": "**Mean NDVI change across the study region**\n\nThe mean NDVI change is **\u20130.0187** (rounded to four decimal places). This value indicates a slight overall decline in vegetation greenness across the region.",
+      "tool_calls": [
+        "calculate_statistics"
+      ],
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "failure_type": "none",
+      "evidence": {
+        "grounded": true,
+        "evidence_count": 1,
+        "supported_count": 1,
+        "evidence": [
+          {
+            "tool": "calculate_statistics",
+            "field": "mean_change",
+            "expected_value": null,
+            "actual_value": -0.018650758199393255,
+            "supported": true
+          }
+        ]
+      },
+      "numerical": {
+        "answer_available": true,
+        "correct": true,
+        "expected_values": {},
+        "extracted_numbers": [
+          0.0187
+        ],
+        "matched_values": {},
+        "missing_values": []
+      },
+      "performance": {
+        "total_latency_ms": 709.0939370000342,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1209,
+        "total_output_tokens": 103,
+        "total_tokens": 1312,
+        "mean_llm_latency_ms": 347.80754600001274,
+        "mean_tool_latency_ms": 13.370179000048665,
+        "max_tool_latency_ms": 13.370179000048665
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "EG-004",
+      "question": "How many degraded cells are present and what is the study region size?",
+      "status": "completed",
+      "final_answer": "**Evidence**\n\n1. **Study region information**  \n   ```json\n   {\n     \"cell_count\": 100,\n     \"crs\": \"EPSG:4326\",\n     \"bounds\": {\n       \"min_x\": 0.0,\n       \"min_y\": 0.0,\n       \"max_x\": 0.1,\n       \"max_y\": 0.1\n     }\n   }\n   ```\n   *Source: `get_region`*\n\n2. **Degradation hotspots**  \n   The tool identified 9 cells where the NDVI change is \u2264\u202f\u20130.1 (the default threshold).  \n   ```json\n   {\n     \"row_count\": 9,\n     \"columns\": [...],\n     \"records\": [...]\n   }\n   ```\n   *Source: `detect_change_hotspots`*\n\n**Answer**\n\n- **Number of degraded cells:** **9**  \n- **Study region size:** The bounding box spans 0.1\u202f\u00b0 in both latitude and longitude, giving an area of **0.01 square degrees** (in the EPSG:4326 coordinate system).",
+      "tool_calls": [
+        "get_region",
+        "detect_change_hotspots"
+      ],
+      "evidence_supported": false,
+      "answer_correct": true,
+      "grounded_correct": false,
+      "failure_type": "ungrounded_answer",
+      "evidence": {
+        "grounded": false,
+        "evidence_count": 2,
+        "supported_count": 1,
+        "evidence": [
+          {
+            "tool": "calculate_statistics",
+            "field": "degraded_cells",
+            "expected_value": 9,
+            "actual_value": null,
+            "supported": false
+          },
+          {
+            "tool": "get_region",
+            "field": "cell_count",
+            "expected_value": 100,
+            "actual_value": 100,
+            "supported": true
+          }
+        ]
+      },
+      "numerical": {
+        "answer_available": true,
+        "correct": true,
+        "expected_values": {
+          "degraded_cells": 9,
+          "cell_count": 100
+        },
+        "extracted_numbers": [
+          1.0,
+          100.0,
+          4326.0,
+          0.0,
+          0.0,
+          0.1,
+          0.1,
+          2.0,
+          9.0,
+          0.1,
+          9.0,
+          9.0,
+          0.1,
+          0.01,
+          4326.0
+        ],
+        "matched_values": {
+          "degraded_cells": 9.0,
+          "cell_count": 100.0
+        },
+        "missing_values": []
+      },
+      "performance": {
+        "total_latency_ms": 25108.320019000075,
+        "llm_call_count": 3,
+        "tool_call_count": 2,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 2801,
+        "total_output_tokens": 512,
+        "total_tokens": 3313,
+        "mean_llm_latency_ms": 8360.397614999934,
+        "mean_tool_latency_ms": 13.414400999863574,
+        "max_tool_latency_ms": 19.70185899972421
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "EG-001",
+      "question": "How many degraded cells are present in the study region?",
+      "status": "completed",
+      "final_answer": "**Evidence**\n\n- The `summarize_hotspots` tool (using the default NDVI\u2011change threshold of\u202f\u20110.1) reports:\n  - **hotspot_count:**\u202f9  \n  - **hotspot_cells:**\u202f['cell_03_03', 'cell_03_04', 'cell_03_05', 'cell_04_03', 'cell_04_04', 'cell_04_05', 'cell_05_03', 'cell_05_04', 'cell_05_05']  \n  - **mean_ndvi_change:**\u202f\u20110.206 (average change for these cells)\n\n**Answer**\n\nThere are **9 degraded cells** in the study region, as identified by the NDVI\u2011change threshold of\u202f\u20110.1.",
+      "tool_calls": [
+        "summarize_hotspots"
+      ],
+      "evidence_supported": false,
+      "answer_correct": true,
+      "grounded_correct": false,
+      "failure_type": "ungrounded_answer",
+      "evidence": {
+        "grounded": false,
+        "evidence_count": 1,
+        "supported_count": 0,
+        "evidence": [
+          {
+            "tool": "calculate_statistics",
+            "field": "degraded_cells",
+            "expected_value": 9,
+            "actual_value": null,
+            "supported": false
+          }
+        ]
+      },
+      "numerical": {
+        "answer_available": true,
+        "correct": true,
+        "expected_values": {
+          "degraded_cells": 9
+        },
+        "extracted_numbers": [
+          0.1,
+          9.0,
+          3.0,
+          3.0,
+          3.0,
+          4.0,
+          3.0,
+          5.0,
+          4.0,
+          3.0,
+          4.0,
+          4.0,
+          4.0,
+          5.0,
+          5.0,
+          3.0,
+          5.0,
+          4.0,
+          5.0,
+          5.0,
+          0.206,
+          9.0,
+          0.1
+        ],
+        "matched_values": {
+          "degraded_cells": 9.0
+        },
+        "missing_values": []
+      },
+      "performance": {
+        "total_latency_ms": 2111.31361400021,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1293,
+        "total_output_tokens": 275,
+        "total_tokens": 1568,
+        "mean_llm_latency_ms": 1051.1123014998702,
+        "mean_tool_latency_ms": 8.93890499992267,
+        "max_tool_latency_ms": 8.93890499992267
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "EG-002",
+      "question": "How many cells are in the study region?",
+      "status": "completed",
+      "final_answer": "**Evidence**\n\nThe `get_region` tool reports that the study region contains **100 spatial cells**.\n\n**Answer**\n\nThere are **100 cells** in the study region.",
+      "tool_calls": [
+        "get_region"
+      ],
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "failure_type": "none",
+      "evidence": {
+        "grounded": true,
+        "evidence_count": 1,
+        "supported_count": 1,
+        "evidence": [
+          {
+            "tool": "get_region",
+            "field": "cell_count",
+            "expected_value": 100,
+            "actual_value": 100,
+            "supported": true
+          }
+        ]
+      },
+      "numerical": {
+        "answer_available": true,
+        "correct": true,
+        "expected_values": {
+          "cell_count": 100
+        },
+        "extracted_numbers": [
+          100.0,
+          100.0
+        ],
+        "matched_values": {
+          "cell_count": 100.0
+        },
+        "missing_values": []
+      },
+      "performance": {
+        "total_latency_ms": 1467.3761770000056,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1176,
+        "total_output_tokens": 76,
+        "total_tokens": 1252,
+        "mean_llm_latency_ms": 729.9219359997551,
+        "mean_tool_latency_ms": 7.4264859999857435,
+        "max_tool_latency_ms": 7.4264859999857435
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "EG-003",
+      "question": "What is the mean NDVI change across the study region?",
+      "status": "completed",
+      "final_answer": "**Evidence (from `calculate_statistics`):**  \n\n- Mean NDVI change across the entire study region: **\u20110.01865**  \n\n**Interpretation:**  \nThe average NDVI has decreased by about 0.019 units, indicating a slight overall decline in vegetation greenness across the region.",
+      "tool_calls": [
+        "calculate_statistics"
+      ],
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "failure_type": "none",
+      "evidence": {
+        "grounded": true,
+        "evidence_count": 1,
+        "supported_count": 1,
+        "evidence": [
+          {
+            "tool": "calculate_statistics",
+            "field": "mean_change",
+            "expected_value": null,
+            "actual_value": -0.018650758199393255,
+            "supported": true
+          }
+        ]
+      },
+      "numerical": {
+        "answer_available": true,
+        "correct": true,
+        "expected_values": {},
+        "extracted_numbers": [
+          0.01865,
+          0.019
+        ],
+        "matched_values": {},
+        "missing_values": []
+      },
+      "performance": {
+        "total_latency_ms": 1019.3828139999823,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1200,
+        "total_output_tokens": 111,
+        "total_tokens": 1311,
+        "mean_llm_latency_ms": 502.9926994998277,
+        "mean_tool_latency_ms": 13.220513999840477,
+        "max_tool_latency_ms": 13.220513999840477
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "EG-004",
+      "question": "How many degraded cells are present and what is the study region size?",
+      "status": "completed",
+      "final_answer": "**Evidence**\n\n- **Study region size** \u2013 The region contains **100 spatial cells** (as reported by `get_region`).\n- **Degraded cells** \u2013 Using the default NDVI\u2011change threshold of\u202f\u20110.1, the hotspot summary identifies **9 degraded cells** (`hotspot_count: 9`).\n\n**Answer**\n\nThe study region comprises 100 cells in total, and 9 of those cells are classified as degraded based on the NDVI change threshold of \u20130.1.",
+      "tool_calls": [
+        "get_region",
+        "summarize_hotspots"
+      ],
+      "evidence_supported": false,
+      "answer_correct": true,
+      "grounded_correct": false,
+      "failure_type": "ungrounded_answer",
+      "evidence": {
+        "grounded": false,
+        "evidence_count": 2,
+        "supported_count": 1,
+        "evidence": [
+          {
+            "tool": "calculate_statistics",
+            "field": "degraded_cells",
+            "expected_value": 9,
+            "actual_value": null,
+            "supported": false
+          },
+          {
+            "tool": "get_region",
+            "field": "cell_count",
+            "expected_value": 100,
+            "actual_value": 100,
+            "supported": true
+          }
+        ]
+      },
+      "numerical": {
+        "answer_available": true,
+        "correct": true,
+        "expected_values": {
+          "degraded_cells": 9,
+          "cell_count": 100
+        },
+        "extracted_numbers": [
+          100.0,
+          0.1,
+          9.0,
+          9.0,
+          100.0,
+          9.0,
+          0.1
+        ],
+        "matched_values": {
+          "degraded_cells": 9.0,
+          "cell_count": 100.0
+        },
+        "missing_values": []
+      },
+      "performance": {
+        "total_latency_ms": 4172.218360999977,
+        "llm_call_count": 3,
+        "tool_call_count": 2,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 2029,
+        "total_output_tokens": 201,
+        "total_tokens": 2230,
+        "mean_llm_latency_ms": 1383.0064049998327,
+        "mean_tool_latency_ms": 11.455227499936882,
+        "max_tool_latency_ms": 13.718455999878643
+      }
+    }
+  ]
+}

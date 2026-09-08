@@ -85,7 +85,7 @@ class GroqAgentRunner:
                         tools=get_groq_tools(),
                         tool_choice="auto",
                         temperature=0,
-                        max_completion_tokens=1084,
+                        max_completion_tokens=2084,
                     )
 
                 usage = getattr(response, "usage", None)
