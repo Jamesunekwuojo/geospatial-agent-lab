@@ -1,0 +1,72 @@
+[
+  {
+    "id": "GS-001",
+    "question": "Which areas experienced significant vegetation deterioration?",
+    "expected_tool": "detect_change_hotspots",
+    "expected_arguments": {
+      "threshold": -0.1
+    }
+  },
+  {
+    "id": "GS-002",
+    "question": "Find areas where vegetation declined substantially.",
+    "expected_tool": "detect_change_hotspots",
+    "expected_arguments": {
+      "threshold": -0.1
+    }
+  },
+  {
+    "id": "GS-003",
+    "question": "Identify vegetation degradation hotspots in the study region.",
+    "expected_tool": "detect_change_hotspots",
+    "expected_arguments": {
+      "threshold": -0.1
+    }
+  },
+  {
+    "id": "GS-004",
+    "question": "What is the vegetation change between the baseline and current observations?",
+    "expected_tool": "calculate_ndvi_change",
+    "expected_arguments": {}
+  },
+  {
+    "id": "GS-005",
+    "question": "Calculate summary statistics for vegetation change.",
+    "expected_tool": "calculate_statistics",
+    "expected_arguments": {}
+  },
+  {
+    "id": "GS-006",
+    "question": "How many degraded cells are present in the study region?",
+    "expected_tool": "calculate_statistics",
+    "expected_arguments": {}
+  },
+  {
+    "id": "GS-007",
+    "question": "Give me information about the study region.",
+    "expected_tool": "get_region",
+    "expected_arguments": {}
+  },
+  {
+    "id": "GS-008",
+    "question": "What is the spatial extent and coordinate system of the dataset?",
+    "expected_tool": "get_region",
+    "expected_arguments": {}
+  },
+  {
+    "id": "GS-009",
+    "question": "Summarize the vegetation degradation hotspots.",
+    "expected_tool": "summarize_hotspots",
+    "expected_arguments": {
+      "threshold": -0.1
+    }
+  },
+  {
+    "id": "GS-010",
+    "question": "Provide a summary of the areas with significant NDVI decline.",
+    "expected_tool": "summarize_hotspots",
+    "expected_arguments": {
+      "threshold": -0.1
+    }
+  }
+]
