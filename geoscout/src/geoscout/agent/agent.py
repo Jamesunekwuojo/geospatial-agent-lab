@@ -24,7 +24,6 @@ class GeoScoutAgent:
         )
 
         for _ in range(self.max_steps):
-
             action = self.planner.plan(
                 question=state.question,
                 observations=state.observations,
@@ -32,25 +31,17 @@ class GeoScoutAgent:
 
             if action.action_type == "finish":
                 state.status = "completed"
-                state.final_answer = self._build_answer(
-                    state
-                )
+                state.final_answer = self._build_answer(state)
                 return state
 
             if action.action_type != "tool_call":
                 state.status = "failed"
-                state.final_answer = (
-                    f"Unknown action type: "
-                    f"{action.action_type}"
-                )
+                state.final_answer = f"Unknown action type: {action.action_type}"
                 return state
 
             if action.tool_name is None:
                 state.status = "failed"
-                state.final_answer = (
-                    "Planner returned a tool action "
-                    "without a tool name."
-                )
+                state.final_answer = "Planner returned a tool action without a tool name."
                 return state
 
             arguments = action.arguments or {}
@@ -70,9 +61,7 @@ class GeoScoutAgent:
 
             except Exception as exc:
                 state.status = "failed"
-                state.final_answer = (
-                    f"Tool execution failed: {exc}"
-                )
+                state.final_answer = f"Tool execution failed: {exc}"
                 return state
 
             state.observations.append(
@@ -83,9 +72,7 @@ class GeoScoutAgent:
             )
 
         state.status = "failed"
-        state.final_answer = (
-            "Agent reached the maximum number of steps."
-        )
+        state.final_answer = "Agent reached the maximum number of steps."
 
         return state
 
@@ -103,13 +90,6 @@ class GeoScoutAgent:
         if observation.tool_name == "detect_change_hotspots":
             result = observation.result
 
-            return (
-                "The analysis identified "
-                f"{len(result)} vegetation "
-                "change hotspots."
-            )
+            return f"The analysis identified {len(result)} vegetation change hotspots."
 
-        return (
-            "The analysis completed successfully "
-            "using the available geospatial tools."
-        )
+        return "The analysis completed successfully using the available geospatial tools."

@@ -18,7 +18,6 @@ class MockGeoPlanner(Planner):
         question_lower = question.lower()
 
         if not observations:
-
             if (
                 "vegetation" in question_lower
                 or "ndvi" in question_lower
