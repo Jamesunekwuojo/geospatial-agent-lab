@@ -10,9 +10,7 @@ def test_groq_agent_runs():
         max_steps=5,
     )
 
-    state = agent.run(
-        "Which areas experienced significant vegetation deterioration?"
-    )
+    state = agent.run("Which areas experienced significant vegetation deterioration?")
 
     assert state.status == "completed"
 
@@ -20,9 +18,6 @@ def test_groq_agent_runs():
 
     assert len(state.tool_calls) >= 1
 
-    assert any(
-        call.tool_name == "detect_change_hotspots"
-        for call in state.tool_calls
-    )
+    assert any(call.tool_name == "detect_change_hotspots" for call in state.tool_calls)
 
     assert len(state.observations) >= 1

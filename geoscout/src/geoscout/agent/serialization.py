@@ -29,9 +29,7 @@ def serialize_tool_result(result: Any) -> str:
             if column in data.columns
         ]
 
-        compact = data[columns].to_dict(
-            orient="records"
-        )
+        compact = data[columns].to_dict(orient="records")
 
         return str(
             {
@@ -47,9 +45,7 @@ def serialize_tool_result(result: Any) -> str:
             {
                 "type": "table",
                 "row_count": len(result),
-                "records": result.to_dict(
-                    orient="records"
-                ),
+                "records": result.to_dict(orient="records"),
             }
         )
 

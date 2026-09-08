@@ -1,4 +1,3 @@
-
 from geoscout.agent.planner import Planner
 from geoscout.agent.state import (
     AgentState,
@@ -25,40 +24,28 @@ class GeoScoutAgent:
         )
 
         for step in range(1, self.max_steps + 1):
-
             state.steps = step
 
             action = self.planner.plan(
                 question=state.question,
-                observations=[
-                    observation.result
-                    for observation in state.observations
-                ],
+                observations=[observation.result for observation in state.observations],
             )
 
             if action.action_type == "finish":
                 state.status = "completed"
 
-                state.final_answer = (
-                    "The agent completed its analysis."
-                )
+                state.final_answer = "The agent completed its analysis."
 
                 return state
 
             if action.action_type != "tool_call":
                 state.status = "failed"
-                state.error = (
-                    f"Unknown action type: "
-                    f"{action.action_type}"
-                )
+                state.error = f"Unknown action type: {action.action_type}"
                 return state
 
             if action.tool_name is None:
                 state.status = "failed"
-                state.error = (
-                    "Planner returned a tool action "
-                    "without a tool name."
-                )
+                state.error = "Planner returned a tool action without a tool name."
                 return state
 
             arguments = action.arguments or {}
@@ -91,8 +78,6 @@ class GeoScoutAgent:
             )
 
         state.status = "failed"
-        state.error = (
-            "Agent reached the maximum number of steps."
-        )
+        state.error = "Agent reached the maximum number of steps."
 
         return state
