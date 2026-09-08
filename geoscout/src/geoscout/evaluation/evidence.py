@@ -121,3 +121,90 @@ def observations_from_state(
     ]
 
 
+def evaluate_grounded_correctness(
+    answer: str | None,
+    observations: list[dict[str, Any]],
+    requirements: list[dict[str, Any]],
+    tolerance: float = 0.0,
+    
+) -> dict[str, Any]:
+    """
+    Evaluate whether the final answer is numerically correct
+    and supported by the agent's observed evidence.
+    """
+
+    from geoscout.evaluation.numerical import (
+        evaluate_numeric_answer,
+    )
+
+    expected_values: dict[str, float] = {}
+
+    for requirement in requirements:
+        expected = requirement.get(
+            "expected_value"
+        )
+
+        if expected is None:
+            continue
+
+        expected_values[
+            requirement["field"]
+        ] = expected
+
+    evidence_result = evaluate_evidence(
+        observations=observations,
+        requirements=requirements,
+        tolerance=tolerance,
+    )
+
+    numerical_result = evaluate_numeric_answer(
+        answer=answer,
+        expected_values=expected_values,
+        tolerance=tolerance,
+    )
+
+    evidence_supported = (
+        evidence_result["grounded"]
+    )
+
+    answer_correct = (
+        numerical_result["correct"]
+    )
+
+    grounded_correct = (
+        evidence_supported
+        and answer_correct
+    )
+    
+    failure_type = classify_grounded_failure(
+    evidence_supported=evidence_supported,
+    answer_correct=answer_correct,
+    )
+
+    return {
+        "evidence_supported": evidence_supported,
+        "answer_correct": answer_correct,
+        "grounded_correct": grounded_correct,
+        "failure_type": failure_type,
+        "evidence": evidence_result,
+        "numerical": numerical_result,
+    }
+
+
+def classify_grounded_failure(
+    evidence_supported: bool,
+    answer_correct: bool,
+) -> str:
+    """Classify grounded-answer failures."""
+
+    if evidence_supported and answer_correct:
+        return "none"
+
+    if not evidence_supported and not answer_correct:
+        return "evidence_and_answer_error"
+
+    if not evidence_supported:
+        return "ungrounded_answer"
+
+    return "answer_factual_error"
+

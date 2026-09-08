@@ -3,7 +3,7 @@ from pathlib import Path
 
 from geoscout.agent.groq_planner import GroqAgentRunner
 from geoscout.evaluation.evidence import (
-    evaluate_evidence,
+    evaluate_grounded_correctness,
     observations_from_state,
 )
 
@@ -47,7 +47,8 @@ def main() -> None:
             state
         )
 
-        evaluation = evaluate_evidence(
+        evaluation = evaluate_grounded_correctness(
+            answer=state.final_answer,
             observations=observations,
             requirements=task[
                 "required_evidence"
@@ -64,18 +65,30 @@ def main() -> None:
 
         results.append(result)
 
-        status = (
-            "PASS"
-            if evaluation["grounded"]
-            else "FAIL"
-        )
+        if evaluation["grounded_correct"]:
+            status = "PASS"
+        elif evaluation["answer_correct"]:
+            status = "ANSWER_ONLY"
+        elif evaluation["evidence_supported"]:
+            status = "EVIDENCE_ONLY"
+        else:
+            status = "FAIL"
 
-        print(f"  {status}")
+        print(f"  Status: {status}")
 
         print(
-            f"  Evidence: "
-            f"{evaluation['supported_count']}/"
-            f"{evaluation['evidence_count']}"
+            f"  Evidence supported: "
+            f"{evaluation['evidence_supported']}"
+        )
+
+        print(
+            f"  Answer correct: "
+            f"{evaluation['answer_correct']}"
+        )
+
+        print(
+            f"  Grounded correct: "
+            f"{evaluation['grounded_correct']}"
         )
 
         print(
@@ -92,20 +105,24 @@ def main() -> None:
 
     total = len(results)
 
-    grounded = sum(
-        result["grounded"]
+    evidence_supported = sum(
+        result["evidence_supported"]
         for result in results
     )
 
-    grounding_rate = (
-        grounded / total
-        if total
-        else 0.0
+    answer_correct = sum(
+        result["answer_correct"]
+        for result in results
+    )
+
+    grounded_correct = sum(
+        result["grounded_correct"]
+        for result in results
     )
 
     print("=" * 60)
     print(
-        "GeoScout Evidence Grounding Benchmark"
+        "GeoScout Grounded Correctness Benchmark"
     )
     print("=" * 60)
 
@@ -114,16 +131,18 @@ def main() -> None:
     )
 
     print(
-        f"Grounded: {grounded}"
+        f"Evidence support rate: "
+        f"{evidence_supported / total:.2%}"
     )
 
     print(
-        f"Ungrounded: {total - grounded}"
+        f"Answer correctness: "
+        f"{answer_correct / total:.2%}"
     )
 
     print(
-        f"Evidence grounding rate: "
-        f"{grounding_rate:.2%}"
+        f"Grounded correctness: "
+        f"{grounded_correct / total:.2%}"
     )
 
 
