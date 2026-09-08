@@ -1,0 +1,51 @@
+[
+  {
+    "id": "EG-001",
+    "question": "How many degraded cells are present in the study region?",
+    "required_evidence": [
+      {
+        "tool": "calculate_statistics",
+        "field": "degraded_cells",
+        "expected_value": 9
+      }
+    ]
+  },
+  {
+    "id": "EG-002",
+    "question": "How many cells are in the study region?",
+    "required_evidence": [
+      {
+        "tool": "get_region",
+        "field": "cell_count",
+        "expected_value": 100
+      }
+    ]
+  },
+  {
+    "id": "EG-003",
+    "question": "What is the mean NDVI change across the study region?",
+    "required_evidence": [
+      {
+        "tool": "calculate_statistics",
+        "field": "mean_change",
+        "expected_value": null
+      }
+    ]
+  },
+  {
+    "id": "EG-004",
+    "question": "How many degraded cells are present and what is the study region size?",
+    "required_evidence": [
+      {
+        "tool": "calculate_statistics",
+        "field": "degraded_cells",
+        "expected_value": 9
+      },
+      {
+        "tool": "get_region",
+        "field": "cell_count",
+        "expected_value": 100
+      }
+    ]
+  }
+]
