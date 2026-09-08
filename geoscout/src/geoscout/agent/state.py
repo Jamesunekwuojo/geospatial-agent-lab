@@ -20,26 +20,54 @@ class ToolObservation:
     result: Any
 
 
+# @dataclass
+# class AgentState:
+#     """State maintained throughout an agent trajectory."""
+
+#     question: str
+
+#     tool_calls: list[ToolCall] = field(default_factory=list)
+
+#     observations: list[ToolObservation] = field(default_factory=list)
+
+#     messages: list[dict[str, Any]] = field(default_factory=list)
+
+#     final_answer: str | None = None
+
+#     status: str = "running"
+
+#     steps: int = 0
+    
+#     tool_execution_errors: list[str] = field(
+#     default_factory=list
+#     )
+
+#     error: str | None = None
+
 @dataclass
 class AgentState:
-    """State maintained throughout an agent trajectory."""
-
     question: str
 
-    tool_calls: list[ToolCall] = field(default_factory=list)
+    tool_calls: list[ToolCall] = field(
+        default_factory=list
+    )
 
-    observations: list[ToolObservation] = field(default_factory=list)
+    observations: list[ToolObservation] = field(
+        default_factory=list
+    )
 
-    messages: list[dict[str, Any]] = field(default_factory=list)
+    messages: list[dict[str, Any]] = field(
+        default_factory=list
+    )
 
     final_answer: str | None = None
 
     status: str = "running"
 
     steps: int = 0
-    
+
     tool_execution_errors: list[str] = field(
-    default_factory=list
+        default_factory=list
     )
 
     error: str | None = None
