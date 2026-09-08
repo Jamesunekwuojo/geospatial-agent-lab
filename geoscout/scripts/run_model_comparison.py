@@ -1,0 +1,302 @@
+import json
+from pathlib import Path
+from typing import Any
+
+from geoscout.agent.groq_planner import GroqAgentRunner
+from geoscout.evaluation.evidence import (
+    evaluate_grounded_correctness,
+    observations_from_state,
+)
+from geoscout.evaluation.performance import (
+    summarize_performance,
+)
+
+BENCHMARK_PATH = Path(
+    "evaluation/benchmarks/"
+    "geoscout_evidence_ground_truth.json"
+)
+
+MODELS = [
+    "openai/gpt-oss-20b",
+    "openai/gpt-oss-120b",
+]
+
+
+def load_benchmark(
+    path: Path,
+) -> list[dict[str, Any]]:
+    with path.open(
+        "r",
+        encoding="utf-8",
+    ) as file:
+        return json.load(file)
+
+
+def evaluate_model(
+    model: str,
+    tasks: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    agent = GroqAgentRunner(
+        model=model,
+        max_steps=6,
+    )
+
+    results = []
+
+    for task in tasks:
+        print(
+            f"[{model}] "
+            f"Running {task['id']}..."
+        )
+
+        state = agent.run(
+            task["question"]
+        )
+
+        observations = observations_from_state(
+            state
+        )
+
+        evaluation = evaluate_grounded_correctness(
+            answer=state.final_answer,
+            observations=observations,
+            requirements=task[
+                "required_evidence"
+            ],
+        )
+
+        performance = summarize_performance(
+            state
+        )
+
+        result = {
+            "model": model,
+            "task_id": task["id"],
+            "question": task["question"],
+            "status": state.status,
+            "final_answer": state.final_answer,
+            "tool_calls": [
+                call.tool_name
+                for call in state.tool_calls
+            ],
+            **evaluation,
+            "performance": performance,
+        }
+
+        results.append(result)
+
+        status = (
+            "PASS"
+            if evaluation["grounded_correct"]
+            else "FAIL"
+        )
+
+        print(
+            f"  {status} | "
+            f"grounded="
+            f"{evaluation['grounded_correct']} | "
+            f"latency="
+            f"{performance['total_latency_ms']:.1f}ms"
+        )
+
+    return results
+
+
+def summarize_model(
+    model: str,
+    results: list[dict[str, Any]],
+) -> dict[str, Any]:
+    total = len(results)
+
+    if total == 0:
+        return {
+            "model": model,
+            "task_count": 0,
+        }
+
+    grounded_correct = sum(
+        result["grounded_correct"]
+        for result in results
+    )
+
+    answer_correct = sum(
+        result["answer_correct"]
+        for result in results
+    )
+
+    evidence_supported = sum(
+        result["evidence_supported"]
+        for result in results
+    )
+
+    total_latency = sum(
+        result["performance"][
+            "total_latency_ms"
+        ]
+        for result in results
+    )
+
+    total_tool_calls = sum(
+        result["performance"][
+            "tool_call_count"
+        ]
+        for result in results
+    )
+
+    total_llm_calls = sum(
+        result["performance"][
+            "llm_call_count"
+        ]
+        for result in results
+    )
+
+    total_tokens = sum(
+        result["performance"][
+            "total_tokens"
+        ]
+        for result in results
+    )
+
+    return {
+        "model": model,
+        "task_count": total,
+        "grounded_correctness": (
+            grounded_correct / total
+        ),
+        "answer_correctness": (
+            answer_correct / total
+        ),
+        "evidence_support_rate": (
+            evidence_supported / total
+        ),
+        "mean_latency_ms": (
+            total_latency / total
+        ),
+        "mean_tool_calls": (
+            total_tool_calls / total
+        ),
+        "mean_llm_calls": (
+            total_llm_calls / total
+        ),
+        "mean_total_tokens": (
+            total_tokens / total
+        ),
+    }
+
+
+def main() -> None:
+    tasks = load_benchmark(
+        BENCHMARK_PATH
+    )
+
+    all_results = []
+    summaries = []
+
+    for model in MODELS:
+        results = evaluate_model(
+            model=model,
+            tasks=tasks,
+        )
+
+        all_results.extend(results)
+
+        summaries.append(
+            summarize_model(
+                model=model,
+                results=results,
+            )
+        )
+
+        print()
+
+    output_dir = Path(
+        "evaluation/results"
+    )
+
+    output_dir.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    output_path = (
+        output_dir
+        / "model_comparison_v1.json"
+    )
+
+    output = {
+        "experiment": (
+            "GPT-OSS 20B vs GPT-OSS 120B"
+        ),
+        "benchmark": str(
+            BENCHMARK_PATH
+        ),
+        "summaries": summaries,
+        "results": all_results,
+    }
+
+    output_path.write_text(
+        json.dumps(
+            output,
+            indent=2,
+            default=str,
+        ),
+        encoding="utf-8",
+    )
+
+    print("=" * 70)
+    print(
+        "GeoScout Model Comparison"
+    )
+    print("=" * 70)
+
+    for summary in summaries:
+        print()
+        print(
+            f"Model: "
+            f"{summary['model']}"
+        )
+
+        print(
+            f"Grounded correctness: "
+            f"{summary['grounded_correctness']:.2%}"
+        )
+
+        print(
+            f"Answer correctness: "
+            f"{summary['answer_correctness']:.2%}"
+        )
+
+        print(
+            f"Evidence support: "
+            f"{summary['evidence_support_rate']:.2%}"
+        )
+
+        print(
+            f"Mean latency: "
+            f"{summary['mean_latency_ms']:.2f} ms"
+        )
+
+        print(
+            f"Mean tool calls: "
+            f"{summary['mean_tool_calls']:.2f}"
+        )
+
+        print(
+            f"Mean LLM calls: "
+            f"{summary['mean_llm_calls']:.2f}"
+        )
+
+        print(
+            f"Mean tokens: "
+            f"{summary['mean_total_tokens']:.2f}"
+        )
+
+    print()
+    print(
+        f"Detailed results saved to:"
+        f"\n{output_path}"
+    )
+
+
+if __name__ == "__main__":
+    main()
