@@ -217,3 +217,118 @@ def summarize_results(
         ),
         "failure_counts": failure_counts,
     }
+
+def required_tools_match(
+    actual_tools: list[str],
+    required_tools: list[str],
+) -> bool:
+    """Check whether all required tools were used."""
+
+    return set(required_tools).issubset(
+        set(actual_tools)
+    )
+
+def evaluate_multistep_task(
+    agent: GroqAgentRunner,
+    task: dict[str, Any],
+) -> dict[str, Any]:
+    """Evaluate a task requiring multiple tools."""
+
+    state = agent.run(
+        task["question"]
+    )
+
+    required_tools = task[
+        "required_tools"
+    ]
+
+    actual_tools = [
+        call.tool_name
+        for call in state.tool_calls
+    ]
+
+    tools_correct = required_tools_match(
+        actual_tools=actual_tools,
+        required_tools=required_tools,
+    )
+
+    execution_success = (
+        len(state.tool_execution_errors) == 0
+    )
+
+    success = (
+        tools_correct
+        and execution_success
+    )
+
+    if not tools_correct:
+        failure_type = (
+            "missing_required_tool"
+        )
+
+    elif not execution_success:
+        failure_type = (
+            "tool_execution_error"
+        )
+
+    else:
+        failure_type = "none"
+
+    return {
+        "task_id": task["id"],
+        "category": task["category"],
+        "difficulty": task["difficulty"],
+        "question": task["question"],
+        "required_tools": required_tools,
+        "actual_tools": actual_tools,
+        "tools_correct": tools_correct,
+        "execution_success": execution_success,
+        "success": success,
+        "failure_type": failure_type,
+        "steps": state.steps,
+        "final_answer": state.final_answer,
+        "error": state.error,
+    }
+    
+
+def summarize_multistep_results(
+    results: list[dict[str, Any]],
+) -> dict[str, Any]:
+
+    if not results:
+        return {
+            "task_count": 0,
+            "required_tool_coverage": 0.0,
+            "execution_success_rate": 0.0,
+            "task_success_rate": 0.0,
+        }
+
+    total = len(results)
+
+    tools_correct = sum(
+        result["tools_correct"]
+        for result in results
+    )
+
+    execution_success = sum(
+        result["execution_success"]
+        for result in results
+    )
+
+    successful = sum(
+        result["success"]
+        for result in results
+    )
+
+    return {
+        "task_count": total,
+        "required_tool_coverage": (
+            tools_correct / total
+        ),
+        "execution_success_rate": (
+            execution_success / total
+        ),
+        "task_success_rate": (
+            successful / total
+        ),
+    }

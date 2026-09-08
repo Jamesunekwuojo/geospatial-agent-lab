@@ -1,0 +1,52 @@
+[
+  {
+    "id": "GS2-001",
+    "category": "multi_step",
+    "difficulty": "medium",
+    "question": "How many cells are in the study region, and how many experienced significant vegetation degradation?",
+    "required_tools": [
+      "get_region",
+      "calculate_statistics"
+    ]
+  },
+  {
+    "id": "GS2-002",
+    "category": "multi_step",
+    "difficulty": "medium",
+    "question": "Give me the study region size and the number of degraded vegetation cells.",
+    "required_tools": [
+      "get_region",
+      "calculate_statistics"
+    ]
+  },
+  {
+    "id": "GS2-003",
+    "category": "multi_step",
+    "difficulty": "medium",
+    "question": "What is the coordinate reference system of the region and how many cells show significant NDVI decline?",
+    "required_tools": [
+      "get_region",
+      "calculate_statistics"
+    ]
+  },
+  {
+    "id": "GS2-004",
+    "category": "multi_step",
+    "difficulty": "medium",
+    "question": "Identify the vegetation degradation hotspots and also report the overall mean NDVI change.",
+    "required_tools": [
+      "detect_change_hotspots",
+      "calculate_statistics"
+    ]
+  },
+  {
+    "id": "GS2-005",
+    "category": "multi_step",
+    "difficulty": "hard",
+    "question": "Summarize the vegetation degradation hotspots and provide the total number of cells analyzed.",
+    "required_tools": [
+      "summarize_hotspots",
+      "get_region"
+    ]
+  }
+]
