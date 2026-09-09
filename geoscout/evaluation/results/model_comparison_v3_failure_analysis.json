@@ -1,0 +1,94 @@
+{
+  "experiment": "GPT-OSS 20B vs GPT-OSS 120B",
+  "source_artifact": "evaluation/results/model_comparison_v3.json",
+  "evaluation_version": "semantic-v2",
+  "models": {
+    "openai/gpt-oss-20b": {
+      "task_count": 20,
+      "grounded_failure_count": 2,
+      "grounded_failure_tasks": [
+        "GE-010",
+        "GE-019"
+      ],
+      "evidence_failure_count": 2,
+      "evidence_failure_tasks": [
+        "GE-010",
+        "GE-019"
+      ],
+      "answer_failure_count": 1,
+      "answer_failure_tasks": [
+        "GE-019"
+      ]
+    },
+    "openai/gpt-oss-120b": {
+      "task_count": 20,
+      "grounded_failure_count": 1,
+      "grounded_failure_tasks": [
+        "GE-010"
+      ],
+      "evidence_failure_count": 1,
+      "evidence_failure_tasks": [
+        "GE-010"
+      ],
+      "answer_failure_count": 0,
+      "answer_failure_tasks": []
+    }
+  },
+  "comparative_findings": [
+    {
+      "finding": "Grounded correctness difference",
+      "description": "GPT-OSS 120B has one fewer grounded failure than GPT-OSS 20B.",
+      "20b_grounded_failures": 2,
+      "120b_grounded_failures": 1
+    },
+    {
+      "finding": "GE-019 differentiates the models",
+      "description": "GPT-OSS 20B fails GE-019 evidence grounding, while GPT-OSS 120B passes it.",
+      "20b": "FAIL",
+      "120b": "PASS"
+    },
+    {
+      "finding": "GE-010 is shared",
+      "description": "Both models fail GE-010 under the semantic-v2 grounded evaluation.",
+      "20b": "FAIL",
+      "120b": "FAIL"
+    }
+  ],
+  "methodological_notes": [
+    "The answer_correct metric should not be interpreted independently of the GE-010 evaluator caveat.",
+    "Current claim_groundedness is not treated as an independent metric from semantic evidence support.",
+    "Trajectory tool-path diagnostics are exploratory and are not authoritative task-failure indicators."
+  ],
+  "ge019_case_study": {
+    "20b": {
+      "actual_tools": [
+        "summarize_hotspots"
+      ],
+      "grounded_correct": false,
+      "evidence_supported": false,
+      "answer_correct": false,
+      "supported_concepts": [
+        "degraded_cell_count"
+      ],
+      "unsupported_concepts": [
+        "study_cell_count"
+      ],
+      "interpretation": "The model obtained evidence for the number of degraded/hotspot cells but did not obtain evidence for the total study-cell count required by the benchmark."
+    },
+    "120b": {
+      "actual_tools": [
+        "get_region",
+        "summarize_hotspots"
+      ],
+      "grounded_correct": true,
+      "evidence_supported": true,
+      "answer_correct": true,
+      "supported_concepts": [
+        "study_cell_count",
+        "degraded_cell_count"
+      ],
+      "unsupported_concepts": [],
+      "interpretation": "The model acquired both the study-cell count and degraded-cell count through an acceptable tool path."
+    }
+  }
+}
