@@ -167,7 +167,7 @@ def analyze_result(
     )
 
     actual_tools = result.get(
-        "tool_calls",
+        "actual_tools",
         [],
     )
 
