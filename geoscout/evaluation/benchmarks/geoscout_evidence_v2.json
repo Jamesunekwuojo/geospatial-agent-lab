@@ -10,7 +10,14 @@
         "field": "degraded_cells",
         "expected_value": 9
       }
-    ]
+    ],
+    "expected_claims": [
+    {
+      "tool": "calculate_statistics",
+      "field": "degraded_cells",
+      "expected_value": 9
+    }
+  ]
   },
   {
     "id": "GE-002",
@@ -23,6 +30,14 @@
         "field": "cell_count",
         "expected_value": 100
       }
+    ],
+
+    "expected_claims": [
+    {
+      "tool": "get_region",
+      "field": "cell_count",
+      "expected_value": 100
+    }
     ]
   },
   {
@@ -31,6 +46,13 @@
     "difficulty": "easy",
     "question": "What coordinate reference system is used by the study region?",
     "required_evidence": [
+      {
+        "tool": "get_region",
+        "field": "crs",
+        "expected_value": "EPSG:4326"
+      }
+    ],
+    "expected_claims": [
       {
         "tool": "get_region",
         "field": "crs",
@@ -52,7 +74,24 @@
     ],
     "expected_arguments": {
       "threshold": -0.1
-    }
+    },
+    "expected_claims": [
+      {
+        "tool": "detect_change_hotspots",
+        "field": "hotspot_cells",
+        "expected_value": [
+          "cell_03_03",
+          "cell_03_04",
+          "cell_03_05",
+          "cell_04_03",
+          "cell_04_04",
+          "cell_04_05",
+          "cell_05_03",
+          "cell_05_04",
+          "cell_05_05"
+        ]
+      }
+    ]
   },
   {
     "id": "GE-005",
@@ -64,6 +103,14 @@
         "tool": "calculate_statistics",
         "field": "mean_change",
         "expected_value": null
+      }
+    ],
+    "expected_claims": [
+      {
+        "tool": "calculate_statistics",
+        "field": "mean_change",
+        "expected_value": -0.018650758199393255,
+        "tolerance": 0.002
       }
     ]
   },
@@ -78,6 +125,14 @@
         "field": "mean_change",
         "expected_value": null
       }
+    ],
+    "expected_claims": [
+      {
+        "tool": "calculate_statistics",
+        "field": "mean_change",
+        "expected_value": -0.018650758199393255,
+        "tolerance": 0.002
+      }
     ]
   },
   {
@@ -91,6 +146,14 @@
         "field": "minimum_change",
         "expected_value": null
       }
+    ],
+    "expected_claims": [
+      {
+        "tool": "calculate_statistics",
+        "field": "minimum_change",
+        "expected_value": -0.25,
+        "tolerance": 0.002
+      }
     ]
   },
   {
@@ -103,6 +166,14 @@
         "tool": "calculate_statistics",
         "field": "maximum_change",
         "expected_value": null
+      }
+    ],
+    "expected_claims": [
+      {
+        "tool": "calculate_statistics",
+        "field": "maximum_change",
+        "expected_value": 0.043707936990109886,
+        "tolerance": 0.002
       }
     ]
   },
@@ -120,7 +191,14 @@
     ],
     "expected_arguments": {
       "threshold": -0.1
-    }
+    },
+    "expected_claims": [
+      {
+        "tool": "summarize_hotspots",
+        "field": "hotspot_count",
+        "expected_value": 9
+      }
+    ]
   },
   {
     "id": "GE-010",
@@ -136,7 +214,15 @@
     ],
     "expected_arguments": {
       "threshold": -0.1
-    }
+    },
+    "expected_claims": [
+      {
+        "tool": "summarize_hotspots",
+        "field": "mean_ndvi_change",
+        "expected_value": -0.20555555555555555,
+        "tolerance": 0.002
+      }
+    ]
   },
   {
     "id": "GE-011",
@@ -144,6 +230,18 @@
     "difficulty": "medium",
     "question": "How many cells are in the study region and how many are degraded?",
     "required_evidence": [
+      {
+        "tool": "get_region",
+        "field": "cell_count",
+        "expected_value": 100
+      },
+      {
+        "tool": "calculate_statistics",
+        "field": "degraded_cells",
+        "expected_value": 9
+      }
+    ],
+    "expected_claims": [
       {
         "tool": "get_region",
         "field": "cell_count",
@@ -162,6 +260,18 @@
     "difficulty": "medium",
     "question": "What is the CRS of the dataset and how many cells experienced significant degradation?",
     "required_evidence": [
+      {
+        "tool": "get_region",
+        "field": "crs",
+        "expected_value": "EPSG:4326"
+      },
+      {
+        "tool": "calculate_statistics",
+        "field": "degraded_cells",
+        "expected_value": 9
+      }
+    ],
+    "expected_claims": [
       {
         "tool": "get_region",
         "field": "crs",
@@ -193,7 +303,19 @@
     ],
     "expected_arguments": {
       "threshold": -0.1
-    }
+    },
+    "expected_claims": [
+      {
+        "tool": "summarize_hotspots",
+        "field": "hotspot_count",
+        "expected_value": 9
+      },
+      {
+        "tool": "get_region",
+        "field": "cell_count",
+        "expected_value": 100
+      }
+    ]
   },
   {
     "id": "GE-014",
@@ -210,6 +332,19 @@
         "tool": "calculate_statistics",
         "field": "mean_change",
         "expected_value": null
+      }
+    ],
+    "expected_claims": [
+      {
+        "tool": "calculate_statistics",
+        "field": "degraded_cells",
+        "expected_value": 9
+      },
+      {
+        "tool": "calculate_statistics",
+        "field": "mean_change",
+        "expected_value": -0.018650758199393255,
+        "tolerance": 0.002
       }
     ]
   },
@@ -237,7 +372,24 @@
     ],
     "expected_arguments": {
       "threshold": -0.1
-    }
+    },
+    "expected_claims": [
+      {
+        "tool": "get_region",
+        "field": "cell_count",
+        "expected_value": 100
+      },
+      {
+        "tool": "get_region",
+        "field": "crs",
+        "expected_value": "EPSG:4326"
+      },
+      {
+        "tool": "summarize_hotspots",
+        "field": "hotspot_count",
+        "expected_value": 9
+      }
+    ]
   },
   {
     "id": "GE-016",
@@ -258,7 +410,20 @@
     ],
     "expected_arguments": {
       "threshold": -0.1
-    }
+    },
+    "expected_claims": [
+      {
+        "tool": "summarize_hotspots",
+        "field": "hotspot_count",
+        "expected_value": 9
+      },
+      {
+        "tool": "calculate_statistics",
+        "field": "minimum_change",
+        "expected_value": -0.25,
+        "tolerance": 0.002
+      }
+    ]
   },
   {
     "id": "GE-017",
@@ -274,7 +439,14 @@
     ],
     "expected_arguments": {
       "threshold": -0.1
-    }
+    },
+    "expected_claims": [
+      {
+        "tool": "detect_change_hotspots",
+        "field": "hotspot_count",
+        "expected_value": 9
+      }
+    ]
   },
   {
     "id": "GE-018",
@@ -290,7 +462,24 @@
     ],
     "expected_arguments": {
       "threshold": -0.1
-    }
+    },
+    "expected_claims": [
+      {
+        "tool": "detect_change_hotspots",
+        "field": "hotspot_cells",
+        "expected_value": [
+          "cell_03_03",
+          "cell_03_04",
+          "cell_03_05",
+          "cell_04_03",
+          "cell_04_04",
+          "cell_04_05",
+          "cell_05_03",
+          "cell_05_04",
+          "cell_05_05"
+        ]
+      }
+    ]
   },
   {
     "id": "GE-019",
@@ -298,6 +487,18 @@
     "difficulty": "hard",
     "question": "Is vegetation degradation widespread across the dataset, and how many cells are affected?",
     "required_evidence": [
+      {
+        "tool": "calculate_statistics",
+        "field": "degraded_cells",
+        "expected_value": 9
+      },
+      {
+        "tool": "get_region",
+        "field": "cell_count",
+        "expected_value": 100
+      }
+    ],
+    "expected_claims": [
       {
         "tool": "calculate_statistics",
         "field": "degraded_cells",
@@ -325,6 +526,19 @@
         "tool": "calculate_statistics",
         "field": "mean_change",
         "expected_value": null
+      }
+    ],
+    "expected_claims": [
+      {
+        "tool": "calculate_statistics",
+        "field": "degraded_cells",
+        "expected_value": 9
+      },
+      {
+        "tool": "calculate_statistics",
+        "field": "mean_change",
+        "expected_value": -0.018650758199393255,
+        "tolerance": 0.002
       }
     ]
   }

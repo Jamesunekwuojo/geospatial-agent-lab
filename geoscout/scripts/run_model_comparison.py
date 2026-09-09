@@ -3,6 +3,10 @@ from pathlib import Path
 from typing import Any
 
 from geoscout.agent.groq_planner import GroqAgentRunner
+from geoscout.evaluation.claims import (
+    evaluate_claims,
+    evidence_from_observations,
+)
 from geoscout.evaluation.evidence import (
     evaluate_grounded_correctness,
     observations_from_state,
@@ -88,6 +92,18 @@ def evaluate_model(
         state = agent.run(task["question"])
 
         observations = observations_from_state(state)
+        
+        evidence = evidence_from_observations(
+            observations
+        )
+
+        claim_evaluation = evaluate_claims(
+            claims=task.get(
+            "expected_claims",
+            []
+            ),
+            evidence=evidence,
+        )
 
         requirements = resolve_ground_truth(task["required_evidence"])
 
@@ -120,6 +136,7 @@ def evaluate_model(
                 "expected_arguments",
                 {},
             ),
+            "claim_evaluation": claim_evaluation,
             "actual_arguments": (state.tool_calls[0].arguments if state.tool_calls else {}),
             "tool_execution_errors": (state.tool_execution_errors),
             **evaluation,
@@ -166,6 +183,13 @@ def summarize_model(
     total_llm_calls = sum(result["performance"]["llm_call_count"] for result in results)
 
     total_tokens = sum(result["performance"]["total_tokens"] for result in results)
+    
+    claim_grounded = sum(
+    result[
+        "claim_evaluation"
+    ]["grounded"]
+    for result in results
+    )
 
     return {
         "model": model,
@@ -177,6 +201,9 @@ def summarize_model(
         "mean_tool_calls": (total_tool_calls / total),
         "mean_llm_calls": (total_llm_calls / total),
         "mean_total_tokens": (total_tokens / total),
+        "claim_groundedness": (
+            claim_grounded / total
+        ),
     }
 
 
