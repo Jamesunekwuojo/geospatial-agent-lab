@@ -6,8 +6,7 @@
     "question": "How many degraded cells are present in the study region?",
     "required_evidence": [
       {
-        "tool": "calculate_statistics",
-        "field": "degraded_cells",
+        "concept": "degraded_cell_count",
         "expected_value": 9
       }
     ],

@@ -4,6 +4,9 @@ from geoscout.evaluation.evidence import (
     evaluate_grounded_correctness,
     get_tool_field_value,
 )
+from geoscout.evaluation.evidence_capabilities import (
+    evaluate_evidence_path,
+)
 
 
 def test_get_tool_field_value() -> None:
@@ -272,3 +275,71 @@ def test_failure_classification() -> None:
         )
         == "evidence_and_answer_error"
     )
+
+
+def test_alternative_evidence_path() -> None:
+    observations = [
+        {
+            "tool_name": "summarize_hotspots",
+            "result": {
+                "threshold": -0.1,
+                "hotspot_count": 9,
+                "hotspot_cells": [
+                    "cell_03_03",
+                    "cell_03_04",
+                ],
+                "mean_ndvi_change": -0.206,
+            },
+        }
+    ]
+
+    requirements = [
+        {
+            "field": "hotspot_count",
+            "expected_value": 9,
+            "acceptable_tools": [
+                "detect_change_hotspots",
+                "summarize_hotspots",
+            ],
+        }
+    ]
+
+    result = evaluate_evidence_path(
+        observations=observations,
+        requirements=requirements,
+    )
+
+    assert result["grounded"]
+    assert result["supported_count"] == 1
+
+
+
+def test_alternative_tool_supports_degraded_count() -> None:
+    observations = [
+        {
+            "tool_name": "summarize_hotspots",
+            "result": {
+                "hotspot_count": 9,
+                "hotspot_cells": [],
+                "mean_ndvi_change": -0.206,
+            },
+        }
+    ]
+
+    requirements = [
+        {
+            "field": "hotspot_count",
+            "expected_value": 9,
+            "acceptable_tools": [
+                "calculate_statistics",
+                "summarize_hotspots",
+            ],
+        }
+    ]
+
+    result = evaluate_evidence_path(
+        observations=observations,
+        requirements=requirements,
+    )
+
+    assert result["grounded"]
