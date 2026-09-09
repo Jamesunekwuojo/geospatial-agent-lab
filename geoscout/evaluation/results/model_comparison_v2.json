@@ -1,0 +1,4762 @@
+{
+  "experiment": "GPT-OSS 20B vs GPT-OSS 120B",
+  "benchmark": "evaluation/benchmarks/geoscout_evidence_v2.json",
+  "evaluation_version": "semantic-v2",
+  "summaries": [
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_count": 20,
+      "grounded_correctness": 0.9,
+      "answer_correctness": 0.95,
+      "evidence_support_rate": 0.9,
+      "claim_groundedness": 0.9,
+      "mean_latency_ms": 9954.645657300716,
+      "mean_tool_calls": 1.2,
+      "mean_llm_calls": 2.2,
+      "mean_total_tokens": 1984.65
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_count": 20,
+      "grounded_correctness": 0.95,
+      "answer_correctness": 1.0,
+      "evidence_support_rate": 0.95,
+      "claim_groundedness": 0.95,
+      "mean_latency_ms": 6139.8030604006635,
+      "mean_tool_calls": 1.25,
+      "mean_llm_calls": 2.25,
+      "mean_total_tokens": 2036.95
+    }
+  ],
+  "results": [
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "GE-001",
+      "category": "single_tool",
+      "difficulty": "easy",
+      "question": "How many degraded cells are present in the study region?",
+      "status": "completed",
+      "final_answer": "**Answer**\n\nThere are **9 degraded cells** in the study region.  \n\n**Evidence**\n\nThe `calculate_statistics` tool returned the following key value:\n\n- `degraded_cells`: 9\n\nThis value represents the number of cells whose NDVI change is less than or equal to the default degradation threshold (\u20110.1).",
+      "expected_tools": [
+        "calculate_statistics",
+        "summarize_hotspots",
+        "detect_change_hotspots"
+      ],
+      "actual_tools": [
+        "calculate_statistics"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "calculate_statistics",
+          "arguments": {
+            "": ""
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 1,
+        "supported_count": 1,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "degraded_cells",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 1,
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "degraded_cells",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 12148.470380001527,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1489,
+        "total_output_tokens": 148,
+        "total_tokens": 1637,
+        "mean_llm_latency_ms": 6045.88747050002,
+        "mean_tool_latency_ms": 56.439429994497914,
+        "max_tool_latency_ms": 56.439429994497914
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "calculate_statistics",
+          "summarize_hotspots",
+          "detect_change_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "GE-002",
+      "category": "single_tool",
+      "difficulty": "easy",
+      "question": "How many spatial cells are in the study region?",
+      "status": "completed",
+      "final_answer": "The study region contains **100 spatial cells**.",
+      "expected_tools": [
+        "get_region",
+        "calculate_statistics"
+      ],
+      "actual_tools": [
+        "get_region"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "get_region",
+          "arguments": {}
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 1,
+        "supported_count": 1,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "study_cell_count",
+            "expected_value": 100,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "cell_count",
+                "actual_value": 100
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 1,
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "study_cell_count",
+              "expected_value": 100
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "cell_count",
+                "actual_value": 100
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 11309.908240000368,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1459,
+        "total_output_tokens": 74,
+        "total_tokens": 1533,
+        "mean_llm_latency_ms": 5650.305182003649,
+        "mean_tool_latency_ms": 9.167340002022684,
+        "max_tool_latency_ms": 9.167340002022684
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "get_region",
+          "calculate_statistics"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "GE-003",
+      "category": "single_tool",
+      "difficulty": "easy",
+      "question": "What coordinate reference system is used by the study region?",
+      "status": "completed",
+      "final_answer": "The study region uses the **EPSG:4326** coordinate reference system (WGS\u202f84).",
+      "expected_tools": [
+        "get_region"
+      ],
+      "actual_tools": [
+        "get_region"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "get_region",
+          "arguments": {}
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 1,
+        "supported_count": 1,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "region_crs",
+            "expected_value": "EPSG:4326",
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "crs",
+                "actual_value": "EPSG:4326"
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 1,
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "region_crs",
+              "expected_value": "EPSG:4326"
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "crs",
+                "actual_value": "EPSG:4326"
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 2461.4222179952776,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1449,
+        "total_output_tokens": 73,
+        "total_tokens": 1522,
+        "mean_llm_latency_ms": 1224.0574789939274,
+        "mean_tool_latency_ms": 13.191904996347148,
+        "max_tool_latency_ms": 13.191904996347148
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "get_region"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "GE-004",
+      "category": "single_tool",
+      "difficulty": "easy",
+      "question": "Identify the cells where vegetation deterioration is significant.",
+      "status": "completed",
+      "final_answer": "**Vegetation deterioration hotspots (NDVI change \u2264\u202f\u20130.1)**  \n\n- **Count:** 9 cells  \n- **Cell identifiers:**  \n  - `cell_03_03`  \n  - `cell_03_04`  \n  - `cell_03_05`  \n  - `cell_04_03`  \n  - `cell_04_04`  \n  - `cell_04_05`  \n  - `cell_05_03`  \n  - `cell_05_04`  \n  - `cell_05_05`  \n\nThese cells exhibit significant vegetation deterioration according to the default threshold of \u20130.1.",
+      "expected_tools": [
+        "detect_change_hotspots",
+        "summarize_hotspots"
+      ],
+      "actual_tools": [
+        "summarize_hotspots"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "summarize_hotspots",
+          "arguments": {
+            "threshold": -0.1
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 1,
+        "supported_count": 1,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "hotspot_cells",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_cells",
+                "actual_value": [
+                  "cell_03_03",
+                  "cell_03_04",
+                  "cell_03_05",
+                  "cell_04_03",
+                  "cell_04_04",
+                  "cell_04_05",
+                  "cell_05_03",
+                  "cell_05_04",
+                  "cell_05_05"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 1,
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "hotspot_cells",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_cells",
+                "actual_value": [
+                  "cell_03_03",
+                  "cell_03_04",
+                  "cell_03_05",
+                  "cell_04_03",
+                  "cell_04_04",
+                  "cell_04_05",
+                  "cell_05_03",
+                  "cell_05_04",
+                  "cell_05_05"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 6001.286156002607,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1575,
+        "total_output_tokens": 274,
+        "total_tokens": 1849,
+        "mean_llm_latency_ms": 2995.7207035004103,
+        "mean_tool_latency_ms": 9.719319001305848,
+        "max_tool_latency_ms": 9.719319001305848
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "detect_change_hotspots",
+          "summarize_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "GE-005",
+      "category": "single_tool",
+      "difficulty": "easy",
+      "question": "Calculate summary statistics for vegetation change.",
+      "status": "completed",
+      "final_answer": "**Vegetation Change Summary Statistics**\n\n| Metric | Value |\n|--------|-------|\n| Total cells | 100 |\n| Mean NDVI change | **\u20130.0187** |\n| Median NDVI change | **\u20130.0032** |\n| Minimum NDVI change | **\u20130.25** |\n| Maximum NDVI change | **+0.0437** |\n| Degraded cells (NDVI\u202f\u2264\u202f\u20130.1) | **9** |\n\n*Interpretation:*  \nOn average, the region experienced a slight decline in vegetation (negative mean). The median is close to zero, indicating that most cells had minimal change. A small subset (9\u202f%) of cells showed significant degradation (NDVI change \u2264\u202f\u20130.1).",
+      "expected_tools": [
+        "calculate_statistics",
+        "summarize_hotspots",
+        "detect_change_hotspots"
+      ],
+      "actual_tools": [
+        "calculate_statistics"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "calculate_statistics",
+          "arguments": {}
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 4,
+        "supported_count": 4,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "overall_mean_ndvi_change",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "mean_change",
+                "actual_value": -0.018650758199393255
+              }
+            ]
+          },
+          {
+            "concept": "minimum_ndvi_change",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "minimum_change",
+                "actual_value": -0.25
+              }
+            ]
+          },
+          {
+            "concept": "maximum_ndvi_change",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "maximum_change",
+                "actual_value": 0.043707936990109886
+              }
+            ]
+          },
+          {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "degraded_cells",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 4,
+        "supported_claim_count": 4,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "overall_mean_ndvi_change",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "mean_change",
+                "actual_value": -0.018650758199393255
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "minimum_ndvi_change",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "minimum_change",
+                "actual_value": -0.25
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "maximum_ndvi_change",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "maximum_change",
+                "actual_value": 0.043707936990109886
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "degraded_cells",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 3391.619020003418,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1430,
+        "total_output_tokens": 188,
+        "total_tokens": 1618,
+        "mean_llm_latency_ms": 1686.5599759985344,
+        "mean_tool_latency_ms": 18.357019995164592,
+        "max_tool_latency_ms": 18.357019995164592
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "calculate_statistics",
+          "summarize_hotspots",
+          "detect_change_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "GE-006",
+      "category": "single_tool",
+      "difficulty": "medium",
+      "question": "What is the mean change in NDVI across the entire region?",
+      "status": "completed",
+      "final_answer": "**Mean NDVI change across the region**\n\n- **Mean change:** \u20130.0187 (NDVI units)\n\nThis value is derived from the dataset\u2019s NDVI change statistics for all 100 spatial cells in the study region.",
+      "expected_tools": [
+        "calculate_statistics"
+      ],
+      "actual_tools": [
+        "calculate_statistics"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "calculate_statistics",
+          "arguments": {}
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 1,
+        "supported_count": 1,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "overall_mean_ndvi_change",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "mean_change",
+                "actual_value": -0.018650758199393255
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 1,
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "overall_mean_ndvi_change",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "mean_change",
+                "actual_value": -0.018650758199393255
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 2008.6983860019245,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1449,
+        "total_output_tokens": 85,
+        "total_tokens": 1534,
+        "mean_llm_latency_ms": 996.8918329977896,
+        "mean_tool_latency_ms": 14.759439996851142,
+        "max_tool_latency_ms": 14.759439996851142
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "calculate_statistics"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "GE-007",
+      "category": "single_tool",
+      "difficulty": "medium",
+      "question": "What is the largest observed decrease in NDVI?",
+      "status": "completed",
+      "final_answer": "**Largest observed NDVI decrease**\n\nThe minimum NDVI change across all spatial cells is **\u20130.25**. This represents the greatest observed decline in vegetation index within the study region.",
+      "expected_tools": [
+        "calculate_statistics"
+      ],
+      "actual_tools": [
+        "calculate_statistics"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "calculate_statistics",
+          "arguments": {
+            "": ""
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 1,
+        "supported_count": 1,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "minimum_ndvi_change",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "minimum_change",
+                "actual_value": -0.25
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 1,
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "minimum_ndvi_change",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "minimum_change",
+                "actual_value": -0.25
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 3239.824750002299,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1488,
+        "total_output_tokens": 121,
+        "total_tokens": 1609,
+        "mean_llm_latency_ms": 1614.567854001507,
+        "mean_tool_latency_ms": 10.571765000349842,
+        "max_tool_latency_ms": 10.571765000349842
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "calculate_statistics"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "GE-008",
+      "category": "single_tool",
+      "difficulty": "medium",
+      "question": "What is the greatest increase in NDVI observed in the dataset?",
+      "status": "completed",
+      "final_answer": "The dataset shows a maximum NDVI increase of **0.0437** (approximately 0.044) across the study region.",
+      "expected_tools": [
+        "calculate_statistics"
+      ],
+      "actual_tools": [
+        "calculate_statistics"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "calculate_statistics",
+          "arguments": {
+            "": ""
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 1,
+        "supported_count": 1,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "maximum_ndvi_change",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "maximum_change",
+                "actual_value": 0.043707936990109886
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 1,
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "maximum_ndvi_change",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "maximum_change",
+                "actual_value": 0.043707936990109886
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 4747.22394499986,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1498,
+        "total_output_tokens": 114,
+        "total_tokens": 1612,
+        "mean_llm_latency_ms": 2368.199716496747,
+        "mean_tool_latency_ms": 10.657260994776152,
+        "max_tool_latency_ms": 10.657260994776152
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "calculate_statistics"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "GE-009",
+      "category": "single_tool",
+      "difficulty": "medium",
+      "question": "Summarize the vegetation degradation hotspots.",
+      "status": "completed",
+      "final_answer": "**Vegetation Degradation Hotspots Summary (NDVI change \u2264\u202f\u20130.10)**  \n\n| Metric | Value |\n|--------|-------|\n| Hotspot count | **9** cells |\n| Hotspot cell identifiers | `cell_03_03`, `cell_03_04`, `cell_03_05`, `cell_04_03`, `cell_04_04`, `cell_04_05`, `cell_05_03`, `cell_05_04`, `cell_05_05` |\n| Mean NDVI change across hotspots | **\u20130.206** |\n\n*Evidence:* The `summarize_hotspots` tool returned a hotspot count of 9, listed the specific cell identifiers, and provided the mean NDVI change for these cells.",
+      "expected_tools": [
+        "calculate_statistics",
+        "summarize_hotspots",
+        "detect_change_hotspots"
+      ],
+      "actual_tools": [
+        "summarize_hotspots"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "summarize_hotspots",
+          "arguments": {
+            "threshold": -0.1
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 3,
+        "supported_count": 3,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          },
+          {
+            "concept": "hotspot_cells",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_cells",
+                "actual_value": [
+                  "cell_03_03",
+                  "cell_03_04",
+                  "cell_03_05",
+                  "cell_04_03",
+                  "cell_04_04",
+                  "cell_04_05",
+                  "cell_05_03",
+                  "cell_05_04",
+                  "cell_05_05"
+                ]
+              }
+            ]
+          },
+          {
+            "concept": "hotspot_mean_ndvi_change",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "mean_ndvi_change",
+                "actual_value": -0.20555555555555555
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 3,
+        "supported_claim_count": 3,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "hotspot_cells",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_cells",
+                "actual_value": [
+                  "cell_03_03",
+                  "cell_03_04",
+                  "cell_03_05",
+                  "cell_04_03",
+                  "cell_04_04",
+                  "cell_04_05",
+                  "cell_05_03",
+                  "cell_05_04",
+                  "cell_05_05"
+                ]
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "hotspot_mean_ndvi_change",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "mean_ndvi_change",
+                "actual_value": -0.20555555555555555
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 52756.15837999794,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1526,
+        "total_output_tokens": 251,
+        "total_tokens": 1777,
+        "mean_llm_latency_ms": 26373.139637998975,
+        "mean_tool_latency_ms": 9.733644001244102,
+        "max_tool_latency_ms": 9.733644001244102
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "calculate_statistics",
+          "summarize_hotspots",
+          "detect_change_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "GE-010",
+      "category": "single_tool",
+      "difficulty": "medium",
+      "question": "What is the average NDVI change among the detected degradation hotspots?",
+      "status": "completed",
+      "final_answer": "The agent returned no final answer.",
+      "expected_tools": [
+        "summarize_hotspots"
+      ],
+      "actual_tools": [],
+      "tool_call_arguments": [],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 1,
+        "supported_count": 0,
+        "unsupported_count": 1,
+        "grounded": false,
+        "requirements": [
+          {
+            "concept": "hotspot_mean_ndvi_change",
+            "expected_value": null,
+            "supported": false,
+            "supporting_evidence": []
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 1,
+        "supported_claim_count": 0,
+        "unsupported_claim_count": 1,
+        "grounded": false,
+        "claims": [
+          {
+            "claim": {
+              "concept": "hotspot_mean_ndvi_change",
+              "expected_value": null
+            },
+            "supported": false,
+            "supporting_evidence": []
+          }
+        ]
+      },
+      "evidence_supported": false,
+      "answer_correct": true,
+      "grounded_correct": false,
+      "performance": {
+        "total_latency_ms": 1109.191686999111,
+        "llm_call_count": 1,
+        "tool_call_count": 0,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 671,
+        "total_output_tokens": 384,
+        "total_tokens": 1055,
+        "mean_llm_latency_ms": 1109.1455619971384,
+        "mean_tool_latency_ms": 0.0,
+        "max_tool_latency_ms": 0.0
+      },
+      "primary_failure": "ungrounded_answer",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "summarize_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "GE-011",
+      "category": "multi_tool",
+      "difficulty": "medium",
+      "question": "How many cells are in the study region and how many are degraded?",
+      "status": "completed",
+      "final_answer": "**Study region**\n\n- Total number of spatial cells: **100**\n\n**Vegetation degradation**\n\n- Cells identified as degradation hotspots (NDVI change\u202f\u2264\u202f\u20110.1): **9**  \n  (cell identifiers: `cell_03_03`, `cell_03_04`, `cell_03_05`, `cell_04_03`, `cell_04_04`, `cell_04_05`, `cell_05_03`, `cell_05_04`, `cell_05_05`)\n\nSo, out of 100 cells in the study region, 9 cells are considered degraded.",
+      "expected_tools": [
+        "get_region",
+        "calculate_statistics",
+        "summarize_hotspots",
+        "detect_change_hotspots"
+      ],
+      "actual_tools": [
+        "get_region",
+        "summarize_hotspots"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "get_region",
+          "arguments": {}
+        },
+        {
+          "tool_name": "summarize_hotspots",
+          "arguments": {
+            "threshold": -0.1
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 2,
+        "supported_count": 2,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "study_cell_count",
+            "expected_value": 100,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "cell_count",
+                "actual_value": 100
+              }
+            ]
+          },
+          {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 2,
+        "supported_claim_count": 2,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "study_cell_count",
+              "expected_value": 100
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "cell_count",
+                "actual_value": 100
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 3315.9354669987806,
+        "llm_call_count": 3,
+        "tool_call_count": 2,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 2447,
+        "total_output_tokens": 246,
+        "total_tokens": 2693,
+        "mean_llm_latency_ms": 1099.6026436647905,
+        "mean_tool_latency_ms": 8.468413998343749,
+        "max_tool_latency_ms": 9.284252999350429
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "get_region",
+          "calculate_statistics",
+          "summarize_hotspots",
+          "detect_change_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "GE-012",
+      "category": "multi_tool",
+      "difficulty": "medium",
+      "question": "What is the CRS of the dataset and how many cells experienced significant degradation?",
+      "status": "completed",
+      "final_answer": "**CRS of the dataset:** EPSG:4326  \n**Number of cells that experienced significant degradation (NDVI change\u202f\u2264\u202f\u20110.1):** 9 cells",
+      "expected_tools": [
+        "get_region",
+        "calculate_statistics",
+        "summarize_hotspots",
+        "detect_change_hotspots"
+      ],
+      "actual_tools": [
+        "get_region",
+        "summarize_hotspots"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "get_region",
+          "arguments": {}
+        },
+        {
+          "tool_name": "summarize_hotspots",
+          "arguments": {
+            "threshold": -0.1
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 2,
+        "supported_count": 2,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "region_crs",
+            "expected_value": "EPSG:4326",
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "crs",
+                "actual_value": "EPSG:4326"
+              }
+            ]
+          },
+          {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 2,
+        "supported_claim_count": 2,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "region_crs",
+              "expected_value": "EPSG:4326"
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "crs",
+                "actual_value": "EPSG:4326"
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 4144.675409996125,
+        "llm_call_count": 3,
+        "tool_call_count": 2,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 2492,
+        "total_output_tokens": 174,
+        "total_tokens": 2666,
+        "mean_llm_latency_ms": 1372.4809923345067,
+        "mean_tool_latency_ms": 13.486239000485511,
+        "max_tool_latency_ms": 19.125794002320617
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "get_region",
+          "calculate_statistics",
+          "summarize_hotspots",
+          "detect_change_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "GE-013",
+      "category": "multi_tool",
+      "difficulty": "medium",
+      "question": "Identify the degradation hotspots and report the total number of cells analyzed.",
+      "status": "completed",
+      "final_answer": "**Degradation hotspots**\n\n- **Number of hotspots:** 9 cells  \n- **Hotspot cell identifiers:**  \n  - cell_03_03  \n  - cell_03_04  \n  - cell_03_05  \n  - cell_04_03  \n  - cell_04_04  \n  - cell_04_05  \n  - cell_05_03  \n  - cell_05_04  \n  - cell_05_05  \n\n**Total cells analyzed**\n\n- 100 cells in the study region.  \n\nThese figures come from the GIS tools: `summarize_hotspots` (for hotspot count and IDs) and `get_region` (for the total cell count).",
+      "expected_tools": [
+        "detect_change_hotspots",
+        "summarize_hotspots",
+        "get_region",
+        "calculate_statistics"
+      ],
+      "actual_tools": [
+        "get_region",
+        "summarize_hotspots"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "get_region",
+          "arguments": {}
+        },
+        {
+          "tool_name": "summarize_hotspots",
+          "arguments": {
+            "threshold": -0.1
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 2,
+        "supported_count": 2,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "hotspot_cells",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_cells",
+                "actual_value": [
+                  "cell_03_03",
+                  "cell_03_04",
+                  "cell_03_05",
+                  "cell_04_03",
+                  "cell_04_04",
+                  "cell_04_05",
+                  "cell_05_03",
+                  "cell_05_04",
+                  "cell_05_05"
+                ]
+              }
+            ]
+          },
+          {
+            "concept": "study_cell_count",
+            "expected_value": 100,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "cell_count",
+                "actual_value": 100
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 2,
+        "supported_claim_count": 2,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "hotspot_cells",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_cells",
+                "actual_value": [
+                  "cell_03_03",
+                  "cell_03_04",
+                  "cell_03_05",
+                  "cell_04_03",
+                  "cell_04_04",
+                  "cell_04_05",
+                  "cell_05_03",
+                  "cell_05_04",
+                  "cell_05_05"
+                ]
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "study_cell_count",
+              "expected_value": 100
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "cell_count",
+                "actual_value": 100
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 2303.1274520035367,
+        "llm_call_count": 3,
+        "tool_call_count": 2,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 2428,
+        "total_output_tokens": 253,
+        "total_tokens": 2681,
+        "mean_llm_latency_ms": 758.9411756683452,
+        "mean_tool_latency_ms": 12.986669498786796,
+        "max_tool_latency_ms": 13.613251998322085
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "detect_change_hotspots",
+          "summarize_hotspots",
+          "get_region",
+          "calculate_statistics"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "GE-014",
+      "category": "multi_tool",
+      "difficulty": "hard",
+      "question": "How many degraded cells are there, and what is the mean NDVI change across the region?",
+      "status": "completed",
+      "final_answer": "**Answer**\n\n- **Degraded cells:** 9  \n- **Mean NDVI change across the region:** \u20130.0187 (average decrease)\n\n**Evidence**\n\nThe `calculate_statistics` tool returned the following key metrics for the study region:\n\n- `cell_count`: 100  \n- `mean_change`: \u20130.018650758199393255  \n- `degraded_cells`: 9  \n\nThese values directly answer the question about the number of degraded cells and the mean NDVI change.",
+      "expected_tools": [
+        "calculate_statistics",
+        "summarize_hotspots",
+        "detect_change_hotspots"
+      ],
+      "actual_tools": [
+        "calculate_statistics"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "calculate_statistics",
+          "arguments": {
+            "": ""
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 2,
+        "supported_count": 2,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "degraded_cells",
+                "actual_value": 9
+              }
+            ]
+          },
+          {
+            "concept": "overall_mean_ndvi_change",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "mean_change",
+                "actual_value": -0.018650758199393255
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 2,
+        "supported_claim_count": 2,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "degraded_cells",
+                "actual_value": 9
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "overall_mean_ndvi_change",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "mean_change",
+                "actual_value": -0.018650758199393255
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 3878.123324000626,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1471,
+        "total_output_tokens": 149,
+        "total_tokens": 1620,
+        "mean_llm_latency_ms": 1934.2385515010392,
+        "mean_tool_latency_ms": 9.497938997810706,
+        "max_tool_latency_ms": 9.497938997810706
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "calculate_statistics",
+          "summarize_hotspots",
+          "detect_change_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "GE-015",
+      "category": "multi_tool",
+      "difficulty": "hard",
+      "question": "Give me the region size, the number of degradation hotspots, and the dataset CRS.",
+      "status": "completed",
+      "final_answer": "**Region information**\n\n- **Spatial extent (size)**:\u202fmin\u202fx\u202f=\u202f0.0,\u202fmin\u202fy\u202f=\u202f0.0,\u202fmax\u202fx\u202f=\u202f0.1,\u202fmax\u202fy\u202f=\u202f0.1  \n- **Coordinate reference system (CRS)**:\u202fEPSG:4326  \n- **Number of spatial cells**:\u202f100  \n\n**Vegetation degradation hotspots**\n\n- **Hotspot count (NDVI change\u202f\u2264\u202f\u20110.1)**:\u202f9  \n- **Hotspot cell identifiers**:\u202fcell_03_03, cell_03_04, cell_03_05, cell_04_03, cell_04_04, cell_04_05, cell_05_03, cell_05_04, cell_05_05  \n\n*Evidence:*  \n- `get_region` returned the extent, CRS, and cell count.  \n- `summarize_hotspots` (threshold\u202f=\u202f\u20110.1) returned 9 hotspots.",
+      "expected_tools": [
+        "get_region",
+        "calculate_statistics",
+        "summarize_hotspots",
+        "detect_change_hotspots"
+      ],
+      "actual_tools": [
+        "get_region",
+        "summarize_hotspots"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "get_region",
+          "arguments": {}
+        },
+        {
+          "tool_name": "summarize_hotspots",
+          "arguments": {
+            "threshold": -0.1
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 3,
+        "supported_count": 3,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "study_cell_count",
+            "expected_value": 100,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "cell_count",
+                "actual_value": 100
+              }
+            ]
+          },
+          {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          },
+          {
+            "concept": "region_crs",
+            "expected_value": "EPSG:4326",
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "crs",
+                "actual_value": "EPSG:4326"
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 3,
+        "supported_claim_count": 3,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "study_cell_count",
+              "expected_value": 100
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "cell_count",
+                "actual_value": 100
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "region_crs",
+              "expected_value": "EPSG:4326"
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "crs",
+                "actual_value": "EPSG:4326"
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 15354.569809998793,
+        "llm_call_count": 3,
+        "tool_call_count": 2,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 2986,
+        "total_output_tokens": 599,
+        "total_tokens": 3585,
+        "mean_llm_latency_ms": 5105.389837000985,
+        "mean_tool_latency_ms": 18.99031899665715,
+        "max_tool_latency_ms": 20.64026599691715
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "get_region",
+          "calculate_statistics",
+          "summarize_hotspots",
+          "detect_change_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "GE-016",
+      "category": "multi_tool",
+      "difficulty": "hard",
+      "question": "What are the degradation hotspots and what is the minimum NDVI change in the entire region?",
+      "status": "completed",
+      "final_answer": "**Degradation hotspots (NDVI change\u202f\u2264\u202f\u20110.1)**  \n- Total hotspots: **9**  \n- Cell identifiers:  \n  - `cell_03_03`  \n  - `cell_03_04`  \n  - `cell_03_05`  \n  - `cell_04_03`  \n  - `cell_04_04`  \n  - `cell_04_05`  \n  - `cell_05_03`  \n  - `cell_05_04`  \n  - `cell_05_05`  \n\n**Minimum NDVI change in the entire region**  \n- **\u20110.25** (observed in the most degraded cell).",
+      "expected_tools": [
+        "detect_change_hotspots",
+        "summarize_hotspots",
+        "calculate_statistics"
+      ],
+      "actual_tools": [
+        "summarize_hotspots",
+        "calculate_statistics"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "summarize_hotspots",
+          "arguments": {
+            "threshold": -0.1
+          }
+        },
+        {
+          "tool_name": "calculate_statistics",
+          "arguments": {}
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 2,
+        "supported_count": 2,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "hotspot_cells",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_cells",
+                "actual_value": [
+                  "cell_03_03",
+                  "cell_03_04",
+                  "cell_03_05",
+                  "cell_04_03",
+                  "cell_04_04",
+                  "cell_04_05",
+                  "cell_05_03",
+                  "cell_05_04",
+                  "cell_05_05"
+                ]
+              }
+            ]
+          },
+          {
+            "concept": "minimum_ndvi_change",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "minimum_change",
+                "actual_value": -0.25
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 2,
+        "supported_claim_count": 2,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "hotspot_cells",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_cells",
+                "actual_value": [
+                  "cell_03_03",
+                  "cell_03_04",
+                  "cell_03_05",
+                  "cell_04_03",
+                  "cell_04_04",
+                  "cell_04_05",
+                  "cell_05_03",
+                  "cell_05_04",
+                  "cell_05_05"
+                ]
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "minimum_ndvi_change",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "minimum_change",
+                "actual_value": -0.25
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 21446.26948100631,
+        "llm_call_count": 3,
+        "tool_call_count": 2,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 2671,
+        "total_output_tokens": 336,
+        "total_tokens": 3007,
+        "mean_llm_latency_ms": 7138.038109665406,
+        "mean_tool_latency_ms": 15.944400500302436,
+        "max_tool_latency_ms": 20.16448199719889
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "detect_change_hotspots",
+          "summarize_hotspots",
+          "calculate_statistics"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "GE-017",
+      "category": "reasoning",
+      "difficulty": "hard",
+      "question": "If significant degradation is defined as an NDVI change of -0.10 or lower, how many cells meet that criterion?",
+      "status": "completed",
+      "final_answer": "**Answer**\n\nUsing the NDVI\u2011change threshold of \u20130.10, **9 cells** in the study region meet the criterion for significant degradation.",
+      "expected_tools": [
+        "calculate_statistics",
+        "summarize_hotspots",
+        "detect_change_hotspots"
+      ],
+      "actual_tools": [
+        "summarize_hotspots"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "summarize_hotspots",
+          "arguments": {
+            "threshold": -0.1
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 1,
+        "supported_count": 1,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 1,
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 11745.142912004667,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1586,
+        "total_output_tokens": 146,
+        "total_tokens": 1732,
+        "mean_llm_latency_ms": 5867.938223498641,
+        "mean_tool_latency_ms": 9.142263006651774,
+        "max_tool_latency_ms": 9.142263006651774
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "calculate_statistics",
+          "summarize_hotspots",
+          "detect_change_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "GE-018",
+      "category": "reasoning",
+      "difficulty": "hard",
+      "question": "Which cells should be investigated first because they experienced substantial vegetation decline?",
+      "status": "completed",
+      "final_answer": "**Cells with the most substantial vegetation decline (NDVI change\u202f\u2264\u202f\u20130.10)**  \n\n| Cell ID | NDVI change (average) |\n|---------|-----------------------|\n| cell_03_03 | \u20130.23 |\n| cell_03_04 | \u20130.21 |\n| cell_03_05 | \u20130.20 |\n| cell_04_03 | \u20130.22 |\n| cell_04_04 | \u20130.24 |\n| cell_04_05 | \u20130.19 |\n| cell_05_03 | \u20130.25 |\n| cell_05_04 | \u20130.18 |\n| cell_05_05 | \u20130.20 |\n\nThese nine cells were identified as degradation hotspots by the `summarize_hotspots` tool (threshold\u202f=\u202f\u20130.10). They should be prioritized for further investigation.",
+      "expected_tools": [
+        "detect_change_hotspots",
+        "summarize_hotspots"
+      ],
+      "actual_tools": [
+        "summarize_hotspots"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "summarize_hotspots",
+          "arguments": {
+            "threshold": -0.1
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 1,
+        "supported_count": 1,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "hotspot_cells",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_cells",
+                "actual_value": [
+                  "cell_03_03",
+                  "cell_03_04",
+                  "cell_03_05",
+                  "cell_04_03",
+                  "cell_04_04",
+                  "cell_04_05",
+                  "cell_05_03",
+                  "cell_05_04",
+                  "cell_05_05"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 1,
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "hotspot_cells",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_cells",
+                "actual_value": [
+                  "cell_03_03",
+                  "cell_03_04",
+                  "cell_03_05",
+                  "cell_04_03",
+                  "cell_04_04",
+                  "cell_04_05",
+                  "cell_05_03",
+                  "cell_05_04",
+                  "cell_05_05"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 7477.848675000132,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1652,
+        "total_output_tokens": 387,
+        "total_tokens": 2039,
+        "mean_llm_latency_ms": 3730.124154499208,
+        "mean_tool_latency_ms": 17.4151039973367,
+        "max_tool_latency_ms": 17.4151039973367
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "detect_change_hotspots",
+          "summarize_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "GE-019",
+      "category": "reasoning",
+      "difficulty": "hard",
+      "question": "Is vegetation degradation widespread across the dataset, and how many cells are affected?",
+      "status": "completed",
+      "final_answer": "**Vegetation degradation status**\n\n- **Widespread?**  \n  The dataset shows a clear pattern of vegetation decline across a contiguous block of cells. The mean NDVI change for the identified hotspots is **\u20130.21**, indicating a noticeable overall loss of vegetation cover.\n\n- **Number of affected cells**  \n  Using the default degradation threshold of **\u20130.1**, **9 cells** are classified as degradation hotspots.\n\n**Summary of affected cells**\n\n| Cell ID |\n|---------|\n| cell_03_03 |\n| cell_03_04 |\n| cell_03_05 |\n| cell_04_03 |\n| cell_04_04 |\n| cell_04_05 |\n| cell_05_03 |\n| cell_05_04 |\n| cell_05_05 |\n\nThese cells form a contiguous area, suggesting that vegetation degradation is indeed widespread within the study region.",
+      "expected_tools": [
+        "get_region",
+        "calculate_statistics",
+        "summarize_hotspots",
+        "detect_change_hotspots"
+      ],
+      "actual_tools": [
+        "summarize_hotspots"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "summarize_hotspots",
+          "arguments": {
+            "threshold": -0.1
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 2,
+        "supported_count": 1,
+        "unsupported_count": 1,
+        "grounded": false,
+        "requirements": [
+          {
+            "concept": "study_cell_count",
+            "expected_value": 100,
+            "supported": false,
+            "supporting_evidence": []
+          },
+          {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 2,
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 1,
+        "grounded": false,
+        "claims": [
+          {
+            "claim": {
+              "concept": "study_cell_count",
+              "expected_value": 100
+            },
+            "supported": false,
+            "supporting_evidence": []
+          },
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": false,
+      "answer_correct": false,
+      "grounded_correct": false,
+      "performance": {
+        "total_latency_ms": 15059.886340000958,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1593,
+        "total_output_tokens": 324,
+        "total_tokens": 1917,
+        "mean_llm_latency_ms": 7524.521426497813,
+        "mean_tool_latency_ms": 10.705708999012131,
+        "max_tool_latency_ms": 10.705708999012131
+      },
+      "primary_failure": "evidence_and_answer_error",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "get_region",
+          "calculate_statistics",
+          "summarize_hotspots",
+          "detect_change_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-20b",
+      "task_id": "GE-020",
+      "category": "reasoning",
+      "difficulty": "hard",
+      "question": "Provide an evidence-based summary of vegetation deterioration, including the number of affected cells and the overall NDVI change.",
+      "status": "completed",
+      "final_answer": "**Evidence\u2011based summary of vegetation deterioration**\n\n| Metric | Value |\n|--------|-------|\n| Total number of spatial cells in the study region | **100** |\n| Mean NDVI change (baseline\u202f\u2192\u202fcurrent) | **\u20110.0187** |\n| Median NDVI change | **\u20110.0032** |\n| Minimum NDVI change (most degraded) | **\u20110.25** |\n| Maximum NDVI change (most improved) | **+0.0437** |\n| Number of cells classified as vegetation\u2011degradation hotspots (NDVI\u202f\u2264\u202f\u20110.1) | **9** |\n\n**Interpretation**\n\n- The overall NDVI change across the region is slightly negative (mean\u202f\u2248\u202f\u20110.019), indicating a modest decline in vegetation greenness on average.\n- Nine out of the 100 cells (9\u202f%) exhibit NDVI changes below the \u22120.1 threshold, qualifying them as significant vegetation\u2011degradation hotspots.\n- The most severe degradation observed is a drop of 0.25 NDVI units in a single cell, while the most improvement recorded is an increase of 0.044 NDVI units.\n\nThese figures are directly derived from the `calculate_statistics` tool, which aggregates the NDVI change data stored in the dataset.",
+      "expected_tools": [
+        "calculate_statistics",
+        "summarize_hotspots",
+        "detect_change_hotspots"
+      ],
+      "actual_tools": [
+        "calculate_statistics"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "calculate_statistics",
+          "arguments": {}
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 2,
+        "supported_count": 2,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "degraded_cells",
+                "actual_value": 9
+              }
+            ]
+          },
+          {
+            "concept": "overall_mean_ndvi_change",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "mean_change",
+                "actual_value": -0.018650758199393255
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 2,
+        "supported_claim_count": 2,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "degraded_cells",
+                "actual_value": 9
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "overall_mean_ndvi_change",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "mean_change",
+                "actual_value": -0.018650758199393255
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 15193.531113000063,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1585,
+        "total_output_tokens": 422,
+        "total_tokens": 2007,
+        "mean_llm_latency_ms": 7592.848909502209,
+        "mean_tool_latency_ms": 7.699294998019468,
+        "max_tool_latency_ms": 7.699294998019468
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "calculate_statistics",
+          "summarize_hotspots",
+          "detect_change_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "GE-001",
+      "category": "single_tool",
+      "difficulty": "easy",
+      "question": "How many degraded cells are present in the study region?",
+      "status": "completed",
+      "final_answer": "**Evidence**  \nThe `summarize_hotspots` tool (threshold\u202f=\u202f\u20110.1) reports:\n\n- **hotspot_count:**\u202f9  \n- **hotspot_cells:**\u202f['cell_03_03', 'cell_03_04', 'cell_03_05', 'cell_04_03', 'cell_04_04', 'cell_04_05', 'cell_05_03', 'cell_05_04', 'cell_05_05']  \n\n**Answer**  \nThere are **9 degraded cells** in the study region (cells whose NDVI change is \u2264\u202f\u20110.1).",
+      "expected_tools": [
+        "calculate_statistics",
+        "summarize_hotspots",
+        "detect_change_hotspots"
+      ],
+      "actual_tools": [
+        "summarize_hotspots"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "summarize_hotspots",
+          "arguments": {
+            "threshold": -0.1
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 1,
+        "supported_count": 1,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 1,
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 4828.19941300113,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1515,
+        "total_output_tokens": 209,
+        "total_tokens": 1724,
+        "mean_llm_latency_ms": 2407.3780904982414,
+        "mean_tool_latency_ms": 13.331139001820702,
+        "max_tool_latency_ms": 13.331139001820702
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "calculate_statistics",
+          "summarize_hotspots",
+          "detect_change_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "GE-002",
+      "category": "single_tool",
+      "difficulty": "easy",
+      "question": "How many spatial cells are in the study region?",
+      "status": "completed",
+      "final_answer": "**Evidence**  \nThe `get_region` tool reports that the study region contains **100 spatial cells**.\n\n**Answer**  \nThere are 100 spatial cells in the study region.",
+      "expected_tools": [
+        "get_region",
+        "calculate_statistics"
+      ],
+      "actual_tools": [
+        "get_region"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "get_region",
+          "arguments": {}
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 1,
+        "supported_count": 1,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "study_cell_count",
+            "expected_value": 100,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "cell_count",
+                "actual_value": 100
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 1,
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "study_cell_count",
+              "expected_value": 100
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "cell_count",
+                "actual_value": 100
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 2380.8109519959544,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1456,
+        "total_output_tokens": 100,
+        "total_tokens": 1556,
+        "mean_llm_latency_ms": 1186.2196100009896,
+        "mean_tool_latency_ms": 8.26617500570137,
+        "max_tool_latency_ms": 8.26617500570137
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "get_region",
+          "calculate_statistics"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "GE-003",
+      "category": "single_tool",
+      "difficulty": "easy",
+      "question": "What coordinate reference system is used by the study region?",
+      "status": "completed",
+      "final_answer": "**Evidence**  \nThe study region information returned by the `get_region` tool includes:\n\n- `crs`: **EPSG:4326**\n\n**Answer**  \nThe coordinate reference system (CRS) used by the study region is **EPSG:4326** (WGS\u202f84 latitude\u2011longitude).",
+      "expected_tools": [
+        "get_region"
+      ],
+      "actual_tools": [
+        "get_region"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "get_region",
+          "arguments": {}
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 1,
+        "supported_count": 1,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "region_crs",
+            "expected_value": "EPSG:4326",
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "crs",
+                "actual_value": "EPSG:4326"
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 1,
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "region_crs",
+              "expected_value": "EPSG:4326"
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "crs",
+                "actual_value": "EPSG:4326"
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 1959.887502998754,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1456,
+        "total_output_tokens": 123,
+        "total_tokens": 1579,
+        "mean_llm_latency_ms": 976.1274589982349,
+        "mean_tool_latency_ms": 7.507813003030606,
+        "max_tool_latency_ms": 7.507813003030606
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "get_region"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "GE-004",
+      "category": "single_tool",
+      "difficulty": "easy",
+      "question": "Identify the cells where vegetation deterioration is significant.",
+      "status": "completed",
+      "final_answer": "**Evidence**  \nThe `summarize_hotspots` tool (threshold\u202f=\u202f\u20110.1) returned:\n\n- **Hotspot count:** 9 cells  \n- **Hotspot cell identifiers:** `cell_03_03`, `cell_03_04`, `cell_03_05`, `cell_04_03`, `cell_04_04`, `cell_04_05`, `cell_05_03`, `cell_05_04`, `cell_05_05`  \n- **Mean NDVI change for these cells:**\u202f\u20110.206  \n\n**Interpretation**  \nThese nine cells exhibit NDVI changes \u2264\u202f\u20110.1, indicating significant vegetation deterioration. They are the locations where vegetation health has declined most sharply according to the dataset.",
+      "expected_tools": [
+        "detect_change_hotspots",
+        "summarize_hotspots"
+      ],
+      "actual_tools": [
+        "summarize_hotspots"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "summarize_hotspots",
+          "arguments": {
+            "threshold": -0.1
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 1,
+        "supported_count": 1,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "hotspot_cells",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_cells",
+                "actual_value": [
+                  "cell_03_03",
+                  "cell_03_04",
+                  "cell_03_05",
+                  "cell_04_03",
+                  "cell_04_04",
+                  "cell_04_05",
+                  "cell_05_03",
+                  "cell_05_04",
+                  "cell_05_05"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 1,
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "hotspot_cells",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_cells",
+                "actual_value": [
+                  "cell_03_03",
+                  "cell_03_04",
+                  "cell_03_05",
+                  "cell_04_03",
+                  "cell_04_04",
+                  "cell_04_05",
+                  "cell_05_03",
+                  "cell_05_04",
+                  "cell_05_05"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 2312.58218199946,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1574,
+        "total_output_tokens": 300,
+        "total_tokens": 1874,
+        "mean_llm_latency_ms": 1149.9260595010128,
+        "mean_tool_latency_ms": 12.626654999621678,
+        "max_tool_latency_ms": 12.626654999621678
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "detect_change_hotspots",
+          "summarize_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "GE-005",
+      "category": "single_tool",
+      "difficulty": "easy",
+      "question": "Calculate summary statistics for vegetation change.",
+      "status": "completed",
+      "final_answer": "**Evidence (from `calculate_statistics`):**  \n- Total number of spatial cells: **100**  \n- Mean NDVI change: **\u20110.0187**  \n- Median NDVI change: **\u20110.0032**  \n- Minimum NDVI change: **\u20110.25**  \n- Maximum NDVI change: **0.0437**  \n- Number of degraded cells (NDVI change \u2264\u202f\u20110.1): **9**  \n\n**Interpretation:**  \nAcross the study region, vegetation shows a slight overall decline, with an average NDVI decrease of about 0.019. Most cells have small changes (median near zero), but a few cells exhibit notable degradation (9 cells falling below the \u20110.1 threshold). The range of change spans from a moderate loss (\u20110.25) to a modest gain (0.0437).",
+      "expected_tools": [
+        "calculate_statistics",
+        "summarize_hotspots",
+        "detect_change_hotspots"
+      ],
+      "actual_tools": [
+        "calculate_statistics"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "calculate_statistics",
+          "arguments": {}
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 4,
+        "supported_count": 4,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "overall_mean_ndvi_change",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "mean_change",
+                "actual_value": -0.018650758199393255
+              }
+            ]
+          },
+          {
+            "concept": "minimum_ndvi_change",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "minimum_change",
+                "actual_value": -0.25
+              }
+            ]
+          },
+          {
+            "concept": "maximum_ndvi_change",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "maximum_change",
+                "actual_value": 0.043707936990109886
+              }
+            ]
+          },
+          {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "degraded_cells",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 4,
+        "supported_claim_count": 4,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "overall_mean_ndvi_change",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "mean_change",
+                "actual_value": -0.018650758199393255
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "minimum_ndvi_change",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "minimum_change",
+                "actual_value": -0.25
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "maximum_ndvi_change",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "maximum_change",
+                "actual_value": 0.043707936990109886
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "degraded_cells",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 2487.941724997654,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1450,
+        "total_output_tokens": 232,
+        "total_tokens": 1682,
+        "mean_llm_latency_ms": 1236.9259739971312,
+        "mean_tool_latency_ms": 13.933224996435456,
+        "max_tool_latency_ms": 13.933224996435456
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "calculate_statistics",
+          "summarize_hotspots",
+          "detect_change_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "GE-006",
+      "category": "single_tool",
+      "difficulty": "medium",
+      "question": "What is the mean change in NDVI across the entire region?",
+      "status": "completed",
+      "final_answer": "**Evidence**  \nThe `calculate_statistics` tool reports the following summary for NDVI change across the entire study region:\n\n- **Mean NDVI change:**\u202f-0.01865  \n\n**Interpretation**  \nOn average, the region experienced a slight decrease in NDVI of about **\u20110.019** (unitless), indicating a modest overall decline in vegetation greenness.",
+      "expected_tools": [
+        "calculate_statistics"
+      ],
+      "actual_tools": [
+        "calculate_statistics"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "calculate_statistics",
+          "arguments": {
+            "": {}
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 1,
+        "supported_count": 1,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "overall_mean_ndvi_change",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "mean_change",
+                "actual_value": -0.018650758199393255
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 1,
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "overall_mean_ndvi_change",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "mean_change",
+                "actual_value": -0.018650758199393255
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 2288.380418998713,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1489,
+        "total_output_tokens": 157,
+        "total_tokens": 1646,
+        "mean_llm_latency_ms": 1139.7308739979053,
+        "mean_tool_latency_ms": 8.739349999814294,
+        "max_tool_latency_ms": 8.739349999814294
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "calculate_statistics"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "GE-007",
+      "category": "single_tool",
+      "difficulty": "medium",
+      "question": "What is the largest observed decrease in NDVI?",
+      "status": "completed",
+      "final_answer": "**Evidence**  \n- The `calculate_statistics` tool reports a **minimum NDVI change of\u202f-0.25** across all cells in the study region.\n\n**Answer**  \nThe largest observed decrease in NDVI is **0.25** (a change of \u20130.25). This represents the most negative NDVI change recorded among the cells.",
+      "expected_tools": [
+        "calculate_statistics"
+      ],
+      "actual_tools": [
+        "calculate_statistics"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "calculate_statistics",
+          "arguments": {
+            "threshold": null
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 1,
+        "supported_count": 1,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "minimum_ndvi_change",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "minimum_change",
+                "actual_value": -0.25
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 1,
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "minimum_ndvi_change",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "minimum_change",
+                "actual_value": -0.25
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 3202.054630004568,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1506,
+        "total_output_tokens": 176,
+        "total_tokens": 1682,
+        "mean_llm_latency_ms": 1596.283601498726,
+        "mean_tool_latency_ms": 9.33490099851042,
+        "max_tool_latency_ms": 9.33490099851042
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "calculate_statistics"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "GE-008",
+      "category": "single_tool",
+      "difficulty": "medium",
+      "question": "What is the greatest increase in NDVI observed in the dataset?",
+      "status": "completed",
+      "final_answer": "**Evidence**  \nThe `calculate_statistics` tool reports the following summary for NDVI change across all cells in the dataset:\n\n- **Maximum NDVI change:** **0.0437** (rounded to four decimal places)  \n\n**Answer**  \nThe greatest increase in NDVI observed in the dataset is **approximately 0.0437**. This value represents the highest positive NDVI change among all spatial cells.",
+      "expected_tools": [
+        "calculate_statistics"
+      ],
+      "actual_tools": [
+        "calculate_statistics"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "calculate_statistics",
+          "arguments": {}
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 1,
+        "supported_count": 1,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "maximum_ndvi_change",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "maximum_change",
+                "actual_value": 0.043707936990109886
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 1,
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "maximum_ndvi_change",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "maximum_change",
+                "actual_value": 0.043707936990109886
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 2086.508517000766,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1554,
+        "total_output_tokens": 228,
+        "total_tokens": 1782,
+        "mean_llm_latency_ms": 1036.1357824986044,
+        "mean_tool_latency_ms": 14.047450997168198,
+        "max_tool_latency_ms": 14.047450997168198
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "calculate_statistics"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "GE-009",
+      "category": "single_tool",
+      "difficulty": "medium",
+      "question": "Summarize the vegetation degradation hotspots.",
+      "status": "completed",
+      "final_answer": "**Evidence (from the GIS tool):**  \n- Threshold used:\u202f-0.1 (NDVI change \u2264\u202f-0.1 defines a degradation hotspot)  \n- Hotspot count:\u202f9 cells  \n- Hotspot cell identifiers:\u202fcell_03_03, cell_03_04, cell_03_05, cell_04_03, cell_04_04, cell_04_05, cell_05_03, cell_05_04, cell_05_05  \n- Mean NDVI change across these hotspots:\u202f-0.206  \n\n**Interpretation:**  \nThe analysis identified nine spatial cells that experienced significant vegetation loss (NDVI decline of at least -0.1). These cells are clustered in the central\u2011southern part of the study area (rows\u202f3\u20115, columns\u202f3\u20115). The average NDVI reduction of about -0.21 indicates moderate to strong degradation within these hotspots.",
+      "expected_tools": [
+        "calculate_statistics",
+        "summarize_hotspots",
+        "detect_change_hotspots"
+      ],
+      "actual_tools": [
+        "summarize_hotspots"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "summarize_hotspots",
+          "arguments": {
+            "threshold": -0.1
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 3,
+        "supported_count": 3,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          },
+          {
+            "concept": "hotspot_cells",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_cells",
+                "actual_value": [
+                  "cell_03_03",
+                  "cell_03_04",
+                  "cell_03_05",
+                  "cell_04_03",
+                  "cell_04_04",
+                  "cell_04_05",
+                  "cell_05_03",
+                  "cell_05_04",
+                  "cell_05_05"
+                ]
+              }
+            ]
+          },
+          {
+            "concept": "hotspot_mean_ndvi_change",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "mean_ndvi_change",
+                "actual_value": -0.20555555555555555
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 3,
+        "supported_claim_count": 3,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "hotspot_cells",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_cells",
+                "actual_value": [
+                  "cell_03_03",
+                  "cell_03_04",
+                  "cell_03_05",
+                  "cell_04_03",
+                  "cell_04_04",
+                  "cell_04_05",
+                  "cell_05_03",
+                  "cell_05_04",
+                  "cell_05_05"
+                ]
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "hotspot_mean_ndvi_change",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "mean_ndvi_change",
+                "actual_value": -0.20555555555555555
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 2941.2602560041705,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1517,
+        "total_output_tokens": 279,
+        "total_tokens": 1796,
+        "mean_llm_latency_ms": 1464.9469274991134,
+        "mean_tool_latency_ms": 11.149819001730066,
+        "max_tool_latency_ms": 11.149819001730066
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "calculate_statistics",
+          "summarize_hotspots",
+          "detect_change_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "GE-010",
+      "category": "single_tool",
+      "difficulty": "medium",
+      "question": "What is the average NDVI change among the detected degradation hotspots?",
+      "status": "completed",
+      "final_answer": "The agent returned no final answer.",
+      "expected_tools": [
+        "summarize_hotspots"
+      ],
+      "actual_tools": [],
+      "tool_call_arguments": [],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 1,
+        "supported_count": 0,
+        "unsupported_count": 1,
+        "grounded": false,
+        "requirements": [
+          {
+            "concept": "hotspot_mean_ndvi_change",
+            "expected_value": null,
+            "supported": false,
+            "supporting_evidence": []
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 1,
+        "supported_claim_count": 0,
+        "unsupported_claim_count": 1,
+        "grounded": false,
+        "claims": [
+          {
+            "claim": {
+              "concept": "hotspot_mean_ndvi_change",
+              "expected_value": null
+            },
+            "supported": false,
+            "supporting_evidence": []
+          }
+        ]
+      },
+      "evidence_supported": false,
+      "answer_correct": true,
+      "grounded_correct": false,
+      "performance": {
+        "total_latency_ms": 5217.470611001772,
+        "llm_call_count": 1,
+        "tool_call_count": 0,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 671,
+        "total_output_tokens": 384,
+        "total_tokens": 1055,
+        "mean_llm_latency_ms": 5217.43200399942,
+        "mean_tool_latency_ms": 0.0,
+        "max_tool_latency_ms": 0.0
+      },
+      "primary_failure": "ungrounded_answer",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "summarize_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "GE-011",
+      "category": "multi_tool",
+      "difficulty": "medium",
+      "question": "How many cells are in the study region and how many are degraded?",
+      "status": "completed",
+      "final_answer": "**Evidence**\n\n- **Study\u2011region cell count:** 100 cells (from `get_region`).\n- **Degraded (hotspot) cells:** 9 cells identified as vegetation\u2011degradation hotspots using the default NDVI\u2011change threshold of\u202f\u20110.1 (from `summarize_hotspots`).\n\n**Answer**\n\nThe study region contains **100 cells**, of which **9 cells are classified as degraded** based on the NDVI\u2011change threshold of \u20130.1.",
+      "expected_tools": [
+        "get_region",
+        "calculate_statistics",
+        "summarize_hotspots",
+        "detect_change_hotspots"
+      ],
+      "actual_tools": [
+        "get_region",
+        "summarize_hotspots"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "get_region",
+          "arguments": {}
+        },
+        {
+          "tool_name": "summarize_hotspots",
+          "arguments": {
+            "threshold": -0.1
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 2,
+        "supported_count": 2,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "study_cell_count",
+            "expected_value": 100,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "cell_count",
+                "actual_value": 100
+              }
+            ]
+          },
+          {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 2,
+        "supported_claim_count": 2,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "study_cell_count",
+              "expected_value": 100
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "cell_count",
+                "actual_value": 100
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 12958.656581002288,
+        "llm_call_count": 3,
+        "tool_call_count": 2,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 2432,
+        "total_output_tokens": 215,
+        "total_tokens": 2647,
+        "mean_llm_latency_ms": 4310.196099669459,
+        "mean_tool_latency_ms": 13.90945450111758,
+        "max_tool_latency_ms": 14.756876000319608
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "get_region",
+          "calculate_statistics",
+          "summarize_hotspots",
+          "detect_change_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "GE-012",
+      "category": "multi_tool",
+      "difficulty": "medium",
+      "question": "What is the CRS of the dataset and how many cells experienced significant degradation?",
+      "status": "completed",
+      "final_answer": "**Evidence**\n\n- **CRS** (from `get_region`): `EPSG:4326`  \n- **Degraded cells** (from `summarize_hotspots` with the default NDVI\u2011change threshold of\u202f-0.1): **9 cells** experienced significant vegetation degradation.\n\n**Answer**\n\nThe dataset uses the coordinate reference system **EPSG:4326**, and **9 spatial cells** were identified as significant degradation hotspots.",
+      "expected_tools": [
+        "get_region",
+        "calculate_statistics",
+        "summarize_hotspots",
+        "detect_change_hotspots"
+      ],
+      "actual_tools": [
+        "get_region",
+        "summarize_hotspots"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "get_region",
+          "arguments": {}
+        },
+        {
+          "tool_name": "summarize_hotspots",
+          "arguments": {
+            "threshold": -0.1
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 2,
+        "supported_count": 2,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "region_crs",
+            "expected_value": "EPSG:4326",
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "crs",
+                "actual_value": "EPSG:4326"
+              }
+            ]
+          },
+          {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 2,
+        "supported_claim_count": 2,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "region_crs",
+              "expected_value": "EPSG:4326"
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "crs",
+                "actual_value": "EPSG:4326"
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 5596.942064999894,
+        "llm_call_count": 3,
+        "tool_call_count": 2,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 2409,
+        "total_output_tokens": 187,
+        "total_tokens": 2596,
+        "mean_llm_latency_ms": 1860.1156000004266,
+        "mean_tool_latency_ms": 8.205956000892911,
+        "max_tool_latency_ms": 8.923747998778708
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "get_region",
+          "calculate_statistics",
+          "summarize_hotspots",
+          "detect_change_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "GE-013",
+      "category": "multi_tool",
+      "difficulty": "medium",
+      "question": "Identify the degradation hotspots and report the total number of cells analyzed.",
+      "status": "completed",
+      "final_answer": "**Evidence**\n\n- **Region information** \u2013 The study region contains **100 cells** (as reported by `get_region`).\n- **Degradation hotspots** \u2013 Using a threshold of\u202f\u20110.1, `summarize_hotspots` identified **9 hotspot cells**:\n  - `cell_03_03`, `cell_03_04`, `cell_03_05`,\n  - `cell_04_03`, `cell_04_04`, `cell_04_05`,\n  - `cell_05_03`, `cell_05_04`, `cell_05_05`.\n\n**Interpretation**\n\n- The total number of cells analyzed in the dataset is **100**.\n- **9 cells** meet the degradation\u2011hotspot criterion (NDVI change \u2264\u202f\u20110.1). These are the identified hotspots.",
+      "expected_tools": [
+        "detect_change_hotspots",
+        "summarize_hotspots",
+        "get_region",
+        "calculate_statistics"
+      ],
+      "actual_tools": [
+        "get_region",
+        "summarize_hotspots"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "get_region",
+          "arguments": {}
+        },
+        {
+          "tool_name": "summarize_hotspots",
+          "arguments": {
+            "threshold": -0.1
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 2,
+        "supported_count": 2,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "hotspot_cells",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_cells",
+                "actual_value": [
+                  "cell_03_03",
+                  "cell_03_04",
+                  "cell_03_05",
+                  "cell_04_03",
+                  "cell_04_04",
+                  "cell_04_05",
+                  "cell_05_03",
+                  "cell_05_04",
+                  "cell_05_05"
+                ]
+              }
+            ]
+          },
+          {
+            "concept": "study_cell_count",
+            "expected_value": 100,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "cell_count",
+                "actual_value": 100
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 2,
+        "supported_claim_count": 2,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "hotspot_cells",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_cells",
+                "actual_value": [
+                  "cell_03_03",
+                  "cell_03_04",
+                  "cell_03_05",
+                  "cell_04_03",
+                  "cell_04_04",
+                  "cell_04_05",
+                  "cell_05_03",
+                  "cell_05_04",
+                  "cell_05_05"
+                ]
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "study_cell_count",
+              "expected_value": 100
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "cell_count",
+                "actual_value": 100
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 8414.1167110065,
+        "llm_call_count": 3,
+        "tool_call_count": 2,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 2615,
+        "total_output_tokens": 380,
+        "total_tokens": 2995,
+        "mean_llm_latency_ms": 2797.781331001412,
+        "mean_tool_latency_ms": 10.29188000029535,
+        "max_tool_latency_ms": 11.919065997062717
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "detect_change_hotspots",
+          "summarize_hotspots",
+          "get_region",
+          "calculate_statistics"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "GE-014",
+      "category": "multi_tool",
+      "difficulty": "hard",
+      "question": "How many degraded cells are there, and what is the mean NDVI change across the region?",
+      "status": "completed",
+      "final_answer": "**Evidence**\n\n- The `calculate_statistics` tool (using the default degradation threshold of\u202f\u20110.1) returned:\n  - **Degraded\u2011cell count:**\u202f9  \n  - **Mean NDVI change (region\u2011wide):**\u202f\u20110.01865  \n\n**Answer**\n\nThere are **9 degraded cells** in the study region, and the **average NDVI change across the entire region is \u20130.0187** (a slight overall decline).",
+      "expected_tools": [
+        "calculate_statistics",
+        "summarize_hotspots",
+        "detect_change_hotspots"
+      ],
+      "actual_tools": [
+        "calculate_statistics"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "calculate_statistics",
+          "arguments": {
+            "threshold": -0.1
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 2,
+        "supported_count": 2,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "degraded_cells",
+                "actual_value": 9
+              }
+            ]
+          },
+          {
+            "concept": "overall_mean_ndvi_change",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "mean_change",
+                "actual_value": -0.018650758199393255
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 2,
+        "supported_claim_count": 2,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "degraded_cells",
+                "actual_value": 9
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "overall_mean_ndvi_change",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "mean_change",
+                "actual_value": -0.018650758199393255
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 3521.8593730023713,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1523,
+        "total_output_tokens": 199,
+        "total_tokens": 1722,
+        "mean_llm_latency_ms": 1756.6901419995702,
+        "mean_tool_latency_ms": 8.297993001178838,
+        "max_tool_latency_ms": 8.297993001178838
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "calculate_statistics",
+          "summarize_hotspots",
+          "detect_change_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "GE-015",
+      "category": "multi_tool",
+      "difficulty": "hard",
+      "question": "Give me the region size, the number of degradation hotspots, and the dataset CRS.",
+      "status": "completed",
+      "final_answer": "**Evidence**\n\n- **Region information** (from `get_region`):  \n  - Coordinate Reference System (CRS): **EPSG:4326**  \n  - Spatial bounds: min\u202fx\u202f=\u202f0.0, min\u202fy\u202f=\u202f0.0, max\u202fx\u202f=\u202f0.1, max\u202fy\u202f=\u202f0.1  \n  - Total number of cells: **100**\n\n- **Degradation hotspots** (from `summarize_hotspots` with the default threshold of \u20130.1):  \n  - Number of hotspots: **9**  \n  - Identified hotspot cell IDs: `cell_03_03`, `cell_03_04`, `cell_03_05`, `cell_04_03`, `cell_04_04`, `cell_04_05`, `cell_05_03`, `cell_05_04`, `cell_05_05`  \n\n**Answer**\n\n- The study region uses the CRS **EPSG:4326**.  \n- The region spans from (0.0\u202f,\u202f0.0) to (0.1\u202f,\u202f0.1) in that coordinate system, covering **100 cells**.  \n- There are **9 degradation hotspots** identified within the region.",
+      "expected_tools": [
+        "get_region",
+        "calculate_statistics",
+        "summarize_hotspots",
+        "detect_change_hotspots"
+      ],
+      "actual_tools": [
+        "get_region",
+        "summarize_hotspots"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "get_region",
+          "arguments": {}
+        },
+        {
+          "tool_name": "summarize_hotspots",
+          "arguments": {
+            "threshold": -0.1
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 3,
+        "supported_count": 3,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "study_cell_count",
+            "expected_value": 100,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "cell_count",
+                "actual_value": 100
+              }
+            ]
+          },
+          {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          },
+          {
+            "concept": "region_crs",
+            "expected_value": "EPSG:4326",
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "crs",
+                "actual_value": "EPSG:4326"
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 3,
+        "supported_claim_count": 3,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "study_cell_count",
+              "expected_value": 100
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "cell_count",
+                "actual_value": 100
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "region_crs",
+              "expected_value": "EPSG:4326"
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "crs",
+                "actual_value": "EPSG:4326"
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 19919.161750003695,
+        "llm_call_count": 3,
+        "tool_call_count": 2,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 2477,
+        "total_output_tokens": 401,
+        "total_tokens": 2878,
+        "mean_llm_latency_ms": 6628.292787667306,
+        "mean_tool_latency_ms": 16.999060499074403,
+        "max_tool_latency_ms": 20.528086999547668
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "get_region",
+          "calculate_statistics",
+          "summarize_hotspots",
+          "detect_change_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "GE-016",
+      "category": "multi_tool",
+      "difficulty": "hard",
+      "question": "What are the degradation hotspots and what is the minimum NDVI change in the entire region?",
+      "status": "completed",
+      "final_answer": "**Evidence**\n\n| Metric | Value |\n|--------|-------|\n| Degradation hotspots (NDVI\u202f\u2264\u202f\u20110.1) | 9 cells: `cell_03_03`, `cell_03_04`, `cell_03_05`, `cell_04_03`, `cell_04_04`, `cell_04_05`, `cell_05_03`, `cell_05_04`, `cell_05_05` |\n| Minimum NDVI change (entire region) | **\u20110.25** |\n\n**Interpretation**\n\n- The nine cells listed are the identified degradation hotspots, each showing NDVI change at or below the \u20130.1 threshold.\n- The most severe vegetation loss across the whole study area is a NDVI decrease of \u20130.25.",
+      "expected_tools": [
+        "detect_change_hotspots",
+        "summarize_hotspots",
+        "calculate_statistics"
+      ],
+      "actual_tools": [
+        "summarize_hotspots",
+        "calculate_statistics"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "summarize_hotspots",
+          "arguments": {
+            "threshold": -0.1
+          }
+        },
+        {
+          "tool_name": "calculate_statistics",
+          "arguments": {}
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 2,
+        "supported_count": 2,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "hotspot_cells",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_cells",
+                "actual_value": [
+                  "cell_03_03",
+                  "cell_03_04",
+                  "cell_03_05",
+                  "cell_04_03",
+                  "cell_04_04",
+                  "cell_04_05",
+                  "cell_05_03",
+                  "cell_05_04",
+                  "cell_05_05"
+                ]
+              }
+            ]
+          },
+          {
+            "concept": "minimum_ndvi_change",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "minimum_change",
+                "actual_value": -0.25
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 2,
+        "supported_claim_count": 2,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "hotspot_cells",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_cells",
+                "actual_value": [
+                  "cell_03_03",
+                  "cell_03_04",
+                  "cell_03_05",
+                  "cell_04_03",
+                  "cell_04_04",
+                  "cell_04_05",
+                  "cell_05_03",
+                  "cell_05_04",
+                  "cell_05_05"
+                ]
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "minimum_ndvi_change",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "minimum_change",
+                "actual_value": -0.25
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 7103.593626001384,
+        "llm_call_count": 3,
+        "tool_call_count": 2,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 2479,
+        "total_output_tokens": 265,
+        "total_tokens": 2744,
+        "mean_llm_latency_ms": 2357.955187665842,
+        "mean_tool_latency_ms": 14.754029998584883,
+        "max_tool_latency_ms": 16.022532996430527
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "detect_change_hotspots",
+          "summarize_hotspots",
+          "calculate_statistics"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "GE-017",
+      "category": "reasoning",
+      "difficulty": "hard",
+      "question": "If significant degradation is defined as an NDVI change of -0.10 or lower, how many cells meet that criterion?",
+      "status": "completed",
+      "final_answer": "**Evidence**  \nThe `summarize_hotspots` tool was run with a degradation threshold of\u202f-0.10. It returned:\n\n- `hotspot_count`: **9** cells  \n- `hotspot_cells`: list of the nine cell identifiers  \n- `mean_ndvi_change` for these cells: \u20130.206 (provided for context)\n\n**Answer**  \nNine cells in the study region have an NDVI change of \u20130.10 or lower, meeting the defined criterion for significant degradation.",
+      "expected_tools": [
+        "calculate_statistics",
+        "summarize_hotspots",
+        "detect_change_hotspots"
+      ],
+      "actual_tools": [
+        "summarize_hotspots"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "summarize_hotspots",
+          "arguments": {
+            "threshold": -0.1
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 1,
+        "supported_count": 1,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 1,
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 7821.409653995943,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1570,
+        "total_output_tokens": 206,
+        "total_tokens": 1776,
+        "mean_llm_latency_ms": 3904.485642000509,
+        "mean_tool_latency_ms": 12.293526000576094,
+        "max_tool_latency_ms": 12.293526000576094
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "calculate_statistics",
+          "summarize_hotspots",
+          "detect_change_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "GE-018",
+      "category": "reasoning",
+      "difficulty": "hard",
+      "question": "Which cells should be investigated first because they experienced substantial vegetation decline?",
+      "status": "completed",
+      "final_answer": "**Evidence**\n\n- **Hotspot threshold:** NDVI change\u202f\u2264\u202f\u20110.1 (default).  \n- **Detected hotspots:** 9 cells show NDVI decline meeting this threshold.  \n- **Cell identifiers:** `cell_03_03`, `cell_03_04`, `cell_03_05`, `cell_04_03`, `cell_04_04`, `cell_04_05`, `cell_05_03`, `cell_05_04`, `cell_05_05`.  \n- **Mean NDVI change among hotspots:**\u202f\u20110.206 (indicating substantial decline).\n\n**Interpretation**\n\nThese nine cells experienced the most pronounced vegetation loss (NDVI decline beyond the \u20130.1 threshold) and should be prioritized for further investigation.",
+      "expected_tools": [
+        "detect_change_hotspots",
+        "summarize_hotspots"
+      ],
+      "actual_tools": [
+        "summarize_hotspots"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "summarize_hotspots",
+          "arguments": {
+            "threshold": -0.1
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 1,
+        "supported_count": 1,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "hotspot_cells",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_cells",
+                "actual_value": [
+                  "cell_03_03",
+                  "cell_03_04",
+                  "cell_03_05",
+                  "cell_04_03",
+                  "cell_04_04",
+                  "cell_04_05",
+                  "cell_05_03",
+                  "cell_05_04",
+                  "cell_05_05"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 1,
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "hotspot_cells",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_cells",
+                "actual_value": [
+                  "cell_03_03",
+                  "cell_03_04",
+                  "cell_03_05",
+                  "cell_04_03",
+                  "cell_04_04",
+                  "cell_04_05",
+                  "cell_05_03",
+                  "cell_05_04",
+                  "cell_05_05"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 8020.44309899793,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1559,
+        "total_output_tokens": 277,
+        "total_tokens": 1836,
+        "mean_llm_latency_ms": 4005.076959500002,
+        "mean_tool_latency_ms": 10.115305005456321,
+        "max_tool_latency_ms": 10.115305005456321
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "detect_change_hotspots",
+          "summarize_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "GE-019",
+      "category": "reasoning",
+      "difficulty": "hard",
+      "question": "Is vegetation degradation widespread across the dataset, and how many cells are affected?",
+      "status": "completed",
+      "final_answer": "**Evidence**\n\n| Metric | Value |\n|--------|-------|\n| Total number of cells in the dataset | 100 |\n| Cells identified as vegetation\u2011degradation hotspots (NDVI change\u202f\u2264\u202f\u20110.1) | 9 |\n| Proportion of degraded cells | 9\u202f% of the dataset |\n| Mean NDVI change across all cells | \u20130.0187 |\n| Mean NDVI change among the hotspots | \u20130.206 |\n\n*The hotspot count and identifiers come from the `summarize_hotspots` tool (threshold\u202f=\u202f\u20110.1). The overall cell count and summary statistics come from the `calculate_statistics` tool.*\n\n**Interpretation**\n\nOnly 9 out of 100 cells (about 9\u202f%) show NDVI declines of \u20130.1 or greater, indicating vegetation degradation. Because fewer than one\u2011tenth of the cells are affected, degradation is **not widespread** across the dataset; it is limited to a small subset of cells concentrated in a localized area.",
+      "expected_tools": [
+        "get_region",
+        "calculate_statistics",
+        "summarize_hotspots",
+        "detect_change_hotspots"
+      ],
+      "actual_tools": [
+        "calculate_statistics",
+        "summarize_hotspots"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "calculate_statistics",
+          "arguments": {
+            "": {}
+          }
+        },
+        {
+          "tool_name": "summarize_hotspots",
+          "arguments": {
+            "threshold": -0.1
+          }
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 2,
+        "supported_count": 2,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "study_cell_count",
+            "expected_value": 100,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "cell_count",
+                "actual_value": 100
+              }
+            ]
+          },
+          {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "degraded_cells",
+                "actual_value": 9
+              },
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 2,
+        "supported_claim_count": 2,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "study_cell_count",
+              "expected_value": 100
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "cell_count",
+                "actual_value": 100
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "degraded_cells",
+                "actual_value": 9
+              },
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 13436.434473005647,
+        "llm_call_count": 3,
+        "tool_call_count": 2,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 2711,
+        "total_output_tokens": 477,
+        "total_tokens": 3188,
+        "mean_llm_latency_ms": 4466.655788331991,
+        "mean_tool_latency_ms": 18.09093750125612,
+        "max_tool_latency_ms": 18.225216001155786
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "get_region",
+          "calculate_statistics",
+          "summarize_hotspots",
+          "detect_change_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "task_id": "GE-020",
+      "category": "reasoning",
+      "difficulty": "hard",
+      "question": "Provide an evidence-based summary of vegetation deterioration, including the number of affected cells and the overall NDVI change.",
+      "status": "completed",
+      "final_answer": "**Evidence (from `calculate_statistics`)**\n\n- **Total cells in the study region:** 100  \n- **Mean NDVI change (overall):**\u202f-0.0187  \n- **Median NDVI change:**\u202f-0.0032  \n- **Minimum NDVI change:**\u202f-0.25  \n- **Maximum NDVI change:**\u202f0.0437  \n- **Number of degraded cells (NDVI change\u202f\u2264\u202f\u20110.1):**\u202f9  \n\n**Interpretation**\n\nThe region shows a modest overall decline in vegetation health, with an average NDVI decrease of about **\u20110.019** across all cells. While most cells exhibit small changes (median near zero), **9 cells** have experienced significant deterioration (NDVI drop of\u202f\u20110.1 or more). These hotspots represent the primary areas of concern for vegetation loss in the study area.",
+      "expected_tools": [
+        "calculate_statistics",
+        "summarize_hotspots",
+        "detect_change_hotspots"
+      ],
+      "actual_tools": [
+        "calculate_statistics"
+      ],
+      "tool_call_arguments": [
+        {
+          "tool_name": "calculate_statistics",
+          "arguments": {}
+        }
+      ],
+      "tool_execution_errors": [],
+      "evidence_evaluation": {
+        "requirement_count": 2,
+        "supported_count": 2,
+        "unsupported_count": 0,
+        "grounded": true,
+        "requirements": [
+          {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "degraded_cells",
+                "actual_value": 9
+              }
+            ]
+          },
+          {
+            "concept": "overall_mean_ndvi_change",
+            "expected_value": null,
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "mean_change",
+                "actual_value": -0.018650758199393255
+              }
+            ]
+          }
+        ]
+      },
+      "claim_evaluation": {
+        "claim_count": 2,
+        "supported_claim_count": 2,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "degraded_cells",
+                "actual_value": 9
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "overall_mean_ndvi_change",
+              "expected_value": null
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "calculate_statistics",
+                "field": "mean_change",
+                "actual_value": -0.018650758199393255
+              }
+            ]
+          }
+        ]
+      },
+      "evidence_supported": true,
+      "answer_correct": true,
+      "grounded_correct": true,
+      "performance": {
+        "total_latency_ms": 6298.347667994676,
+        "llm_call_count": 2,
+        "tool_call_count": 1,
+        "tool_execution_error_count": 0,
+        "total_input_tokens": 1614,
+        "total_output_tokens": 367,
+        "total_tokens": 1981,
+        "mean_llm_latency_ms": 3139.8747189996357,
+        "mean_tool_latency_ms": 17.49480899889022,
+        "max_tool_latency_ms": 17.49480899889022
+      },
+      "primary_failure": "none",
+      "trajectory_analysis": {
+        "failure_type": "agent_failure",
+        "expected_tools": [
+          "calculate_statistics",
+          "summarize_hotspots",
+          "detect_change_hotspots"
+        ],
+        "actual_tools": [],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": []
+      }
+    }
+  ]
+}

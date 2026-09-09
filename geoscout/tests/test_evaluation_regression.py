@@ -57,3 +57,22 @@ def test_ge001_regression() -> None:
 
     assert evidence["grounded"]
     assert claims_result["grounded"]
+
+
+def test_qualitative_answer_correctness_epsg() -> None:
+    from geoscout.evaluation.evidence import (
+        qualitative_values_appear_in_answer,
+    )
+
+    expected_values = ["EPSG:4326"]
+
+    assert qualitative_values_appear_in_answer(
+        "The coordinate system is EPSG:4326.",
+        expected_values,
+    )
+    assert not qualitative_values_appear_in_answer(
+        "The coordinate system is EPSG:3857.",
+        expected_values,
+    )
+
+

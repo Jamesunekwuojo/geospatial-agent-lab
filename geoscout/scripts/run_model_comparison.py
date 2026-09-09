@@ -8,10 +8,14 @@ from geoscout.evaluation.claims import (
 )
 from geoscout.evaluation.evidence import (
     evaluate_semantic_evidence,
+    qualitative_values_appear_in_answer,
 )
 from geoscout.evaluation.failure_analysis import (
     analyze_result,
     summarize_failures,
+)
+from geoscout.evaluation.numerical import (
+    evaluate_numeric_answer,
 )
 from geoscout.evaluation.performance import (
     summarize_performance,
@@ -75,6 +79,57 @@ def extract_expected_tools(
     return tools
 
 
+def evaluate_answer_correctness(
+    answer: str | None,
+    task: dict[str, Any],
+) -> bool:
+    """
+    Evaluate whether the answer contains the expected
+    factual values (both numerical and qualitative).
+    """
+
+    if not answer:
+        return False
+
+    expected_claims = task.get(
+        "expected_claims",
+        [],
+    )
+
+    numeric_expected_values: dict[str, float] = {}
+    qualitative_expected_values: list[Any] = []
+
+    for claim in expected_claims:
+        expected = claim.get("expected_value")
+
+        if expected is None:
+            continue
+
+        concept = claim["concept"]
+
+        if isinstance(expected, (int, float)) and not isinstance(expected, bool):
+            numeric_expected_values[concept] = float(expected)
+        else:
+            qualitative_expected_values.append(expected)
+
+    if numeric_expected_values:
+        numerical = evaluate_numeric_answer(
+            answer=answer,
+            expected_values=numeric_expected_values,
+        )
+        if not numerical["correct"]:
+            return False
+
+    if qualitative_expected_values:
+        if not qualitative_values_appear_in_answer(
+            answer=answer,
+            expected_values=qualitative_expected_values,
+        ):
+            return False
+
+    return True
+
+
 def evaluate_model(
     model: str,
     tasks: list[dict[str, Any]],
@@ -133,7 +188,7 @@ def evaluate_model(
         )
 
         # --------------------------------------------------
-        # 3. Numerical answer correctness
+        # 3. Answer correctness
         # --------------------------------------------------
 
         answer_correct = (
@@ -257,54 +312,6 @@ def evaluate_model(
         )
 
     return results
-
-
-def evaluate_answer_correctness(
-    answer: str | None,
-    task: dict[str, Any],
-) -> bool:
-    """
-    Evaluate whether the answer contains the expected
-    factual values.
-
-    This remains intentionally lightweight for now.
-    """
-
-    if not answer:
-        return False
-
-    expected_claims = task.get(
-        "expected_claims",
-        [],
-    )
-
-    from geoscout.evaluation.numerical import (
-        evaluate_numeric_answer,
-    )
-
-    expected_values = {}
-
-    for claim in expected_claims:
-        expected = claim.get(
-            "expected_value"
-        )
-
-        if expected is None:
-            continue
-
-        concept = claim["concept"]
-
-        expected_values[concept] = expected
-
-    if not expected_values:
-        return True
-
-    numerical = evaluate_numeric_answer(
-        answer=answer,
-        expected_values=expected_values,
-    )
-
-    return numerical["correct"]
 
 
 def summarize_model(
