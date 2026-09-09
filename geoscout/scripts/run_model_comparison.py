@@ -489,7 +489,7 @@ def main() -> None:
 
     output_path = (
         output_dir
-        / "model_comparison_v2.json"
+        / "model_comparison_v3.json"
     )
 
     output = {
@@ -515,7 +515,7 @@ def main() -> None:
 
     print("=" * 70)
     print(
-        "GeoScout Model Comparison v2"
+        "GeoScout Model Comparison v3"
     )
     print("=" * 70)
 
