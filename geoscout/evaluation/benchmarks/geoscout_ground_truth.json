@@ -1,0 +1,50 @@
+[
+  {
+    "id": "GT-001",
+    "question": "How many degraded cells are present in the study region?",
+    "expected_values": {
+      "degraded_cells": 9
+    },
+    "tolerance": 0.0
+  },
+  {
+    "id": "GT-002",
+    "question": "How many cells experienced significant vegetation degradation?",
+    "expected_values": {
+      "degraded_cells": 9
+    },
+    "tolerance": 0.0
+  },
+  {
+    "id": "GT-003",
+    "question": "What is the total number of cells in the study region?",
+    "expected_values": {
+      "cell_count": 100
+    },
+    "tolerance": 0.0
+  },
+  {
+    "id": "GT-004",
+    "question": "What is the mean NDVI change across the study region?",
+    "expected_values": {
+      "mean_change": -0.018650758199393255
+    },
+    "tolerance": 0.002
+  },
+  {
+    "id": "GT-005",
+    "question": "What is the minimum NDVI change in the study region?",
+    "expected_values": {
+      "minimum_change": -0.25
+    },
+    "tolerance": 0.002
+  },
+  {
+    "id": "GT-006",
+    "question": "What is the maximum NDVI change in the study region?",
+    "expected_values": {
+      "maximum_change": 0.043707936990109886
+    },
+    "tolerance": 0.002
+  }
+]

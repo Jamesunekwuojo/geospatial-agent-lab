@@ -2,8 +2,6 @@ from pathlib import Path
 
 import geopandas as gpd
 
-
-
 DEFAULT_DATASET = Path("data/synthetic/vegetation_grid.geojson")
 
 
@@ -12,9 +10,7 @@ def load_dataset(
 ) -> gpd.GeoDataFrame:
     """Load the GeoScout synthetic geospatial dataset."""
     if not dataset_path.exists():
-        raise FileNotFoundError(
-            f"Dataset not found: {dataset_path}"
-        )
+        raise FileNotFoundError(f"Dataset not found: {dataset_path}")
 
     return gpd.read_file(dataset_path)
 
@@ -47,9 +43,7 @@ def calculate_ndvi_change(
 
     gdf = load_dataset(dataset_path).copy()
 
-    gdf["ndvi_change"] = (
-        gdf["current_ndvi"] - gdf["baseline_ndvi"]
-    )
+    gdf["ndvi_change"] = gdf["current_ndvi"] - gdf["baseline_ndvi"]
 
     return gdf
 
@@ -104,11 +98,7 @@ def summarize_hotspots(
         "threshold": threshold,
         "hotspot_count": int(len(hotspots)),
         "hotspot_cells": hotspots["cell_id"].tolist(),
-        "mean_ndvi_change": (
-            float(hotspots["ndvi_change"].mean())
-            if len(hotspots) > 0
-            else None
-        ),
+        "mean_ndvi_change": (float(hotspots["ndvi_change"].mean()) if len(hotspots) > 0 else None),
     }
 
 

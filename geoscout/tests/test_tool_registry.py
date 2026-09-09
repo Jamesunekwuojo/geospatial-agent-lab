@@ -19,9 +19,7 @@ def test_tool_registry_contains_expected_tools():
 
 
 def test_detect_hotspots_schema():
-    schema = DetectChangeHotspotsInput(
-        threshold=-0.20
-    )
+    schema = DetectChangeHotspotsInput(threshold=-0.20)
 
     assert schema.threshold == -0.20
 

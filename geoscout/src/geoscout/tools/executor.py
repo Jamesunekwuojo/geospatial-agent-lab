@@ -1,3 +1,4 @@
+import inspect
 from typing import Any
 
 from geoscout.tools.geospatial import (
@@ -7,7 +8,6 @@ from geoscout.tools.geospatial import (
     get_region,
     summarize_hotspots,
 )
-
 
 TOOL_FUNCTIONS = {
     "get_region": get_region,
@@ -47,14 +47,20 @@ def execute_tool(
     if tool_name not in TOOL_FUNCTIONS:
         available = ", ".join(TOOL_FUNCTIONS.keys())
 
-        raise ValueError(
-            f"Unknown tool '{tool_name}'. "
-            f"Available tools: {available}"
-        )
+        raise ValueError(f"Unknown tool '{tool_name}'. Available tools: {available}")
 
     function = TOOL_FUNCTIONS[tool_name]
 
     if arguments is None:
         arguments = {}
+        
+    supported_arguments = inspect.signature(function).parameters
+    
+    arguments = {
+    name: value
+    for name, value in arguments.items()
+    if name in supported_arguments
+    }
+
 
     return function(**arguments)

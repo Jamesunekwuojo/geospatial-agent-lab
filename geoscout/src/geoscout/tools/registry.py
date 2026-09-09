@@ -7,7 +7,6 @@ from geoscout.tools.schemas import (
     ToolDefinition,
 )
 
-
 TOOLS = [
     ToolDefinition(
         name="get_region",
@@ -21,8 +20,11 @@ TOOLS = [
     ToolDefinition(
         name="calculate_ndvi_change",
         description=(
-            "Calculate the change in NDVI between the baseline year "
-            "and the current year for every spatial cell."
+            "Calculate NDVI change between the fixed baseline and current "
+            "years stored in the dataset for every spatial cell. Use only "
+            "when per-cell NDVI-change values are required; for regional "
+            "summaries use calculate_statistics instead. "
+            "This tool accepts no arguments."
         ),
         input_schema=CalculateNDVIChangeInput.model_json_schema(),
     ),
@@ -37,8 +39,9 @@ TOOLS = [
     ToolDefinition(
         name="calculate_statistics",
         description=(
-            "Calculate summary statistics describing vegetation "
-            "change across the study region."
+            "Calculate compact summary statistics for vegetation change across "
+            "the study region, including cell count, mean, median, minimum, "
+            "maximum, and degraded-cell count."
         ),
         input_schema=CalculateStatisticsInput.model_json_schema(),
     ),
@@ -46,7 +49,8 @@ TOOLS = [
         name="summarize_hotspots",
         description=(
             "Return a compact summary of vegetation degradation "
-            "hotspots, including their count and cell identifiers."
+            "hotspots, including their count and cell identifiers. Prefer this "
+            "to detect_change_hotspots when cell geometries are not required."
         ),
         input_schema=SummarizeHotspotsInput.model_json_schema(),
     ),

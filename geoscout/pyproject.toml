@@ -21,6 +21,7 @@ dependencies = [
     "geopandas>=1.0,<2",
     "shapely>=2.0,<3",
     "pyproj>=3.6,<4",
+    "groq>=1.7.0",
 ]
 
 [project.optional-dependencies]
@@ -42,6 +43,9 @@ where = ["src"]
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
+markers = [
+    "integration: tests that call external services such as Groq",
+]
 
 [tool.ruff]
 line-length = 100
@@ -61,3 +65,5 @@ source = ["geoscout"]
 
 [tool.coverage.report]
 show_missing = true
+
+

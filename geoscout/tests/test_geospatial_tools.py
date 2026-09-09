@@ -20,14 +20,9 @@ def test_calculate_ndvi_change():
     assert "ndvi_change" in gdf.columns
     assert len(gdf) == 100
 
-    expected = (
-        gdf["current_ndvi"] - gdf["baseline_ndvi"]
-    )
+    expected = gdf["current_ndvi"] - gdf["baseline_ndvi"]
 
-    assert (
-        expected.round(10)
-        == gdf["ndvi_change"].round(10)
-    ).all()
+    assert (expected.round(10) == gdf["ndvi_change"].round(10)).all()
 
 
 def test_detect_change_hotspots():

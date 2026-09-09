@@ -39,9 +39,7 @@ class SummarizeHotspotsInput(BaseModel):
 
     threshold: float = Field(
         default=-0.10,
-        description=(
-            "NDVI change threshold used to identify degradation hotspots."
-        ),
+        description=("NDVI change threshold used to identify degradation hotspots."),
     )
 
 

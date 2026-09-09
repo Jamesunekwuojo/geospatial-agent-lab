@@ -4,7 +4,6 @@ import geopandas as gpd
 import numpy as np
 from shapely.geometry import box
 
-
 GRID_SIZE = 10
 CELL_SIZE = 0.01
 
@@ -84,14 +83,10 @@ def generate_dataset() -> gpd.GeoDataFrame:
 
     for cell_id, change in degraded_cells.items():
         mask = gdf["cell_id"] == cell_id
-        gdf.loc[mask, "current_ndvi"] = (
-            gdf.loc[mask, "baseline_ndvi"] + change
-        )
+        gdf.loc[mask, "current_ndvi"] = gdf.loc[mask, "baseline_ndvi"] + change
 
     # Calculate the actual change.
-    gdf["ndvi_change"] = (
-        gdf["current_ndvi"] - gdf["baseline_ndvi"]
-    )
+    gdf["ndvi_change"] = gdf["current_ndvi"] - gdf["baseline_ndvi"]
 
     # Ground-truth degradation label.
     #
@@ -115,10 +110,7 @@ def main() -> None:
     print(f"Dataset written to: {OUTPUT_FILE}")
     print(f"Number of cells: {len(gdf)}")
     print(f"CRS: {gdf.crs}")
-    print(
-        f"Degraded cells: "
-        f"{gdf['is_degraded'].sum()}"
-    )
+    print(f"Degraded cells: {gdf['is_degraded'].sum()}")
 
 
 if __name__ == "__main__":

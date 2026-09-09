@@ -1,5 +1,3 @@
-import geopandas as gpd
-
 from geoscout.data.generate_synthetic import generate_dataset
 
 
@@ -24,11 +22,6 @@ def test_dataset_has_nine_degraded_cells():
 def test_ndvi_change_is_correct():
     gdf = generate_dataset()
 
-    calculated_change = (
-        gdf["current_ndvi"] - gdf["baseline_ndvi"]
-    )
+    calculated_change = gdf["current_ndvi"] - gdf["baseline_ndvi"]
 
-    assert (
-        calculated_change.round(10)
-        == gdf["ndvi_change"].round(10)
-    ).all()
+    assert (calculated_change.round(10) == gdf["ndvi_change"].round(10)).all()
