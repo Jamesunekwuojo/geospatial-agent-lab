@@ -29,3 +29,6 @@ evaluation/results/
 
 # Logs
 *.log
+
+# Generated evaluation trajectories
+#geoscout/evaluation/results/
