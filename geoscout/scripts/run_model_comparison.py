@@ -10,6 +10,9 @@ from geoscout.evaluation.evidence import (
     evaluate_semantic_evidence,
     qualitative_values_appear_in_answer,
 )
+from geoscout.evaluation.evidence_trace import (
+    build_evidence_trace,
+)
 from geoscout.evaluation.failure_analysis import (
     analyze_result,
     summarize_failures,
@@ -187,6 +190,10 @@ def evaluate_model(
             )
         )
 
+        evidence_trace = build_evidence_trace(
+            claim_evaluation
+        )
+
         # --------------------------------------------------
         # 3. Answer correctness
         # --------------------------------------------------
@@ -253,6 +260,11 @@ def evaluate_model(
             "claim_evaluation": (
                 claim_evaluation
             ),
+
+            "evidence_trace": [
+                trace.to_dict()
+                for trace in evidence_trace
+            ],
 
             "evidence_supported": (
                 evidence_evaluation[
