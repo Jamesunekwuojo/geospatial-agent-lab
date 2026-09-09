@@ -1,0 +1,285 @@
+{
+  "experiment": "GPT-OSS 20B vs GPT-OSS 120B",
+  "source_artifact": "evaluation/results/model_comparison_v3.json",
+  "evaluation_version": "semantic-v2",
+  "task_count_per_model": 20,
+  "total_model_task_evaluations": 40,
+  "models": {
+    "openai/gpt-oss-20b": {
+      "task_count": 20,
+      "grounded_correct": 18,
+      "grounded_correctness": 0.9,
+      "answer_correct": 19,
+      "answer_correctness": 0.95,
+      "evidence_supported": 18,
+      "evidence_support_rate": 0.9,
+      "grounded_failures": 2,
+      "evidence_failures": 2,
+      "answer_failures": 1,
+      "mean_tools_per_task": 1.2,
+      "tasks_with_no_tool_calls": 1,
+      "tasks_with_multiple_tools": 5,
+      "tool_usage_frequency": {
+        "calculate_statistics": 8,
+        "get_region": 6,
+        "summarize_hotspots": 10
+      },
+      "failure_cases": [
+        {
+          "task_id": "GE-010",
+          "primary_failure": "ungrounded_answer",
+          "trajectory_failure": "agent_failure",
+          "answer_correct": true,
+          "evidence_supported": false,
+          "actual_tools": []
+        },
+        {
+          "task_id": "GE-019",
+          "primary_failure": "evidence_and_answer_error",
+          "trajectory_failure": "missing_required_tool",
+          "answer_correct": false,
+          "evidence_supported": false,
+          "actual_tools": [
+            "summarize_hotspots"
+          ]
+        }
+      ]
+    },
+    "openai/gpt-oss-120b": {
+      "task_count": 20,
+      "grounded_correct": 19,
+      "grounded_correctness": 0.95,
+      "answer_correct": 20,
+      "answer_correctness": 1.0,
+      "evidence_supported": 19,
+      "evidence_support_rate": 0.95,
+      "grounded_failures": 1,
+      "evidence_failures": 1,
+      "answer_failures": 0,
+      "mean_tools_per_task": 1.25,
+      "tasks_with_no_tool_calls": 1,
+      "tasks_with_multiple_tools": 6,
+      "tool_usage_frequency": {
+        "summarize_hotspots": 11,
+        "get_region": 7,
+        "calculate_statistics": 7
+      },
+      "failure_cases": [
+        {
+          "task_id": "GE-010",
+          "primary_failure": "ungrounded_answer",
+          "trajectory_failure": "agent_failure",
+          "answer_correct": true,
+          "evidence_supported": false,
+          "actual_tools": []
+        }
+      ]
+    }
+  },
+  "comparisons": {
+    "grounded_correctness_difference": 0.04999999999999993,
+    "answer_correctness_difference": 0.050000000000000044,
+    "evidence_support_difference": 0.04999999999999993,
+    "grounded_failure_reduction": 1,
+    "evidence_failure_reduction": 1,
+    "answer_failure_reduction": 1,
+    "mean_tools_per_task_difference": 0.050000000000000044
+  },
+  "failure_cases": {
+    "openai/gpt-oss-20b": {
+      "count": 2,
+      "tasks": [
+        {
+          "task_id": "GE-010",
+          "primary_failure": "ungrounded_answer",
+          "trajectory_failure": "agent_failure",
+          "answer_correct": true,
+          "evidence_supported": false,
+          "actual_tools": []
+        },
+        {
+          "task_id": "GE-019",
+          "primary_failure": "evidence_and_answer_error",
+          "trajectory_failure": "missing_required_tool",
+          "answer_correct": false,
+          "evidence_supported": false,
+          "actual_tools": [
+            "summarize_hotspots"
+          ]
+        }
+      ],
+      "failure_type_counts": {
+        "ungrounded_answer": 1,
+        "evidence_and_answer_error": 1
+      }
+    },
+    "openai/gpt-oss-120b": {
+      "count": 1,
+      "tasks": [
+        {
+          "task_id": "GE-010",
+          "primary_failure": "ungrounded_answer",
+          "trajectory_failure": "agent_failure",
+          "answer_correct": true,
+          "evidence_supported": false,
+          "actual_tools": []
+        }
+      ],
+      "failure_type_counts": {
+        "ungrounded_answer": 1
+      }
+    }
+  },
+  "ge019_case_study": {
+    "openai/gpt-oss-20b": {
+      "actual_tools": [
+        "summarize_hotspots"
+      ],
+      "grounded_correct": false,
+      "answer_correct": false,
+      "evidence_supported": false,
+      "evidence_trace": [
+        {
+          "concept": "study_cell_count",
+          "expected_value": 100,
+          "supported": false,
+          "supporting_evidence": []
+        },
+        {
+          "concept": "degraded_cell_count",
+          "expected_value": 9,
+          "supported": true,
+          "supporting_evidence": [
+            {
+              "tool": "summarize_hotspots",
+              "field": "hotspot_count",
+              "actual_value": 9
+            }
+          ]
+        }
+      ],
+      "claim_evaluation": {
+        "claim_count": 2,
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 1,
+        "grounded": false,
+        "claims": [
+          {
+            "claim": {
+              "concept": "study_cell_count",
+              "expected_value": 100
+            },
+            "supported": false,
+            "supporting_evidence": []
+          },
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "trajectory_failure": "missing_required_tool",
+      "trajectory_failure_interpretation": "Exploratory tool-path diagnostic only; not an authoritative task failure indicator.",
+      "authoritative_evaluation": {
+        "grounded_correct": false,
+        "answer_correct": false,
+        "evidence_supported": false
+      }
+    },
+    "openai/gpt-oss-120b": {
+      "actual_tools": [
+        "get_region",
+        "summarize_hotspots"
+      ],
+      "grounded_correct": true,
+      "answer_correct": true,
+      "evidence_supported": true,
+      "evidence_trace": [
+        {
+          "concept": "study_cell_count",
+          "expected_value": 100,
+          "supported": true,
+          "supporting_evidence": [
+            {
+              "tool": "get_region",
+              "field": "cell_count",
+              "actual_value": 100
+            }
+          ]
+        },
+        {
+          "concept": "degraded_cell_count",
+          "expected_value": 9,
+          "supported": true,
+          "supporting_evidence": [
+            {
+              "tool": "summarize_hotspots",
+              "field": "hotspot_count",
+              "actual_value": 9
+            }
+          ]
+        }
+      ],
+      "claim_evaluation": {
+        "claim_count": 2,
+        "supported_claim_count": 2,
+        "unsupported_claim_count": 0,
+        "grounded": true,
+        "claims": [
+          {
+            "claim": {
+              "concept": "study_cell_count",
+              "expected_value": 100
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "get_region",
+                "field": "cell_count",
+                "actual_value": 100
+              }
+            ]
+          },
+          {
+            "claim": {
+              "concept": "degraded_cell_count",
+              "expected_value": 9
+            },
+            "supported": true,
+            "supporting_evidence": [
+              {
+                "tool": "summarize_hotspots",
+                "field": "hotspot_count",
+                "actual_value": 9
+              }
+            ]
+          }
+        ]
+      },
+      "trajectory_failure": "missing_required_tool",
+      "trajectory_failure_interpretation": "Exploratory tool-path diagnostic only; not an authoritative task failure indicator.",
+      "authoritative_evaluation": {
+        "grounded_correct": true,
+        "answer_correct": true,
+        "evidence_supported": true
+      },
+      "trajectory_failure_note": "The trajectory diagnostic reports missing_required_tool because expected_tools contains alternative acceptable paths. Semantic-v2 evidence evaluation marks GE-019 grounded and successful."
+    }
+  },
+  "methodological_notes": [
+    "Claim groundedness is not treated as an independent metric from evidence support in semantic-v2.",
+    "GE-010 answer_correct=True is not interpreted as a successful analytical answer because the agent produced no tool calls and no analytical final answer.",
+    "Tool-path overlap is treated as an exploratory workflow diagnostic, not an official performance metric.",
+    "GE-019 spatial interpretation is not independently scored by the current benchmark."
+  ]
+}
