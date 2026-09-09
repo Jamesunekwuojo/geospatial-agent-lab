@@ -11,12 +11,11 @@
       }
     ],
     "expected_claims": [
-    {
-      "tool": "calculate_statistics",
-      "field": "degraded_cells",
-      "expected_value": 9
-    }
-  ]
+      {
+        "concept": "degraded_cell_count",
+        "expected_value": 9
+      }
+    ]
   },
   {
     "id": "GE-002",
@@ -25,18 +24,15 @@
     "question": "How many spatial cells are in the study region?",
     "required_evidence": [
       {
-        "tool": "get_region",
-        "field": "cell_count",
+        "concept": "study_cell_count",
         "expected_value": 100
       }
     ],
-
     "expected_claims": [
-    {
-      "tool": "get_region",
-      "field": "cell_count",
-      "expected_value": 100
-    }
+      {
+        "concept": "study_cell_count",
+        "expected_value": 100
+      }
     ]
   },
   {
@@ -46,15 +42,13 @@
     "question": "What coordinate reference system is used by the study region?",
     "required_evidence": [
       {
-        "tool": "get_region",
-        "field": "crs",
+        "concept": "region_crs",
         "expected_value": "EPSG:4326"
       }
     ],
     "expected_claims": [
       {
-        "tool": "get_region",
-        "field": "crs",
+        "concept": "region_crs",
         "expected_value": "EPSG:4326"
       }
     ]
@@ -66,29 +60,14 @@
     "question": "Identify the cells where vegetation deterioration is significant.",
     "required_evidence": [
       {
-        "tool": "detect_change_hotspots",
-        "field": "hotspot_cells",
+        "concept": "hotspot_cells",
         "expected_value": null
       }
     ],
-    "expected_arguments": {
-      "threshold": -0.1
-    },
     "expected_claims": [
       {
-        "tool": "detect_change_hotspots",
-        "field": "hotspot_cells",
-        "expected_value": [
-          "cell_03_03",
-          "cell_03_04",
-          "cell_03_05",
-          "cell_04_03",
-          "cell_04_04",
-          "cell_04_05",
-          "cell_05_03",
-          "cell_05_04",
-          "cell_05_05"
-        ]
+        "concept": "hotspot_cells",
+        "expected_value": null
       }
     ]
   },
@@ -99,17 +78,38 @@
     "question": "Calculate summary statistics for vegetation change.",
     "required_evidence": [
       {
-        "tool": "calculate_statistics",
-        "field": "mean_change",
+        "concept": "overall_mean_ndvi_change",
         "expected_value": null
+      },
+      {
+        "concept": "minimum_ndvi_change",
+        "expected_value": null
+      },
+      {
+        "concept": "maximum_ndvi_change",
+        "expected_value": null
+      },
+      {
+        "concept": "degraded_cell_count",
+        "expected_value": 9
       }
     ],
     "expected_claims": [
       {
-        "tool": "calculate_statistics",
-        "field": "mean_change",
-        "expected_value": -0.018650758199393255,
-        "tolerance": 0.002
+        "concept": "overall_mean_ndvi_change",
+        "expected_value": null
+      },
+      {
+        "concept": "minimum_ndvi_change",
+        "expected_value": null
+      },
+      {
+        "concept": "maximum_ndvi_change",
+        "expected_value": null
+      },
+      {
+        "concept": "degraded_cell_count",
+        "expected_value": 9
       }
     ]
   },
@@ -120,17 +120,14 @@
     "question": "What is the mean change in NDVI across the entire region?",
     "required_evidence": [
       {
-        "tool": "calculate_statistics",
-        "field": "mean_change",
+        "concept": "overall_mean_ndvi_change",
         "expected_value": null
       }
     ],
     "expected_claims": [
       {
-        "tool": "calculate_statistics",
-        "field": "mean_change",
-        "expected_value": -0.018650758199393255,
-        "tolerance": 0.002
+        "concept": "overall_mean_ndvi_change",
+        "expected_value": null
       }
     ]
   },
@@ -141,17 +138,14 @@
     "question": "What is the largest observed decrease in NDVI?",
     "required_evidence": [
       {
-        "tool": "calculate_statistics",
-        "field": "minimum_change",
+        "concept": "minimum_ndvi_change",
         "expected_value": null
       }
     ],
     "expected_claims": [
       {
-        "tool": "calculate_statistics",
-        "field": "minimum_change",
-        "expected_value": -0.25,
-        "tolerance": 0.002
+        "concept": "minimum_ndvi_change",
+        "expected_value": null
       }
     ]
   },
@@ -162,17 +156,14 @@
     "question": "What is the greatest increase in NDVI observed in the dataset?",
     "required_evidence": [
       {
-        "tool": "calculate_statistics",
-        "field": "maximum_change",
+        "concept": "maximum_ndvi_change",
         "expected_value": null
       }
     ],
     "expected_claims": [
       {
-        "tool": "calculate_statistics",
-        "field": "maximum_change",
-        "expected_value": 0.043707936990109886,
-        "tolerance": 0.002
+        "concept": "maximum_ndvi_change",
+        "expected_value": null
       }
     ]
   },
@@ -183,19 +174,30 @@
     "question": "Summarize the vegetation degradation hotspots.",
     "required_evidence": [
       {
-        "tool": "summarize_hotspots",
-        "field": "hotspot_count",
+        "concept": "degraded_cell_count",
         "expected_value": 9
+      },
+      {
+        "concept": "hotspot_cells",
+        "expected_value": null
+      },
+      {
+        "concept": "hotspot_mean_ndvi_change",
+        "expected_value": null
       }
     ],
-    "expected_arguments": {
-      "threshold": -0.1
-    },
     "expected_claims": [
       {
-        "tool": "summarize_hotspots",
-        "field": "hotspot_count",
+        "concept": "degraded_cell_count",
         "expected_value": 9
+      },
+      {
+        "concept": "hotspot_cells",
+        "expected_value": null
+      },
+      {
+        "concept": "hotspot_mean_ndvi_change",
+        "expected_value": null
       }
     ]
   },
@@ -206,20 +208,14 @@
     "question": "What is the average NDVI change among the detected degradation hotspots?",
     "required_evidence": [
       {
-        "tool": "summarize_hotspots",
-        "field": "mean_ndvi_change",
+        "concept": "hotspot_mean_ndvi_change",
         "expected_value": null
       }
     ],
-    "expected_arguments": {
-      "threshold": -0.1
-    },
     "expected_claims": [
       {
-        "tool": "summarize_hotspots",
-        "field": "mean_ndvi_change",
-        "expected_value": -0.20555555555555555,
-        "tolerance": 0.002
+        "concept": "hotspot_mean_ndvi_change",
+        "expected_value": null
       }
     ]
   },
@@ -230,25 +226,21 @@
     "question": "How many cells are in the study region and how many are degraded?",
     "required_evidence": [
       {
-        "tool": "get_region",
-        "field": "cell_count",
+        "concept": "study_cell_count",
         "expected_value": 100
       },
       {
-        "tool": "calculate_statistics",
-        "field": "degraded_cells",
+        "concept": "degraded_cell_count",
         "expected_value": 9
       }
     ],
     "expected_claims": [
       {
-        "tool": "get_region",
-        "field": "cell_count",
+        "concept": "study_cell_count",
         "expected_value": 100
       },
       {
-        "tool": "calculate_statistics",
-        "field": "degraded_cells",
+        "concept": "degraded_cell_count",
         "expected_value": 9
       }
     ]
@@ -260,25 +252,21 @@
     "question": "What is the CRS of the dataset and how many cells experienced significant degradation?",
     "required_evidence": [
       {
-        "tool": "get_region",
-        "field": "crs",
+        "concept": "region_crs",
         "expected_value": "EPSG:4326"
       },
       {
-        "tool": "calculate_statistics",
-        "field": "degraded_cells",
+        "concept": "degraded_cell_count",
         "expected_value": 9
       }
     ],
     "expected_claims": [
       {
-        "tool": "get_region",
-        "field": "crs",
+        "concept": "region_crs",
         "expected_value": "EPSG:4326"
       },
       {
-        "tool": "calculate_statistics",
-        "field": "degraded_cells",
+        "concept": "degraded_cell_count",
         "expected_value": 9
       }
     ]
@@ -290,28 +278,21 @@
     "question": "Identify the degradation hotspots and report the total number of cells analyzed.",
     "required_evidence": [
       {
-        "tool": "summarize_hotspots",
-        "field": "hotspot_count",
-        "expected_value": 9
+        "concept": "hotspot_cells",
+        "expected_value": null
       },
       {
-        "tool": "get_region",
-        "field": "cell_count",
+        "concept": "study_cell_count",
         "expected_value": 100
       }
     ],
-    "expected_arguments": {
-      "threshold": -0.1
-    },
     "expected_claims": [
       {
-        "tool": "summarize_hotspots",
-        "field": "hotspot_count",
-        "expected_value": 9
+        "concept": "hotspot_cells",
+        "expected_value": null
       },
       {
-        "tool": "get_region",
-        "field": "cell_count",
+        "concept": "study_cell_count",
         "expected_value": 100
       }
     ]
@@ -323,27 +304,22 @@
     "question": "How many degraded cells are there, and what is the mean NDVI change across the region?",
     "required_evidence": [
       {
-        "tool": "calculate_statistics",
-        "field": "degraded_cells",
+        "concept": "degraded_cell_count",
         "expected_value": 9
       },
       {
-        "tool": "calculate_statistics",
-        "field": "mean_change",
+        "concept": "overall_mean_ndvi_change",
         "expected_value": null
       }
     ],
     "expected_claims": [
       {
-        "tool": "calculate_statistics",
-        "field": "degraded_cells",
+        "concept": "degraded_cell_count",
         "expected_value": 9
       },
       {
-        "tool": "calculate_statistics",
-        "field": "mean_change",
-        "expected_value": -0.018650758199393255,
-        "tolerance": 0.002
+        "concept": "overall_mean_ndvi_change",
+        "expected_value": null
       }
     ]
   },
@@ -354,39 +330,30 @@
     "question": "Give me the region size, the number of degradation hotspots, and the dataset CRS.",
     "required_evidence": [
       {
-        "tool": "get_region",
-        "field": "cell_count",
+        "concept": "study_cell_count",
         "expected_value": 100
       },
       {
-        "tool": "get_region",
-        "field": "crs",
-        "expected_value": "EPSG:4326"
+        "concept": "degraded_cell_count",
+        "expected_value": 9
       },
       {
-        "tool": "summarize_hotspots",
-        "field": "hotspot_count",
-        "expected_value": 9
+        "concept": "region_crs",
+        "expected_value": "EPSG:4326"
       }
     ],
-    "expected_arguments": {
-      "threshold": -0.1
-    },
     "expected_claims": [
       {
-        "tool": "get_region",
-        "field": "cell_count",
+        "concept": "study_cell_count",
         "expected_value": 100
       },
       {
-        "tool": "get_region",
-        "field": "crs",
-        "expected_value": "EPSG:4326"
+        "concept": "degraded_cell_count",
+        "expected_value": 9
       },
       {
-        "tool": "summarize_hotspots",
-        "field": "hotspot_count",
-        "expected_value": 9
+        "concept": "region_crs",
+        "expected_value": "EPSG:4326"
       }
     ]
   },
@@ -397,30 +364,22 @@
     "question": "What are the degradation hotspots and what is the minimum NDVI change in the entire region?",
     "required_evidence": [
       {
-        "tool": "summarize_hotspots",
-        "field": "hotspot_count",
-        "expected_value": 9
+        "concept": "hotspot_cells",
+        "expected_value": null
       },
       {
-        "tool": "calculate_statistics",
-        "field": "minimum_change",
+        "concept": "minimum_ndvi_change",
         "expected_value": null
       }
     ],
-    "expected_arguments": {
-      "threshold": -0.1
-    },
     "expected_claims": [
       {
-        "tool": "summarize_hotspots",
-        "field": "hotspot_count",
-        "expected_value": 9
+        "concept": "hotspot_cells",
+        "expected_value": null
       },
       {
-        "tool": "calculate_statistics",
-        "field": "minimum_change",
-        "expected_value": -0.25,
-        "tolerance": 0.002
+        "concept": "minimum_ndvi_change",
+        "expected_value": null
       }
     ]
   },
@@ -431,18 +390,13 @@
     "question": "If significant degradation is defined as an NDVI change of -0.10 or lower, how many cells meet that criterion?",
     "required_evidence": [
       {
-        "tool": "detect_change_hotspots",
-        "field": "hotspot_count",
+        "concept": "degraded_cell_count",
         "expected_value": 9
       }
     ],
-    "expected_arguments": {
-      "threshold": -0.1
-    },
     "expected_claims": [
       {
-        "tool": "detect_change_hotspots",
-        "field": "hotspot_count",
+        "concept": "degraded_cell_count",
         "expected_value": 9
       }
     ]
@@ -454,29 +408,14 @@
     "question": "Which cells should be investigated first because they experienced substantial vegetation decline?",
     "required_evidence": [
       {
-        "tool": "detect_change_hotspots",
-        "field": "hotspot_cells",
+        "concept": "hotspot_cells",
         "expected_value": null
       }
     ],
-    "expected_arguments": {
-      "threshold": -0.1
-    },
     "expected_claims": [
       {
-        "tool": "detect_change_hotspots",
-        "field": "hotspot_cells",
-        "expected_value": [
-          "cell_03_03",
-          "cell_03_04",
-          "cell_03_05",
-          "cell_04_03",
-          "cell_04_04",
-          "cell_04_05",
-          "cell_05_03",
-          "cell_05_04",
-          "cell_05_05"
-        ]
+        "concept": "hotspot_cells",
+        "expected_value": null
       }
     ]
   },
@@ -487,26 +426,22 @@
     "question": "Is vegetation degradation widespread across the dataset, and how many cells are affected?",
     "required_evidence": [
       {
-        "tool": "calculate_statistics",
-        "field": "degraded_cells",
-        "expected_value": 9
+        "concept": "study_cell_count",
+        "expected_value": 100
       },
       {
-        "tool": "get_region",
-        "field": "cell_count",
-        "expected_value": 100
+        "concept": "degraded_cell_count",
+        "expected_value": 9
       }
     ],
     "expected_claims": [
       {
-        "tool": "calculate_statistics",
-        "field": "degraded_cells",
-        "expected_value": 9
+        "concept": "study_cell_count",
+        "expected_value": 100
       },
       {
-        "tool": "get_region",
-        "field": "cell_count",
-        "expected_value": 100
+        "concept": "degraded_cell_count",
+        "expected_value": 9
       }
     ]
   },
@@ -517,27 +452,22 @@
     "question": "Provide an evidence-based summary of vegetation deterioration, including the number of affected cells and the overall NDVI change.",
     "required_evidence": [
       {
-        "tool": "calculate_statistics",
-        "field": "degraded_cells",
+        "concept": "degraded_cell_count",
         "expected_value": 9
       },
       {
-        "tool": "calculate_statistics",
-        "field": "mean_change",
+        "concept": "overall_mean_ndvi_change",
         "expected_value": null
       }
     ],
     "expected_claims": [
       {
-        "tool": "calculate_statistics",
-        "field": "degraded_cells",
+        "concept": "degraded_cell_count",
         "expected_value": 9
       },
       {
-        "tool": "calculate_statistics",
-        "field": "mean_change",
-        "expected_value": -0.018650758199393255,
-        "tolerance": 0.002
+        "concept": "overall_mean_ndvi_change",
+        "expected_value": null
       }
     ]
   }

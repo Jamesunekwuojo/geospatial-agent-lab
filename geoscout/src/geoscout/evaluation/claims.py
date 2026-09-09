@@ -1,5 +1,9 @@
 from typing import Any
 
+from geoscout.evaluation.evidence import (
+    evaluate_semantic_evidence,
+)
+
 
 def normalize_text(value: str) -> str:
     """Normalize text for lightweight claim matching."""
@@ -175,3 +179,70 @@ def evidence_from_observations(
             )
 
     return evidence
+
+
+def evaluate_semantic_claims(
+    claims: list[dict[str, Any]],
+    observations: list[dict[str, Any]],
+    tolerance: float = 0.0,
+) -> dict[str, Any]:
+    """
+    Evaluate claims using semantic evidence concepts.
+    """
+
+    requirements = [
+        {
+            "concept": claim["concept"],
+            "expected_value": claim.get(
+                "expected_value"
+            ),
+        }
+        for claim in claims
+    ]
+
+    evidence_result = evaluate_semantic_evidence(
+        observations=observations,
+        requirements=requirements,
+        tolerance=tolerance,
+    )
+
+    claim_results = []
+
+    for claim, evidence in zip(
+        claims,
+        evidence_result["requirements"],
+        strict=True,
+    ):
+        claim_results.append(
+            {
+                "claim": claim,
+                "supported": evidence[
+                    "supported"
+                ],
+                "supporting_evidence": evidence[
+                    "supporting_evidence"
+                ],
+            }
+        )
+
+    supported_count = sum(
+        item["supported"]
+        for item in claim_results
+    )
+
+    return {
+        "claim_count": len(claim_results),
+        "supported_claim_count": (
+            supported_count
+        ),
+        "unsupported_claim_count": (
+            len(claim_results)
+            - supported_count
+        ),
+        "grounded": (
+            len(claim_results) > 0
+            and supported_count
+            == len(claim_results)
+        ),
+        "claims": claim_results,
+    }

@@ -149,3 +149,36 @@ def test_evidence_from_observations() -> None:
         "field": "degraded_cells",
         "actual_value": 9,
     } in evidence
+
+
+def test_semantic_claim_uses_alternative_evidence() -> None:
+    claims = [
+        {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+        }
+    ]
+
+    observations = [
+        {
+            "tool_name": "summarize_hotspots",
+            "result": {
+                "hotspot_count": 9,
+                "hotspot_cells": [],
+                "mean_ndvi_change": -0.206,
+            },
+        }
+    ]
+
+    from geoscout.evaluation.claims import (
+        evaluate_semantic_claims,
+    )
+
+    result = evaluate_semantic_claims(
+        claims=claims,
+        observations=observations,
+    )
+
+    assert result["grounded"]
+    assert result["supported_claim_count"] == 1
+

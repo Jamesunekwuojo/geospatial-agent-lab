@@ -4,11 +4,11 @@ from typing import Any
 
 from geoscout.agent.groq_planner import GroqAgentRunner
 from geoscout.evaluation.claims import (
-    evaluate_claims,
-    evidence_from_observations,
+    evaluate_semantic_claims,
 )
 from geoscout.evaluation.evidence import (
     evaluate_grounded_correctness,
+    evaluate_semantic_evidence,
     observations_from_state,
 )
 from geoscout.evaluation.failure_analysis import summarize_failures
@@ -54,21 +54,37 @@ def resolve_ground_truth(
         item = dict(requirement)
 
         if item.get("expected_value") is None:
-            tool = item["tool"]
-            field = item["field"]
-
-            if tool == "calculate_statistics":
-                item["expected_value"] = statistics[field]
-
-            elif tool == "summarize_hotspots":
-                item["expected_value"] = hotspot_summary[field]
-
-            elif tool == "detect_change_hotspots":
-                if field == "hotspot_count":
-                    item["expected_value"] = len(hotspots)
-
-                elif field == "hotspot_cells":
+            if "concept" in item:
+                concept = item["concept"]
+                if concept == "overall_mean_ndvi_change":
+                    item["expected_value"] = statistics["mean_change"]
+                elif concept == "minimum_ndvi_change":
+                    item["expected_value"] = statistics["minimum_change"]
+                elif concept == "maximum_ndvi_change":
+                    item["expected_value"] = statistics["maximum_change"]
+                elif concept == "hotspot_mean_ndvi_change":
+                    item["expected_value"] = hotspot_summary["mean_ndvi_change"]
+                elif concept == "hotspot_cells":
                     item["expected_value"] = hotspots["cell_id"].tolist()
+                elif concept == "study_cell_count":
+                    item["expected_value"] = statistics["cell_count"]
+                elif concept == "degraded_cell_count":
+                    item["expected_value"] = statistics["degraded_cells"]
+                elif concept == "region_crs":
+                    item["expected_value"] = "EPSG:4326"
+            elif "tool" in item and "field" in item:
+                tool = item["tool"]
+                field = item["field"]
+
+                if tool == "calculate_statistics":
+                    item["expected_value"] = statistics[field]
+                elif tool == "summarize_hotspots":
+                    item["expected_value"] = hotspot_summary[field]
+                elif tool == "detect_change_hotspots":
+                    if field == "hotspot_count":
+                        item["expected_value"] = len(hotspots)
+                    elif field == "hotspot_cells":
+                        item["expected_value"] = hotspots["cell_id"].tolist()
 
         resolved.append(item)
 
@@ -92,25 +108,34 @@ def evaluate_model(
         state = agent.run(task["question"])
 
         observations = observations_from_state(state)
-        
-        evidence = evidence_from_observations(
-            observations
-        )
-
-        claim_evaluation = evaluate_claims(
-            claims=task.get(
-            "expected_claims",
-            []
-            ),
-            evidence=evidence,
-        )
 
         requirements = resolve_ground_truth(task["required_evidence"])
+
+        evidence_evaluation = evaluate_semantic_evidence(
+            observations=observations,
+            requirements=requirements,
+        )
+
+        claim_evaluation = evaluate_semantic_claims(
+            claims=task.get(
+                "expected_claims",
+                [],
+            ),
+            observations=observations,
+        )
 
         evaluation = evaluate_grounded_correctness(
             answer=state.final_answer,
             observations=observations,
             requirements=requirements,
+        )
+
+        answer_correct = evaluation["answer_correct"]
+
+        grounded_correct = (
+            evidence_evaluation["grounded"]
+            and claim_evaluation["grounded"]
+            and answer_correct
         )
 
         performance = summarize_performance(state)
@@ -121,7 +146,10 @@ def evaluate_model(
             "question": task["question"],
             "status": state.status,
             "final_answer": state.final_answer,
-            "tool_calls": [call.tool_name for call in state.tool_calls],
+            "tool_calls": [
+                call.tool_name
+                for call in state.tool_calls
+            ],
             "tool_call_arguments": [
                 {
                     "tool_name": call.tool_name,
@@ -129,33 +157,37 @@ def evaluate_model(
                 }
                 for call in state.tool_calls
             ],
-            "expected_tools": list(
-                dict.fromkeys(requirement["tool"] for requirement in requirements)
-            ),
+            "evidence_evaluation": evidence_evaluation,
+            "claim_evaluation": claim_evaluation,
+            "answer_correct": answer_correct,
+            "grounded_correct": grounded_correct,
+            "evidence_supported": evidence_evaluation["grounded"],
             "expected_arguments": task.get(
                 "expected_arguments",
                 {},
             ),
-            "claim_evaluation": claim_evaluation,
             "actual_arguments": (state.tool_calls[0].arguments if state.tool_calls else {}),
-            "tool_execution_errors": (state.tool_execution_errors),
-            **evaluation,
+            "tool_execution_errors": state.tool_execution_errors,
+            "failure_type": evaluation["failure_type"] if not grounded_correct else "none",
+            "numerical": evaluation["numerical"],
+            "qualitative_answer_correct": evaluation["qualitative_answer_correct"],
             "performance": performance,
         }
 
         results.append(result)
 
-        status = "PASS" if evaluation["grounded_correct"] else "FAIL"
+        status = "PASS" if grounded_correct else "FAIL"
 
         print(
             f"  {status} | "
             f"grounded="
-            f"{evaluation['grounded_correct']} | "
+            f"{grounded_correct} | "
             f"latency="
             f"{performance['total_latency_ms']:.1f}ms"
         )
 
     return results
+
 
 
 def summarize_model(
