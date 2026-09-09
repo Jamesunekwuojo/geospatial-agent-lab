@@ -609,9 +609,21 @@ The v3 results were:
 | Mean LLM calls       |        2.20 |         2.25 |
 | Mean total tokens    |    2,013.55 |     2,030.90 |
 
+![GeoScout v3 performance comparison](evaluation/results/figures/performance_comparison.png)
+
+*Figure 1. Comparison of grounded correctness, answer correctness, and evidence support for GPT-OSS 20B and GPT-OSS 120B.*
+
 The 120B model therefore achieved a five-percentage-point improvement in grounded correctness and evidence support, while achieving perfect answer correctness on this benchmark.
 
 It also had slightly higher average latency and slightly higher tool/LLM-call counts.
+
+![GeoScout v3 latency comparison](evaluation/results/figures/latency_comparison.png)
+
+*Figure 2. Mean end-to-end latency for the two evaluated models.*
+
+![GeoScout v3 tool usage comparison](evaluation/results/figures/tool_usage_comparison.png)
+
+*Figure 3. Mean tool calls and LLM calls per benchmark task.*
 
 ---
 
@@ -654,6 +666,10 @@ This demonstrates that increasing model scale did not guarantee complete workflo
 Aggregate metrics conceal important differences between failure types.
 
 GeoScout therefore records task-level evidence traces and execution information to examine individual failures.
+
+![GeoScout v3 failure comparison](evaluation/results/figures/failure_comparison.png)
+
+*Figure 4. Task-level failure counts across grounded correctness, evidence support, and answer correctness.*
 
 ---
 
@@ -711,6 +727,10 @@ A system designed to improve numerical reasoning would not necessarily solve a f
 # 15. GE-019 — Unsupported Spatial Interpretation
 
 `GE-019` is the most informative grounding failure in the v3 experiment.
+
+![GE-019 evidence comparison](evaluation/results/figures/ge019_case_study.png)
+
+*Figure 5. Comparison of benchmark-required evidence obtained by GPT-OSS 20B and GPT-OSS 120B on GE-019.*
 
 The task required evidence concerning the study region and degraded cells.
 
@@ -876,9 +896,9 @@ Evidence support:
 90% → 95%
 ```
 
-Within this controlled experiment, this is consistent with improved performance from the larger model.
+Within this controlled experiment, the larger model achieved higher performance on the measured metrics. However, the experiment does not establish that model scale itself caused the improvement.
 
-However, the experiment is too small to establish a general relationship between parameter scale and geospatial-agent reliability.
+The experiment is too small to establish a general relationship between parameter scale and geospatial-agent reliability.
 
 The correct interpretation is therefore:
 

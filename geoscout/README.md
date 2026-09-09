@@ -394,6 +394,10 @@ Each model was evaluated on the same **20-task benchmark**.
 | Mean LLM calls       |        2.20 |         2.25 |
 | Mean total tokens    |    2,013.55 |     2,030.90 |
 
+![GeoScout v3 performance comparison](evaluation/results/figures/performance_comparison.png)
+
+*Figure: Comparison of grounded correctness, answer correctness, and evidence support for GPT-OSS 20B and GPT-OSS 120B.*
+
 The v3 results are frozen in:
 
 ```text
@@ -479,6 +483,10 @@ Interpretation
 ```
 
 These are not necessarily equivalent.
+
+![GE-019 evidence comparison](evaluation/results/figures/ge019_case_study.png)
+
+*Figure: Comparison of benchmark-required evidence obtained by GPT-OSS 20B and GPT-OSS 120B on GE-019.*
 
 ---
 
