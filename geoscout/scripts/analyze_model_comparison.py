@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Any
 
 RESULT_PATH = Path(
-    "evaluation/results/model_comparison_v1.json"
+    "evaluation/results/model_comparison_v2.json"
 )
 
 
