@@ -2,7 +2,11 @@ from geoscout.evaluation.evidence import (
     classify_grounded_failure,
     evaluate_evidence,
     evaluate_grounded_correctness,
+    evaluate_semantic_evidence,
     get_tool_field_value,
+)
+from geoscout.evaluation.evidence_capabilities import (
+    evaluate_evidence_path,
 )
 
 
@@ -272,3 +276,141 @@ def test_failure_classification() -> None:
         )
         == "evidence_and_answer_error"
     )
+
+
+def test_alternative_evidence_path() -> None:
+    observations = [
+        {
+            "tool_name": "summarize_hotspots",
+            "result": {
+                "threshold": -0.1,
+                "hotspot_count": 9,
+                "hotspot_cells": [
+                    "cell_03_03",
+                    "cell_03_04",
+                ],
+                "mean_ndvi_change": -0.206,
+            },
+        }
+    ]
+
+    requirements = [
+        {
+            "field": "hotspot_count",
+            "expected_value": 9,
+            "acceptable_tools": [
+                "detect_change_hotspots",
+                "summarize_hotspots",
+            ],
+        }
+    ]
+
+    result = evaluate_evidence_path(
+        observations=observations,
+        requirements=requirements,
+    )
+
+    assert result["grounded"]
+    assert result["supported_count"] == 1
+
+
+
+def test_alternative_tool_supports_degraded_count() -> None:
+    observations = [
+        {
+            "tool_name": "summarize_hotspots",
+            "result": {
+                "hotspot_count": 9,
+                "hotspot_cells": [],
+                "mean_ndvi_change": -0.206,
+            },
+        }
+    ]
+
+    requirements = [
+        {
+            "field": "hotspot_count",
+            "expected_value": 9,
+            "acceptable_tools": [
+                "calculate_statistics",
+                "summarize_hotspots",
+            ],
+        }
+    ]
+
+    result = evaluate_evidence_path(
+        observations=observations,
+        requirements=requirements,
+    )
+
+    assert result["grounded"]
+
+
+def test_semantic_evidence_accepts_alternative_tool() -> None:
+    observations = [
+        {
+            "tool_name": "summarize_hotspots",
+            "result": {
+                "threshold": -0.1,
+                "hotspot_count": 9,
+                "hotspot_cells": [
+                    "cell_03_03",
+                    "cell_03_04",
+                ],
+                "mean_ndvi_change": -0.206,
+            },
+        }
+    ]
+
+    requirements = [
+        {
+            "concept": "degraded_cell_count",
+            "expected_value": 9,
+        }
+    ]
+
+    result = evaluate_semantic_evidence(
+        observations=observations,
+        requirements=requirements,
+    )
+
+    assert result["grounded"]
+    assert result["supported_count"] == 1
+
+    evidence = result[
+        "requirements"
+    ][0]["supporting_evidence"]
+
+    assert evidence[0]["tool"] == (
+        "summarize_hotspots"
+    )
+
+    assert evidence[0]["field"] == (
+        "hotspot_count"
+    )
+
+
+def test_semantic_evidence_rejects_wrong_value() -> None:
+    observations = [
+        {
+            "tool_name": "summarize_hotspots",
+            "result": {
+                "hotspot_count": 9,
+            },
+        }
+    ]
+
+    requirements = [
+        {
+            "concept": "degraded_cell_count",
+            "expected_value": 10,
+        }
+    ]
+
+    result = evaluate_semantic_evidence(
+        observations=observations,
+        requirements=requirements,
+    )
+
+    assert not result["grounded"]
+    assert result["unsupported_count"] == 1

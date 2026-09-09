@@ -99,6 +99,60 @@ def analyze_trajectory(
     }
 
 
+def analyze_tool_path(
+    required_concepts: list[str],
+    actual_tools: list[str],
+) -> dict[str, Any]:
+    """
+    Diagnose tool usage without treating a prescribed tool
+    as the only valid evidence path.
+    """
+
+    from geoscout.evaluation.evidence_requirements import (
+        SEMANTIC_EVIDENCE_RULES,
+    )
+
+    capable_tools = set()
+
+    for concept in required_concepts:
+        for rule in SEMANTIC_EVIDENCE_RULES.get(
+            concept,
+            [],
+        ):
+            capable_tools.add(
+                rule["tool"]
+            )
+
+    actual_tool_set = set(
+        actual_tools
+    )
+
+    capable_used = (
+        actual_tool_set
+        & capable_tools
+    )
+
+    if not actual_tools:
+        status = "no_tool_used"
+
+    elif not capable_used:
+        status = "no_capable_tool_used"
+
+    else:
+        status = "capable_tool_used"
+
+    return {
+        "status": status,
+        "capable_tools": sorted(
+            capable_tools
+        ),
+        "actual_tools": actual_tools,
+        "capable_tools_used": sorted(
+            capable_used
+        ),
+    }
+
+
 def analyze_result(
     result: dict[str, Any],
 ) -> dict[str, Any]:
@@ -113,7 +167,7 @@ def analyze_result(
     )
 
     actual_tools = result.get(
-        "tool_calls",
+        "actual_tools",
         [],
     )
 
@@ -143,21 +197,29 @@ def analyze_result(
         ),
     )
 
-    if trajectory["failure_type"] != "none":
-        primary_failure = trajectory[
-            "failure_type"
-        ]
-
-    elif not result.get(
+    evidence_supported = result.get(
         "evidence_supported",
         False,
-    ):
-        primary_failure = "ungrounded_answer"
-
-    elif not result.get(
+    )
+    answer_correct = result.get(
         "answer_correct",
         False,
-    ):
+    )
+    tool_errors = result.get(
+        "tool_execution_errors",
+        [],
+    )
+
+    if tool_errors:
+        primary_failure = "tool_execution_error"
+
+    elif not evidence_supported and not answer_correct:
+        primary_failure = "evidence_and_answer_error"
+
+    elif not evidence_supported:
+        primary_failure = "ungrounded_answer"
+
+    elif not answer_correct:
         primary_failure = "answer_factual_error"
 
     else:
@@ -184,6 +246,7 @@ def analyze_result(
             0,
         ),
     }
+
 
 
 def summarize_failures(

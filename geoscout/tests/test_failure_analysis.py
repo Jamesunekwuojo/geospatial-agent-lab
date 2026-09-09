@@ -134,3 +134,30 @@ def test_failure_summary() -> None:
     assert summary["successful_tasks"] == 1
     assert summary["failed_tasks"] == 1
     assert summary["success_rate"] == 0.5
+def test_analyze_result_uses_actual_tools():
+    from geoscout.evaluation.failure_analysis import analyze_result
+
+    result = {
+        "expected_tools": [
+            "calculate_statistics",
+            "summarize_hotspots",
+        ],
+        "actual_tools": [
+            "calculate_statistics",
+        ],
+        "expected_arguments": {},
+        "actual_arguments": {},
+        "tool_execution_errors": [],
+        "evidence_supported": True,
+        "answer_correct": True,
+    }
+
+    analyzed = analyze_result(result)
+
+    trajectory = analyzed["trajectory_analysis"]
+
+    assert trajectory["actual_tools"] == [
+        "calculate_statistics"
+    ]
+
+    assert trajectory["failure_type"] != "agent_failure"

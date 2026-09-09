@@ -1,5 +1,114 @@
 from typing import Any
 
+from geoscout.evaluation.evidence_requirements import (
+    SEMANTIC_EVIDENCE_RULES,
+)
+
+
+def get_semantic_evidence_rules(
+    concept: str,
+) -> list[dict[str, str]]:
+    """Return acceptable tool/field combinations for a concept."""
+
+    return SEMANTIC_EVIDENCE_RULES.get(
+        concept,
+        [],
+    )
+
+
+def evaluate_semantic_evidence(
+    observations: list[dict[str, Any]],
+    requirements: list[dict[str, Any]],
+    tolerance: float = 0.0,
+) -> dict[str, Any]:
+    """
+    Evaluate whether each semantic evidence requirement
+    is supported by at least one valid observed tool result.
+    """
+
+    results = []
+
+    for requirement in requirements:
+        concept = requirement["concept"]
+        expected = requirement.get(
+            "expected_value"
+        )
+
+        rules = get_semantic_evidence_rules(
+            concept
+        )
+
+        matches = []
+
+        for observation in observations:
+            tool_name = observation[
+                "tool_name"
+            ]
+
+            result = observation[
+                "result"
+            ]
+
+            if not isinstance(
+                result,
+                dict,
+            ):
+                continue
+
+            for rule in rules:
+                if rule["tool"] != tool_name:
+                    continue
+
+                field = rule["field"]
+
+                if field not in result:
+                    continue
+
+                actual = result[field]
+
+                if compare_values(
+                    actual=actual,
+                    expected=expected,
+                    tolerance=tolerance,
+                ):
+                    matches.append(
+                        {
+                            "tool": tool_name,
+                            "field": field,
+                            "actual_value": actual,
+                        }
+                    )
+
+        supported = len(matches) > 0
+
+        results.append(
+            {
+                "concept": concept,
+                "expected_value": expected,
+                "supported": supported,
+                "supporting_evidence": matches,
+            }
+        )
+
+    supported_count = sum(
+        item["supported"]
+        for item in results
+    )
+
+    return {
+        "requirement_count": len(results),
+        "supported_count": supported_count,
+        "unsupported_count": (
+            len(results)
+            - supported_count
+        ),
+        "grounded": (
+            len(results) > 0
+            and supported_count == len(results)
+        ),
+        "requirements": results,
+    }
+
 
 def get_tool_field_value(
     observations: list[dict[str, Any]],
@@ -155,15 +264,23 @@ def evaluate_grounded_correctness(
         expected = requirement.get("expected_value")
 
         if isinstance(expected, (int, float)) and not isinstance(expected, bool):
-            numeric_expected_values[requirement["field"]] = float(expected)
+            key = requirement.get("concept") or requirement.get("field", "value")
+            numeric_expected_values[key] = float(expected)
         elif expected is not None:
             qualitative_expected_values.append(expected)
 
-    evidence_result = evaluate_evidence(
-        observations=observations,
-        requirements=requirements,
-        tolerance=tolerance,
-    )
+    if any("concept" in req for req in requirements):
+        evidence_result = evaluate_semantic_evidence(
+            observations=observations,
+            requirements=requirements,
+            tolerance=tolerance,
+        )
+    else:
+        evidence_result = evaluate_evidence(
+            observations=observations,
+            requirements=requirements,
+            tolerance=tolerance,
+        )
 
     numerical_result = evaluate_numeric_answer(
         answer=answer,
