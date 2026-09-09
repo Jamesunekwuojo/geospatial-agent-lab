@@ -1,0 +1,9 @@
+Metric,GPT-OSS 20B,GPT-OSS 120B
+Tasks,20,20
+Grounded correctness,90%,95%
+Answer correctness,95%,100%
+Evidence support,90%,95%
+Mean latency (s),8.25,9.76
+Mean tool calls,1.20,1.25
+Mean LLM calls,2.20,2.25
+Mean total tokens,"2,013.55","2,030.90"

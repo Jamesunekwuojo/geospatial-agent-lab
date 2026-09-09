@@ -66,4 +66,9 @@ source = ["geoscout"]
 [tool.coverage.report]
 show_missing = true
 
+[dependency-groups]
+dev = [
+    "matplotlib>=3.11.1",
+]
+
 
