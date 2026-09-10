@@ -1,9 +1,17 @@
-import folium
-import geopandas as gpd
-import streamlit as st
-from streamlit_folium import st_folium
+import sys
+from pathlib import Path
 
-from geoscout.agent.groq_planner import GroqAgentRunner
+# Ensure src/ is on sys.path regardless of execution directory
+_SRC_PATH = Path(__file__).resolve().parent.parent / "src"
+if _SRC_PATH.exists() and str(_SRC_PATH) not in sys.path:
+    sys.path.insert(0, str(_SRC_PATH))
+
+import folium  # noqa: E402
+import geopandas as gpd  # noqa: E402
+import streamlit as st  # noqa: E402
+from streamlit_folium import st_folium  # noqa: E402
+
+from geoscout.agent.groq_planner import GroqAgentRunner  # noqa: E402
 
 st.set_page_config(
     page_title="GeoScout — Geospatial Research Agent",
@@ -552,9 +560,15 @@ def display_spatial_result(state) -> None:
     st.subheader("Spatial Result")
 
     try:
-        dataset = gpd.read_file(
-            "data/synthetic/vegetation_grid.geojson"
-        )
+        base_dir = Path(__file__).resolve().parent.parent
+        candidates = [
+            Path("data/synthetic/vegetation_grid.geojson"),
+            Path("geoscout/data/synthetic/vegetation_grid.geojson"),
+            base_dir / "data" / "synthetic" / "vegetation_grid.geojson",
+        ]
+        default_path = Path("data/synthetic/vegetation_grid.geojson")
+        dataset_path = next((c for c in candidates if c.exists()), default_path)
+        dataset = gpd.read_file(dataset_path)
     except Exception as exc:
         st.warning(
             f"Could not load the spatial dataset: {exc}"

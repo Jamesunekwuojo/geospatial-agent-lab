@@ -188,14 +188,4 @@ GPT-OSS 20B   ██████████████████████
 3. **Execution Reliability:**
    Both models achieved a **0.0% tool execution error rate**, confirming strong API adherence and argument formatting.
 
----
 
-## Conclusion & Next Steps
-
-1. **Semantic Evidence Evaluation Validates Model Scaling:**
-   Decoupling semantic concepts from rigid tool names eliminated 60% of false-negative evaluator rejections, revealing that **GPT-OSS 120B is superior in spatial reasoning, multi-concept synthesis, and speed**.
-2. **Trajectory Analysis as Diagnostic Tool:**
-   Trajectory matching is now appropriately treated as a diagnostic tool-path metric rather than a pass/fail determinant of evidence validity.
-3. **Recommendations for Benchmark Expansion:**
-   - Add multi-threshold hotspot scenarios (e.g. comparing -0.1 vs -0.2 thresholds).
-   - Expand GE-010 tool capability mappings to allow dynamic Python-based reduction over vector cell outputs.
