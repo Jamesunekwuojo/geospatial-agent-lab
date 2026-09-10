@@ -22,6 +22,9 @@ dependencies = [
     "shapely>=2.0,<3",
     "pyproj>=3.6,<4",
     "groq>=1.7.0",
+    "streamlit>=1.40,<2",
+    "folium>=0.18,<1",
+    "streamlit-folium>=0.24,<1",
 ]
 
 [project.optional-dependencies]
