@@ -5,14 +5,29 @@ import geopandas as gpd
 DEFAULT_DATASET = Path("data/synthetic/vegetation_grid.geojson")
 
 
+def _resolve_dataset_path(dataset_path: Path | str) -> Path:
+    p = Path(dataset_path)
+    if p.exists():
+        return p
+    # Try relative to the package root (handles running from repo root or arbitrary cwd)
+    pkg_data = Path(__file__).resolve().parent.parent.parent.parent / "data" / "synthetic" / p.name
+    if pkg_data.exists():
+        return pkg_data
+    repo_data = Path("geoscout") / p
+    if repo_data.exists():
+        return repo_data
+    return p
+
+
 def load_dataset(
     dataset_path: Path = DEFAULT_DATASET,
 ) -> gpd.GeoDataFrame:
     """Load the GeoScout synthetic geospatial dataset."""
-    if not dataset_path.exists():
+    resolved_path = _resolve_dataset_path(dataset_path)
+    if not resolved_path.exists():
         raise FileNotFoundError(f"Dataset not found: {dataset_path}")
 
-    return gpd.read_file(dataset_path)
+    return gpd.read_file(resolved_path)
 
 
 def get_region(
