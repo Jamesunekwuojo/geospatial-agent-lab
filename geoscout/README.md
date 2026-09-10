@@ -404,7 +404,13 @@ The v3 results are frozen in:
 evaluation/results/model_comparison_v3.json
 ```
 
-The baseline is tagged:
+The finalized v3 research release is tagged:
+
+```text
+geoscout-v3
+```
+
+The earlier pre-finalization baseline is retained as:
 
 ```text
 geoscout-v3-baseline
@@ -422,7 +428,7 @@ A future benchmark version can separate these measurements more rigorously.
 
 # What the v3 Experiment Revealed
 
-The aggregate results show a small but measurable improvement from GPT-OSS 20B to GPT-OSS 120B:
+The aggregate results show a small but measurable improvement from GPT-OSS 20B to GPT-OSS 120B in this controlled experiment. However, the experiment does not establish that model scale alone caused the improvement:
 
 ```text
 Grounded correctness:
@@ -628,8 +634,12 @@ geoscout/
 │
 ├── evaluation/
 │   ├── benchmarks/
-│   ├── results/
-│   └── experiments/
+│   └── results/
+│
+├── experiments/
+│   ├── model-comparison-v1.md
+│   ├── model-comparison-v1-results.md
+│   └── model-comparison-v2-results.md
 │
 ├── scripts/
 │   ├── run_benchmark.py
@@ -676,7 +686,7 @@ evaluation/results/
 Model evaluation results and execution trajectories.
 
 ```text
-evaluation/experiments/
+experiments/
 ```
 
 Experiment documentation and analysis.
