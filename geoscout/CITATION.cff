@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this software or research artifact in your work, please cite it as below."
+title: "GeoScout: An Evidence-Grounded AI Agent for Environmental Geospatial Analysis"
+authors:
+  - family-names: Abah
+    given-names: Unekwuojo James
+version: 0.1.0
+date-released: 2026-09-10
+url: "https://github.com/Jamesunekwuojo/geospatial-agent-lab"
+repository-code: "https://github.com/Jamesunekwuojo/geospatial-agent-lab"
+license: MIT
+keywords:
+  - "agentic-ai"
+  - "geoai"
+  - "geospatial"
+  - "gis"
+  - "llm-agents"
+  - "evidence-grounding"
+  - "environmental-ai"
+  - "geospatial-ai"
+  - "tool-calling"

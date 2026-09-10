@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "geoscout"
 version = "0.1.0"
-description = "An evidence-grounded agent for environmental geospatial analysis."
+description = "An evidence-grounded AI agent for environmental geospatial analysis."
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 license = { text = "MIT" }

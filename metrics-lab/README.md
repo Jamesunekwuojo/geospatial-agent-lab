@@ -1,34 +1,45 @@
 # Metrics Lab
 
-A hands-on laboratory for deaper understanding machine learning and AI evaluation
-metrics through implementation and experimentation.
+A small learning/reference lab for understanding evaluation metrics used in
+AI agents, machine learning systems, and research experiments.
 
-## Learning Principle
+This lab uses **GeoScout** as the main practical reference so that the
+definitions are connected to a real project rather than learned only
+theoretically.
 
-Hadns o practical learning, No memorization of metics first!
+---
 
-Instead:
+## 1. The Main Idea
 
-Real-world problem
-→ Data
-→ Prediction
-→ Error analysis
-→ Metric
-→ Implementation
-→ Experiment
-→ Interpretation
-→ Research paper
+A metric is simply a way of measuring some aspect of a system.
 
-## Topics
+Different metrics answer different questions:
 
-- Classification metrics
-- Threshold-based metrics
-- Regression metrics
-- Information retrieval metrics
-- Ranking metrics
-- Agent evaluation metrics
+```text
+Did it get the answer right?
+        ↓
+Answer Correctness
 
-## Goal
+Did it obtain the required evidence?
+        ↓
+Evidence Support
 
-To Develop enough intuition to read research papers and understand what reported
-metrics actually mean, why they were selected, and what they may hide.
+Was the answer both correct AND supported?
+        ↓
+Grounded Correctness
+
+How long did it take?
+        ↓
+Latency
+
+How much work did the agent perform?
+        ↓
+Tool Calls / LLM Calls / Tokens
+```
+
+Therefore:
+
+**One metric rarely tells the whole story.**
+
+GeoScout demonstrated this directly: a model can produce a correct-looking
+answer while failing to acquire the evidence required to support it.
