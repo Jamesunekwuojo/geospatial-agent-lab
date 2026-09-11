@@ -66,9 +66,7 @@ def build_evidence_trace(
         traces.append(
             EvidenceTrace(
                 concept=claim["concept"],
-                expected_value=claim.get(
-                    "expected_value"
-                ),
+                expected_value=claim.get("expected_value"),
                 supported=item["supported"],
                 supporting_evidence=supporting_evidence,
             )

@@ -8,9 +8,7 @@ from geoscout.evaluation.evidence import (
 def normalize_text(value: str) -> str:
     """Normalize text for lightweight claim matching."""
 
-    return " ".join(
-        value.lower().strip().split()
-    )
+    return " ".join(value.lower().strip().split())
 
 
 def claim_matches_evidence(
@@ -34,13 +32,9 @@ def claim_matches_evidence(
     if claim_field != evidence_field:
         return False
 
-    expected = claim.get(
-        "expected_value"
-    )
+    expected = claim.get("expected_value")
 
-    actual = evidence.get(
-        "actual_value"
-    )
+    actual = evidence.get("actual_value")
 
     if expected is None:
         return actual is not None
@@ -57,20 +51,14 @@ def claim_matches_evidence(
             0.0,
         )
 
-        return (
-            abs(
-                float(actual)
-                - float(expected)
-            )
-            <= tolerance
-        )
+        return abs(float(actual) - float(expected)) <= tolerance
 
     # return normalize_text(
     #     str(actual)
     # ) == normalize_text(
     #     str(expected)
     # )
-    
+
     if isinstance(
         expected,
         list,
@@ -80,11 +68,7 @@ def claim_matches_evidence(
     ):
         return set(actual) == set(expected)
 
-    return normalize_text(
-        str(actual)
-    ) == normalize_text(
-    str(expected)
-    )
+    return normalize_text(str(actual)) == normalize_text(str(expected))
 
 
 def evaluate_claims(
@@ -108,38 +92,23 @@ def evaluate_claims(
             )
         ]
 
-        supported = len(
-            supporting_evidence
-        ) > 0
+        supported = len(supporting_evidence) > 0
 
         results.append(
             {
                 "claim": claim,
                 "supported": supported,
-                "supporting_evidence": (
-                    supporting_evidence
-                ),
+                "supporting_evidence": (supporting_evidence),
             }
         )
 
-    supported_count = sum(
-        item["supported"]
-        for item in results
-    )
+    supported_count = sum(item["supported"] for item in results)
 
     return {
         "claim_count": len(results),
-        "supported_claim_count": (
-            supported_count
-        ),
-        "unsupported_claim_count": (
-            len(results)
-            - supported_count
-        ),
-        "grounded": (
-            len(results) > 0
-            and supported_count == len(results)
-        ),
+        "supported_claim_count": (supported_count),
+        "unsupported_claim_count": (len(results) - supported_count),
+        "grounded": (len(results) > 0 and supported_count == len(results)),
         "claims": results,
     }
 
@@ -155,13 +124,9 @@ def evidence_from_observations(
     evidence = []
 
     for observation in observations:
-        tool_name = observation[
-            "tool_name"
-        ]
+        tool_name = observation["tool_name"]
 
-        result = observation[
-            "result"
-        ]
+        result = observation["result"]
 
         if not isinstance(
             result,
@@ -193,9 +158,7 @@ def evaluate_semantic_claims(
     requirements = [
         {
             "concept": claim["concept"],
-            "expected_value": claim.get(
-                "expected_value"
-            ),
+            "expected_value": claim.get("expected_value"),
         }
         for claim in claims
     ]
@@ -216,33 +179,17 @@ def evaluate_semantic_claims(
         claim_results.append(
             {
                 "claim": claim,
-                "supported": evidence[
-                    "supported"
-                ],
-                "supporting_evidence": evidence[
-                    "supporting_evidence"
-                ],
+                "supported": evidence["supported"],
+                "supporting_evidence": evidence["supporting_evidence"],
             }
         )
 
-    supported_count = sum(
-        item["supported"]
-        for item in claim_results
-    )
+    supported_count = sum(item["supported"] for item in claim_results)
 
     return {
         "claim_count": len(claim_results),
-        "supported_claim_count": (
-            supported_count
-        ),
-        "unsupported_claim_count": (
-            len(claim_results)
-            - supported_count
-        ),
-        "grounded": (
-            len(claim_results) > 0
-            and supported_count
-            == len(claim_results)
-        ),
+        "supported_claim_count": (supported_count),
+        "unsupported_claim_count": (len(claim_results) - supported_count),
+        "grounded": (len(claim_results) > 0 and supported_count == len(claim_results)),
         "claims": claim_results,
     }

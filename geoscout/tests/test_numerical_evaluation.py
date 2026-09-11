@@ -6,10 +6,7 @@ from geoscout.evaluation.numerical import (
 
 
 def test_extract_numbers() -> None:
-    text = (
-        "There are 9 degraded cells "
-        "with a mean change of -0.023."
-    )
+    text = "There are 9 degraded cells with a mean change of -0.023."
 
     numbers = extract_numbers(text)
 
@@ -43,10 +40,7 @@ def test_value_does_not_match() -> None:
 
 def test_correct_numeric_answer() -> None:
     result = evaluate_numeric_answer(
-        answer=(
-            "There are 9 degraded cells "
-            "in the study region."
-        ),
+        answer=("There are 9 degraded cells in the study region."),
         expected_values={
             "degraded_cells": 9,
         },
@@ -57,10 +51,7 @@ def test_correct_numeric_answer() -> None:
 
 def test_incorrect_numeric_answer() -> None:
     result = evaluate_numeric_answer(
-        answer=(
-            "There are 14 degraded cells "
-            "in the study region."
-        ),
+        answer=("There are 14 degraded cells in the study region."),
         expected_values={
             "degraded_cells": 9,
         },
@@ -71,10 +62,7 @@ def test_incorrect_numeric_answer() -> None:
 
 def test_missing_numeric_answer() -> None:
     result = evaluate_numeric_answer(
-        answer=(
-            "Vegetation degradation was observed "
-            "across the study region."
-        ),
+        answer=("Vegetation degradation was observed across the study region."),
         expected_values={
             "degraded_cells": 9,
         },

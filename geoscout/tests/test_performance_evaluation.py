@@ -10,9 +10,7 @@ from geoscout.evaluation.performance import (
 
 
 def test_performance_summary() -> None:
-    state = AgentState(
-        question="Test question"
-    )
+    state = AgentState(question="Test question")
 
     state.total_latency_ms = 1500.0
 
@@ -61,42 +59,22 @@ def test_performance_summary() -> None:
         ),
     ]
 
-    summary = summarize_performance(
-        state
-    )
+    summary = summarize_performance(state)
 
-    assert summary[
-        "total_latency_ms"
-    ] == 1500.0
+    assert summary["total_latency_ms"] == 1500.0
 
-    assert summary[
-        "llm_call_count"
-    ] == 2
+    assert summary["llm_call_count"] == 2
 
-    assert summary[
-        "tool_call_count"
-    ] == 2
+    assert summary["tool_call_count"] == 2
 
-    assert summary[
-        "total_input_tokens"
-    ] == 300
+    assert summary["total_input_tokens"] == 300
 
-    assert summary[
-        "total_output_tokens"
-    ] == 130
+    assert summary["total_output_tokens"] == 130
 
-    assert summary[
-        "total_tokens"
-    ] == 430
+    assert summary["total_tokens"] == 430
 
-    assert summary[
-        "mean_llm_latency_ms"
-    ] == 600.0
+    assert summary["mean_llm_latency_ms"] == 600.0
 
-    assert summary[
-        "mean_tool_latency_ms"
-    ] == 15.0
+    assert summary["mean_tool_latency_ms"] == 15.0
 
-    assert summary[
-        "max_tool_latency_ms"
-    ] == 20.0
+    assert summary["max_tool_latency_ms"] == 20.0

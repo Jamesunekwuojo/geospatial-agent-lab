@@ -28,7 +28,7 @@ def serialize_tool_result(result: Any) -> str:
             ]
             if column in data.columns
         ]
-        
+
         max_records = 20
         compact = data[columns].head(max_records).to_dict(orient="records")
 

@@ -32,9 +32,7 @@ def classify_tool_selection(
     if set(expected_tools).issubset(set(actual_tools)):
         return "inefficient_trajectory"
 
-    if not set(actual_tools).intersection(
-        set(expected_tools)
-    ):
+    if not set(actual_tools).intersection(set(expected_tools)):
         return "tool_selection_error"
 
     return "missing_required_tool"
@@ -70,9 +68,7 @@ def analyze_trajectory(
 
     expected_arguments = expected_arguments or {}
     actual_arguments = actual_arguments or {}
-    tool_execution_errors = (
-        tool_execution_errors or []
-    )
+    tool_execution_errors = tool_execution_errors or []
 
     if tool_execution_errors:
         failure_type = "tool_execution_error"
@@ -119,18 +115,11 @@ def analyze_tool_path(
             concept,
             [],
         ):
-            capable_tools.add(
-                rule["tool"]
-            )
+            capable_tools.add(rule["tool"])
 
-    actual_tool_set = set(
-        actual_tools
-    )
+    actual_tool_set = set(actual_tools)
 
-    capable_used = (
-        actual_tool_set
-        & capable_tools
-    )
+    capable_used = actual_tool_set & capable_tools
 
     if not actual_tools:
         status = "no_tool_used"
@@ -143,13 +132,9 @@ def analyze_tool_path(
 
     return {
         "status": status,
-        "capable_tools": sorted(
-            capable_tools
-        ),
+        "capable_tools": sorted(capable_tools),
         "actual_tools": actual_tools,
-        "capable_tools_used": sorted(
-            capable_used
-        ),
+        "capable_tools_used": sorted(capable_used),
     }
 
 
@@ -248,7 +233,6 @@ def analyze_result(
     }
 
 
-
 def summarize_failures(
     results: list[dict[str, Any]],
 ) -> dict[str, Any]:
@@ -256,15 +240,9 @@ def summarize_failures(
     Produce aggregate failure statistics.
     """
 
-    analyzed = [
-        analyze_result(result)
-        for result in results
-    ]
+    analyzed = [analyze_result(result) for result in results]
 
-    counts = Counter(
-        result["primary_failure"]
-        for result in analyzed
-    )
+    counts = Counter(result["primary_failure"] for result in analyzed)
 
     total = len(analyzed)
 
@@ -280,18 +258,8 @@ def summarize_failures(
             0,
         ),
         "failed_tasks": failures,
-        "success_rate": (
-            counts.get("none", 0) / total
-            if total
-            else 0.0
-        ),
-        "failure_rate": (
-            failures / total
-            if total
-            else 0.0
-        ),
-        "failure_counts": dict(
-            counts
-        ),
+        "success_rate": (counts.get("none", 0) / total if total else 0.0),
+        "failure_rate": (failures / total if total else 0.0),
+        "failure_counts": dict(counts),
         "analyzed_results": analyzed,
     }

@@ -3,9 +3,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-RESULT_PATH = Path(
-    "evaluation/results/model_comparison_v2.json"
-)
+RESULT_PATH = Path("evaluation/results/model_comparison_v2.json")
 
 
 def load_results() -> dict[str, Any]:
@@ -22,27 +20,13 @@ def analyze_model(
 ) -> None:
     total = len(results)
 
-    grounded = sum(
-        result["grounded_correct"]
-        for result in results
-    )
+    grounded = sum(result["grounded_correct"] for result in results)
 
-    answer_correct = sum(
-        result["answer_correct"]
-        for result in results
-    )
+    answer_correct = sum(result["answer_correct"] for result in results)
 
-    evidence_supported = sum(
-        result["evidence_supported"]
-        for result in results
-    )
+    evidence_supported = sum(result["evidence_supported"] for result in results)
 
-    claim_grounded = sum(
-        result[
-            "claim_evaluation"
-        ]["grounded"]
-        for result in results
-    )
+    claim_grounded = sum(result["claim_evaluation"]["grounded"] for result in results)
 
     failures = Counter()
 
@@ -57,91 +41,43 @@ def analyze_model(
 
         failures[failure] += 1
 
-    mean_latency = sum(
-        result["performance"][
-            "total_latency_ms"
-        ]
-        for result in results
-    ) / total
+    mean_latency = sum(result["performance"]["total_latency_ms"] for result in results) / total
 
-    mean_tools = sum(
-        result["performance"][
-            "tool_call_count"
-        ]
-        for result in results
-    ) / total
+    mean_tools = sum(result["performance"]["tool_call_count"] for result in results) / total
 
-    mean_llm_calls = sum(
-        result["performance"][
-            "llm_call_count"
-        ]
-        for result in results
-    ) / total
+    mean_llm_calls = sum(result["performance"]["llm_call_count"] for result in results) / total
 
-    mean_tokens = sum(
-        result["performance"][
-            "total_tokens"
-        ]
-        for result in results
-    ) / total
+    mean_tokens = sum(result["performance"]["total_tokens"] for result in results) / total
 
     print()
     print("=" * 70)
     print(model)
     print("=" * 70)
 
-    print(
-        f"Tasks:                 {total}"
-    )
+    print(f"Tasks:                 {total}")
 
-    print(
-        f"Grounded correctness:  "
-        f"{grounded / total:.2%}"
-    )
+    print(f"Grounded correctness:  {grounded / total:.2%}")
 
-    print(
-        f"Answer correctness:    "
-        f"{answer_correct / total:.2%}"
-    )
+    print(f"Answer correctness:    {answer_correct / total:.2%}")
 
-    print(
-        f"Evidence support:      "
-        f"{evidence_supported / total:.2%}"
-    )
+    print(f"Evidence support:      {evidence_supported / total:.2%}")
 
-    print(
-        f"Claim groundedness:    "
-        f"{claim_grounded / total:.2%}"
-    )
+    print(f"Claim groundedness:    {claim_grounded / total:.2%}")
 
-    print(
-        f"Mean latency:          "
-        f"{mean_latency:.2f} ms"
-    )
+    print(f"Mean latency:          {mean_latency:.2f} ms")
 
-    print(
-        f"Mean tool calls:       "
-        f"{mean_tools:.2f}"
-    )
+    print(f"Mean tool calls:       {mean_tools:.2f}")
 
-    print(
-        f"Mean LLM calls:        "
-        f"{mean_llm_calls:.2f}"
-    )
+    print(f"Mean LLM calls:        {mean_llm_calls:.2f}")
 
-    print(
-        f"Mean tokens:           "
-        f"{mean_tokens:.2f}"
-    )
+    print(f"Mean tokens:           {mean_tokens:.2f}")
 
     print()
     print("Failure breakdown")
     print("-" * 40)
 
     for failure, count in failures.most_common():
-        print(
-            f"{failure:<30} {count}"
-        )
+        print(f"{failure:<30} {count}")
 
     print()
     print("Failed tasks")
@@ -151,25 +87,13 @@ def analyze_model(
         if result["grounded_correct"]:
             continue
 
-        print(
-            f"{result['task_id']}: "
-            f"{result['question']}"
-        )
+        print(f"{result['task_id']}: {result['question']}")
 
-        print(
-            f"  Failure: "
-            f"{result.get('primary_failure')}"
-        )
+        print(f"  Failure: {result.get('primary_failure')}")
 
-        print(
-            f"  Tools: "
-            f"{result.get('tool_calls')}"
-        )
+        print(f"  Tools: {result.get('tool_calls')}")
 
-        print(
-            f"  Answer: "
-            f"{result.get('final_answer')}"
-        )
+        print(f"  Answer: {result.get('final_answer')}")
 
         print()
 
@@ -179,19 +103,10 @@ def main() -> None:
 
     results = data["results"]
 
-    models = sorted(
-        {
-            result["model"]
-            for result in results
-        }
-    )
+    models = sorted({result["model"] for result in results})
 
     for model in models:
-        model_results = [
-            result
-            for result in results
-            if result["model"] == model
-        ]
+        model_results = [result for result in results if result["model"] == model]
 
         analyze_model(
             model=model,

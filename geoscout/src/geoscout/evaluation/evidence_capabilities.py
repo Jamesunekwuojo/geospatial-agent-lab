@@ -59,31 +59,16 @@ def find_capable_tools(
 ) -> list[str]:
     """Return all tools capable of producing a field."""
 
-    return [
-        tool_name
-        for tool_name, fields
-        in EVIDENCE_CAPABILITIES.items()
-        if field in fields
-    ]
+    return [tool_name for tool_name, fields in EVIDENCE_CAPABILITIES.items() if field in fields]
 
 
 def validate_capability_registry() -> dict[str, Any]:
     """Return basic information about the capability registry."""
 
     return {
-        "tool_count": len(
-            EVIDENCE_CAPABILITIES
-        ),
-        "field_count": sum(
-            len(fields)
-            for fields
-            in EVIDENCE_CAPABILITIES.values()
-        ),
-        "tools": {
-            tool: sorted(fields)
-            for tool, fields
-            in EVIDENCE_CAPABILITIES.items()
-        },
+        "tool_count": len(EVIDENCE_CAPABILITIES),
+        "field_count": sum(len(fields) for fields in EVIDENCE_CAPABILITIES.values()),
+        "tools": {tool: sorted(fields) for tool, fields in EVIDENCE_CAPABILITIES.items()},
     }
 
 
@@ -101,20 +86,14 @@ def evaluate_evidence_path(
 
     for requirement in requirements:
         field = requirement["field"]
-        expected = requirement.get(
-            "expected_value"
-        )
+        expected = requirement.get("expected_value")
 
-        acceptable_tools = requirement.get(
-            "acceptable_tools"
-        )
+        acceptable_tools = requirement.get("acceptable_tools")
 
         matches = []
 
         for observation in observations:
-            tool_name = observation[
-                "tool_name"
-            ]
+            tool_name = observation["tool_name"]
 
             if acceptable_tools is not None:
                 if tool_name not in acceptable_tools:
@@ -126,9 +105,7 @@ def evaluate_evidence_path(
             ):
                 continue
 
-            result = observation[
-                "result"
-            ]
+            result = observation["result"]
 
             if not isinstance(
                 result,
@@ -165,23 +142,12 @@ def evaluate_evidence_path(
             }
         )
 
-    supported_count = sum(
-        item["supported"]
-        for item in results
-    )
+    supported_count = sum(item["supported"] for item in results)
 
     return {
-        "requirement_count": len(
-            results
-        ),
+        "requirement_count": len(results),
         "supported_count": supported_count,
-        "unsupported_count": (
-            len(results)
-            - supported_count
-        ),
-        "grounded": (
-            len(results) > 0
-            and supported_count == len(results)
-        ),
+        "unsupported_count": (len(results) - supported_count),
+        "grounded": (len(results) > 0 and supported_count == len(results)),
         "requirements": results,
     }

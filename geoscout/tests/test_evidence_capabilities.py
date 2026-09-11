@@ -27,14 +27,9 @@ def test_unknown_field() -> None:
 
 
 def test_find_capable_tools() -> None:
-    tools = find_capable_tools(
-        "degraded_cells"
-    )
+    tools = find_capable_tools("degraded_cells")
 
-    assert (
-        "calculate_statistics"
-        in tools
-    )
+    assert "calculate_statistics" in tools
 
 
 def test_registry_validation() -> None:

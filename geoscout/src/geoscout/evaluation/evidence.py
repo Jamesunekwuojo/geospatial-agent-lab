@@ -30,24 +30,16 @@ def evaluate_semantic_evidence(
 
     for requirement in requirements:
         concept = requirement["concept"]
-        expected = requirement.get(
-            "expected_value"
-        )
+        expected = requirement.get("expected_value")
 
-        rules = get_semantic_evidence_rules(
-            concept
-        )
+        rules = get_semantic_evidence_rules(concept)
 
         matches = []
 
         for observation in observations:
-            tool_name = observation[
-                "tool_name"
-            ]
+            tool_name = observation["tool_name"]
 
-            result = observation[
-                "result"
-            ]
+            result = observation["result"]
 
             if not isinstance(
                 result,
@@ -90,22 +82,13 @@ def evaluate_semantic_evidence(
             }
         )
 
-    supported_count = sum(
-        item["supported"]
-        for item in results
-    )
+    supported_count = sum(item["supported"] for item in results)
 
     return {
         "requirement_count": len(results),
         "supported_count": supported_count,
-        "unsupported_count": (
-            len(results)
-            - supported_count
-        ),
-        "grounded": (
-            len(results) > 0
-            and supported_count == len(results)
-        ),
+        "unsupported_count": (len(results) - supported_count),
+        "grounded": (len(results) > 0 and supported_count == len(results)),
         "requirements": results,
     }
 

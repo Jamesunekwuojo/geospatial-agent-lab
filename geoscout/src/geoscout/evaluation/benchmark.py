@@ -5,9 +5,7 @@ from typing import Any
 from geoscout.agent.groq_planner import GroqAgentRunner
 from geoscout.agent.state import AgentState
 
-DEFAULT_BENCHMARK = Path(
-    "evaluation/benchmarks/geoscout_v1.json"
-)
+DEFAULT_BENCHMARK = Path("evaluation/benchmarks/geoscout_v1.json")
 
 
 def load_benchmark(
@@ -55,9 +53,7 @@ def evaluate_task(
 ) -> dict[str, Any]:
     """Run and evaluate a single benchmark task."""
 
-    state = agent.run(
-        task["question"]
-    )
+    state = agent.run(task["question"])
 
     return evaluate_state(
         state=state,
@@ -79,7 +75,6 @@ def evaluate_state(
     )
 
     if not state.tool_calls:
-
         return {
             "task_id": task["id"],
             "category": task.get(
@@ -107,25 +102,16 @@ def evaluate_state(
 
     first_call = state.tool_calls[0]
 
-    tool_correct = (
-        first_call.tool_name
-        == expected_tool
-    )
+    tool_correct = first_call.tool_name == expected_tool
 
     arguments_correct = arguments_match(
         actual=first_call.arguments,
         expected=expected_arguments,
     )
 
-    execution_success = (
-        state.status == "completed"
-    )
+    execution_success = state.status == "completed"
 
-    success = (
-        tool_correct
-        and arguments_correct
-        and execution_success
-    )
+    success = tool_correct and arguments_correct and execution_success
 
     failure_type = classify_failure(
         tool_correct=tool_correct,
@@ -175,33 +161,18 @@ def summarize_results(
 
     total = len(results)
 
-    tool_correct = sum(
-        result["tool_correct"]
-        for result in results
-    )
+    tool_correct = sum(result["tool_correct"] for result in results)
 
-    arguments_correct = sum(
-        result["arguments_correct"]
-        for result in results
-    )
+    arguments_correct = sum(result["arguments_correct"] for result in results)
 
-    execution_success = sum(
-        result["execution_success"]
-        for result in results
-    )
+    execution_success = sum(result["execution_success"] for result in results)
 
-    successful = sum(
-        result["success"]
-        for result in results
-    )
+    successful = sum(result["success"] for result in results)
 
     failure_counts: dict[str, int] = {}
 
     for result in results:
-
-        failure_type = result[
-            "failure_type"
-        ]
+        failure_type = result["failure_type"]
 
         if failure_type == "none":
             continue
@@ -216,20 +187,13 @@ def summarize_results(
 
     return {
         "task_count": total,
-        "tool_selection_accuracy": (
-            tool_correct / total
-        ),
-        "argument_accuracy": (
-            arguments_correct / total
-        ),
-        "execution_success_rate": (
-            execution_success / total
-        ),
-        "task_success_rate": (
-            successful / total
-        ),
+        "tool_selection_accuracy": (tool_correct / total),
+        "argument_accuracy": (arguments_correct / total),
+        "execution_success_rate": (execution_success / total),
+        "task_success_rate": (successful / total),
         "failure_counts": failure_counts,
     }
+
 
 def required_tools_match(
     actual_tools: list[str],
@@ -237,9 +201,8 @@ def required_tools_match(
 ) -> bool:
     """Check whether all required tools were used."""
 
-    return set(required_tools).issubset(
-        set(actual_tools)
-    )
+    return set(required_tools).issubset(set(actual_tools))
+
 
 def evaluate_multistep_task(
     agent: GroqAgentRunner,
@@ -247,42 +210,26 @@ def evaluate_multistep_task(
 ) -> dict[str, Any]:
     """Evaluate a task requiring multiple tools."""
 
-    state = agent.run(
-        task["question"]
-    )
+    state = agent.run(task["question"])
 
-    required_tools = task[
-        "required_tools"
-    ]
+    required_tools = task["required_tools"]
 
-    actual_tools = [
-        call.tool_name
-        for call in state.tool_calls
-    ]
+    actual_tools = [call.tool_name for call in state.tool_calls]
 
     tools_correct = required_tools_match(
         actual_tools=actual_tools,
         required_tools=required_tools,
     )
 
-    execution_success = (
-        len(state.tool_execution_errors) == 0
-    )
+    execution_success = len(state.tool_execution_errors) == 0
 
-    success = (
-        tools_correct
-        and execution_success
-    )
+    success = tools_correct and execution_success
 
     if not tools_correct:
-        failure_type = (
-            "missing_required_tool"
-        )
+        failure_type = "missing_required_tool"
 
     elif not execution_success:
-        failure_type = (
-            "tool_execution_error"
-        )
+        failure_type = "tool_execution_error"
 
     else:
         failure_type = "none"
@@ -302,7 +249,7 @@ def evaluate_multistep_task(
         "final_answer": state.final_answer,
         "error": state.error,
     }
-    
+
 
 def summarize_multistep_results(
     results: list[dict[str, Any]],
@@ -318,30 +265,15 @@ def summarize_multistep_results(
 
     total = len(results)
 
-    tools_correct = sum(
-        result["tools_correct"]
-        for result in results
-    )
+    tools_correct = sum(result["tools_correct"] for result in results)
 
-    execution_success = sum(
-        result["execution_success"]
-        for result in results
-    )
+    execution_success = sum(result["execution_success"] for result in results)
 
-    successful = sum(
-        result["success"]
-        for result in results
-    )
+    successful = sum(result["success"] for result in results)
 
     return {
         "task_count": total,
-        "required_tool_coverage": (
-            tools_correct / total
-        ),
-        "execution_success_rate": (
-            execution_success / total
-        ),
-        "task_success_rate": (
-            successful / total
-        ),
+        "required_tool_coverage": (tools_correct / total),
+        "execution_success_rate": (execution_success / total),
+        "task_success_rate": (successful / total),
     }

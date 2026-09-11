@@ -314,7 +314,6 @@ def test_alternative_evidence_path() -> None:
     assert result["supported_count"] == 1
 
 
-
 def test_alternative_tool_supports_degraded_count() -> None:
     observations = [
         {
@@ -377,17 +376,11 @@ def test_semantic_evidence_accepts_alternative_tool() -> None:
     assert result["grounded"]
     assert result["supported_count"] == 1
 
-    evidence = result[
-        "requirements"
-    ][0]["supporting_evidence"]
+    evidence = result["requirements"][0]["supporting_evidence"]
 
-    assert evidence[0]["tool"] == (
-        "summarize_hotspots"
-    )
+    assert evidence[0]["tool"] == ("summarize_hotspots")
 
-    assert evidence[0]["field"] == (
-        "hotspot_count"
-    )
+    assert evidence[0]["field"] == ("hotspot_count")
 
 
 def test_semantic_evidence_rejects_wrong_value() -> None:
