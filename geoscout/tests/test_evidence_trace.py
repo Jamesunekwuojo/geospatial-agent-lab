@@ -54,9 +54,7 @@ def test_build_evidence_trace() -> None:
         ]
     }
 
-    traces = build_evidence_trace(
-        claim_evaluation
-    )
+    traces = build_evidence_trace(claim_evaluation)
 
     assert len(traces) == 1
 
@@ -89,9 +87,7 @@ def test_unsupported_claim_has_no_evidence() -> None:
         ]
     }
 
-    traces = build_evidence_trace(
-        claim_evaluation
-    )
+    traces = build_evidence_trace(claim_evaluation)
 
     assert len(traces) == 1
     assert traces[0].supported is False
@@ -120,18 +116,12 @@ def test_evidence_trace_is_json_serializable() -> None:
         ]
     }
 
-    traces = build_evidence_trace(
-        claim_evaluation
-    )
+    traces = build_evidence_trace(claim_evaluation)
 
-    serialized = [
-        trace.to_dict()
-        for trace in traces
-    ]
+    serialized = [trace.to_dict() for trace in traces]
 
     output = json.dumps(serialized)
 
     assert "degraded_cell_count" in output
     assert "calculate_statistics" in output
     assert "degraded_cells" in output
-

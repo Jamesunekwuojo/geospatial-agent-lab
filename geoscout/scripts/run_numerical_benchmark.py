@@ -6,10 +6,7 @@ from geoscout.evaluation.numerical import (
     evaluate_numeric_answer,
 )
 
-BENCHMARK_PATH = Path(
-    "evaluation/benchmarks/"
-    "geoscout_ground_truth.json"
-)
+BENCHMARK_PATH = Path("evaluation/benchmarks/geoscout_ground_truth.json")
 
 
 def load_benchmark(
@@ -23,30 +20,20 @@ def load_benchmark(
 
 
 def main() -> None:
-    tasks = load_benchmark(
-        BENCHMARK_PATH
-    )
+    tasks = load_benchmark(BENCHMARK_PATH)
 
-    agent = GroqAgentRunner(
-        max_steps=6
-    )
+    agent = GroqAgentRunner(max_steps=6)
 
     results = []
 
     for task in tasks:
-        print(
-            f"Running {task['id']}..."
-        )
+        print(f"Running {task['id']}...")
 
-        state = agent.run(
-            task["question"]
-        )
+        state = agent.run(task["question"])
 
         evaluation = evaluate_numeric_answer(
             answer=state.final_answer,
-            expected_values=task[
-                "expected_values"
-            ],
+            expected_values=task["expected_values"],
             tolerance=task.get(
                 "tolerance",
                 0.0,
@@ -63,43 +50,20 @@ def main() -> None:
 
         results.append(result)
 
-        status = (
-            "PASS"
-            if evaluation["correct"]
-            else "FAIL"
-        )
+        status = "PASS" if evaluation["correct"] else "FAIL"
 
         print(f"  {status}")
-        print(
-            f"  Expected: "
-            f"{evaluation['expected_values']}"
-        )
-        print(
-            f"  Matched:  "
-            f"{evaluation['matched_values']}"
-        )
-        print(
-            f"  Missing:  "
-            f"{evaluation['missing_values']}"
-        )
-        print(
-            f"  Answer:   "
-            f"{state.final_answer}"
-        )
+        print(f"  Expected: {evaluation['expected_values']}")
+        print(f"  Matched:  {evaluation['matched_values']}")
+        print(f"  Missing:  {evaluation['missing_values']}")
+        print(f"  Answer:   {state.final_answer}")
         print()
 
     total = len(results)
 
-    correct = sum(
-        result["correct"]
-        for result in results
-    )
+    correct = sum(result["correct"] for result in results)
 
-    accuracy = (
-        correct / total
-        if total
-        else 0.0
-    )
+    accuracy = correct / total if total else 0.0
 
     summary = {
         "task_count": total,
@@ -109,30 +73,16 @@ def main() -> None:
     }
 
     print("=" * 60)
-    print(
-        "GeoScout Numerical Ground-Truth Benchmark"
-    )
+    print("GeoScout Numerical Ground-Truth Benchmark")
     print("=" * 60)
 
-    print(
-        f"Tasks: "
-        f"{total}"
-    )
+    print(f"Tasks: {total}")
 
-    print(
-        f"Correct: "
-        f"{correct}"
-    )
+    print(f"Correct: {correct}")
 
-    print(
-        f"Incorrect: "
-        f"{total - correct}"
-    )
+    print(f"Incorrect: {total - correct}")
 
-    print(
-        f"Numeric answer accuracy: "
-        f"{accuracy:.2%}"
-    )
+    print(f"Numeric answer accuracy: {accuracy:.2%}")
 
     print()
 

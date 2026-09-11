@@ -22,10 +22,7 @@ def short_model_name(model):
 def main():
     data = load_results()
 
-    summaries = {
-        short_model_name(summary["model"]): summary
-        for summary in data["summaries"]
-    }
+    summaries = {short_model_name(summary["model"]): summary for summary in data["summaries"]}
 
     models = [
         "GPT-OSS 20B",
@@ -39,52 +36,31 @@ def main():
         ),
         (
             "Grounded correctness",
-            [
-                f"{summaries[model]['grounded_correctness']:.0%}"
-                for model in models
-            ],
+            [f"{summaries[model]['grounded_correctness']:.0%}" for model in models],
         ),
         (
             "Answer correctness",
-            [
-                f"{summaries[model]['answer_correctness']:.0%}"
-                for model in models
-            ],
+            [f"{summaries[model]['answer_correctness']:.0%}" for model in models],
         ),
         (
             "Evidence support",
-            [
-                f"{summaries[model]['evidence_support_rate']:.0%}"
-                for model in models
-            ],
+            [f"{summaries[model]['evidence_support_rate']:.0%}" for model in models],
         ),
         (
             "Mean latency (s)",
-            [
-                f"{summaries[model]['mean_latency_ms'] / 1000:.2f}"
-                for model in models
-            ],
+            [f"{summaries[model]['mean_latency_ms'] / 1000:.2f}" for model in models],
         ),
         (
             "Mean tool calls",
-            [
-                f"{summaries[model]['mean_tool_calls']:.2f}"
-                for model in models
-            ],
+            [f"{summaries[model]['mean_tool_calls']:.2f}" for model in models],
         ),
         (
             "Mean LLM calls",
-            [
-                f"{summaries[model]['mean_llm_calls']:.2f}"
-                for model in models
-            ],
+            [f"{summaries[model]['mean_llm_calls']:.2f}" for model in models],
         ),
         (
             "Mean total tokens",
-            [
-                f"{summaries[model]['mean_total_tokens']:,.2f}"
-                for model in models
-            ],
+            [f"{summaries[model]['mean_total_tokens']:,.2f}" for model in models],
         ),
     ]
 

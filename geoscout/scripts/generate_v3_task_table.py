@@ -3,9 +3,7 @@ import json
 from pathlib import Path
 
 RESULTS_PATH = Path("evaluation/results/model_comparison_v3.json")
-OUTPUT_PATH = Path(
-    "evaluation/results/model_comparison_v3_task_results.csv"
-)
+OUTPUT_PATH = Path("evaluation/results/model_comparison_v3_task_results.csv")
 
 
 def load_results():
@@ -23,10 +21,7 @@ def main():
         key=lambda task_id: int(task_id.split("-")[1]),
     )
 
-    by_task_model = {
-        (result["task_id"], result["model"]): result
-        for result in results
-    }
+    by_task_model = {(result["task_id"], result["model"]): result for result in results}
 
     models = [
         "openai/gpt-oss-20b",
@@ -36,10 +31,7 @@ def main():
     rows = []
 
     for task_id in task_ids:
-        model_results = [
-            by_task_model[(task_id, model)]
-            for model in models
-        ]
+        model_results = [by_task_model[(task_id, model)] for model in models]
 
         base = model_results[0]
 
@@ -48,18 +40,9 @@ def main():
                 task_id,
                 base["category"],
                 base["difficulty"],
-                *[
-                    "PASS" if result["grounded_correct"] else "FAIL"
-                    for result in model_results
-                ],
-                *[
-                    "PASS" if result["evidence_supported"] else "FAIL"
-                    for result in model_results
-                ],
-                *[
-                    "PASS" if result["answer_correct"] else "FAIL"
-                    for result in model_results
-                ],
+                *["PASS" if result["grounded_correct"] else "FAIL" for result in model_results],
+                *["PASS" if result["evidence_supported"] else "FAIL" for result in model_results],
+                *["PASS" if result["answer_correct"] else "FAIL" for result in model_results],
             ]
         )
 

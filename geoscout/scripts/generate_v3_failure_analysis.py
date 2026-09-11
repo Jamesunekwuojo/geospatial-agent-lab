@@ -2,9 +2,7 @@ import json
 from pathlib import Path
 
 RESULTS_PATH = Path("evaluation/results/model_comparison_v3.json")
-OUTPUT_PATH = Path(
-    "evaluation/results/model_comparison_v3_failure_analysis.json"
-)
+OUTPUT_PATH = Path("evaluation/results/model_comparison_v3_failure_analysis.json")
 
 
 def load_results():
@@ -43,29 +41,17 @@ def main():
     }
 
     for model in models:
-        results = [
-            result
-            for result in data["results"]
-            if result["model"] == model
-        ]
+        results = [result for result in data["results"] if result["model"] == model]
 
         grounded_failures = [
-            result["task_id"]
-            for result in results
-            if not result["grounded_correct"]
+            result["task_id"] for result in results if not result["grounded_correct"]
         ]
 
         evidence_failures = [
-            result["task_id"]
-            for result in results
-            if not result["evidence_supported"]
+            result["task_id"] for result in results if not result["evidence_supported"]
         ]
 
-        answer_failures = [
-            result["task_id"]
-            for result in results
-            if not result["answer_correct"]
-        ]
+        answer_failures = [result["task_id"] for result in results if not result["answer_correct"]]
 
         failure_analysis["models"][model] = {
             "task_count": len(results),
@@ -80,28 +66,21 @@ def main():
     failure_analysis["comparative_findings"] = [
         {
             "finding": "Grounded correctness difference",
-            "description": (
-                "GPT-OSS 120B has one fewer grounded failure than "
-                "GPT-OSS 20B."
-            ),
+            "description": ("GPT-OSS 120B has one fewer grounded failure than GPT-OSS 20B."),
             "20b_grounded_failures": 2,
             "120b_grounded_failures": 1,
         },
         {
             "finding": "GE-019 differentiates the models",
             "description": (
-                "GPT-OSS 20B fails GE-019 evidence grounding, while "
-                "GPT-OSS 120B passes it."
+                "GPT-OSS 20B fails GE-019 evidence grounding, while GPT-OSS 120B passes it."
             ),
             "20b": "FAIL",
             "120b": "PASS",
         },
         {
             "finding": "GE-010 is shared",
-            "description": (
-                "Both models fail GE-010 under the semantic-v2 "
-                "grounded evaluation."
-            ),
+            "description": ("Both models fail GE-010 under the semantic-v2 grounded evaluation."),
             "20b": "FAIL",
             "120b": "FAIL",
         },
@@ -113,12 +92,8 @@ def main():
             "grounded_correct": False,
             "evidence_supported": False,
             "answer_correct": False,
-            "supported_concepts": [
-                "degraded_cell_count"
-            ],
-            "unsupported_concepts": [
-                "study_cell_count"
-            ],
+            "supported_concepts": ["degraded_cell_count"],
+            "unsupported_concepts": ["study_cell_count"],
             "interpretation": (
                 "The model obtained evidence for the number of "
                 "degraded/hotspot cells but did not obtain evidence "

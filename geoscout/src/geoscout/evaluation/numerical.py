@@ -10,10 +10,7 @@ def extract_numbers(text: str) -> list[float]:
         text,
     )
 
-    return [
-        float(value)
-        for value in matches
-    ]
+    return [float(value) for value in matches]
 
 
 def value_matches(
@@ -60,9 +57,7 @@ def evaluate_numeric_answer(
             "correct": False,
             "expected_values": expected_values,
             "matched_values": {},
-            "missing_values": list(
-                expected_values.keys()
-            ),
+            "missing_values": list(expected_values.keys()),
         }
 
     numbers = extract_numbers(answer)

@@ -14,6 +14,4 @@ def timer() -> Iterator[dict[str, float]]:
     try:
         yield result
     finally:
-        result["elapsed_ms"] = (
-            time.perf_counter() - start
-        ) * 1000
+        result["elapsed_ms"] = (time.perf_counter() - start) * 1000

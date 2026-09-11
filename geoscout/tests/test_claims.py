@@ -138,9 +138,7 @@ def test_evidence_from_observations() -> None:
         }
     ]
 
-    evidence = evidence_from_observations(
-        observations
-    )
+    evidence = evidence_from_observations(observations)
 
     assert len(evidence) == 2
 
@@ -181,4 +179,3 @@ def test_semantic_claim_uses_alternative_evidence() -> None:
 
     assert result["grounded"]
     assert result["supported_claim_count"] == 1
-

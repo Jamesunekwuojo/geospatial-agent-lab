@@ -92,9 +92,7 @@ def evaluate_semantic_requirement(
     concept-based or explicit tool/field specifications.
     """
 
-    expected = requirement.get(
-        "expected_value"
-    )
+    expected = requirement.get("expected_value")
 
     if "concept" in requirement:
         concept = requirement["concept"]
@@ -172,9 +170,7 @@ def evaluate_semantic_requirement(
         "actual_value": actual,
         "supported": supported,
         "supporting_evidence": (
-            [{"tool": tool_name, "field": field, "actual_value": actual}]
-            if supported
-            else []
+            [{"tool": tool_name, "field": field, "actual_value": actual}] if supported else []
         ),
     }
 
@@ -198,23 +194,14 @@ def evaluate_semantic_evidence(
         for req in requirements
     ]
 
-    supported_count = sum(
-        item["supported"]
-        for item in results
-    )
+    supported_count = sum(item["supported"] for item in results)
 
-    grounded = (
-        len(results) > 0
-        and supported_count == len(results)
-    )
+    grounded = len(results) > 0 and supported_count == len(results)
 
     return {
         "grounded": grounded,
         "requirement_count": len(results),
         "supported_count": supported_count,
-        "unsupported_count": (
-            len(results)
-            - supported_count
-        ),
+        "unsupported_count": (len(results) - supported_count),
         "requirements": results,
     }

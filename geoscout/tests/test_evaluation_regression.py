@@ -74,5 +74,3 @@ def test_qualitative_answer_correctness_epsg() -> None:
         "The coordinate system is EPSG:3857.",
         expected_values,
     )
-
-

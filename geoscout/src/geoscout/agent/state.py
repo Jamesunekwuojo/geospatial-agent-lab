@@ -48,25 +48,15 @@ class AgentState:
 
     question: str
 
-    tool_calls: list[ToolCall] = field(
-        default_factory=list
-    )
+    tool_calls: list[ToolCall] = field(default_factory=list)
 
-    observations: list[ToolObservation] = field(
-        default_factory=list
-    )
+    observations: list[ToolObservation] = field(default_factory=list)
 
-    messages: list[dict[str, Any]] = field(
-        default_factory=list
-    )
+    messages: list[dict[str, Any]] = field(default_factory=list)
 
-    tool_executions: list[ToolExecution] = field(
-        default_factory=list
-    )
+    tool_executions: list[ToolExecution] = field(default_factory=list)
 
-    llm_calls: list[LLMCall] = field(
-        default_factory=list
-    )
+    llm_calls: list[LLMCall] = field(default_factory=list)
 
     final_answer: str | None = None
 
@@ -74,9 +64,7 @@ class AgentState:
 
     steps: int = 0
 
-    tool_execution_errors: list[str] = field(
-        default_factory=list
-    )
+    tool_execution_errors: list[str] = field(default_factory=list)
 
     error: str | None = None
 

@@ -1,9 +1,7 @@
 import json
 from pathlib import Path
 
-RESULT_PATH = Path(
-    "evaluation/results/model_comparison_v3.json"
-)
+RESULT_PATH = Path("evaluation/results/model_comparison_v3.json")
 
 
 def main() -> None:
@@ -30,27 +28,14 @@ def main() -> None:
             continue
 
         print()
-        print(
-            f"{result['model']} | "
-            f"{result['task_id']}"
-        )
+        print(f"{result['model']} | {result['task_id']}")
 
         for trace in traces:
-            print(
-                f"  Concept: {trace['concept']}"
-            )
-            print(
-                f"  Expected: "
-                f"{trace['expected_value']}"
-            )
-            print(
-                f"  Supported: "
-                f"{trace['supported']}"
-            )
+            print(f"  Concept: {trace['concept']}")
+            print(f"  Expected: {trace['expected_value']}")
+            print(f"  Supported: {trace['supported']}")
 
-            for evidence in trace[
-                "supporting_evidence"
-            ]:
+            for evidence in trace["supporting_evidence"]:
                 print(
                     "  Evidence: "
                     f"{evidence['tool']}."
@@ -60,9 +45,7 @@ def main() -> None:
 
     print()
     print("=" * 70)
-    print(
-        f"Total evidence traces: {trace_count}"
-    )
+    print(f"Total evidence traces: {trace_count}")
     print("=" * 70)
 
 

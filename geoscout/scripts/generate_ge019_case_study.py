@@ -3,12 +3,8 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 
-RESULTS_PATH = Path(
-    "evaluation/results/model_comparison_v3_failure_analysis.json"
-)
-OUTPUT_PATH = Path(
-    "evaluation/results/figures/ge019_case_study.png"
-)
+RESULTS_PATH = Path("evaluation/results/model_comparison_v3_failure_analysis.json")
+OUTPUT_PATH = Path("evaluation/results/figures/ge019_case_study.png")
 
 
 def load_analysis():

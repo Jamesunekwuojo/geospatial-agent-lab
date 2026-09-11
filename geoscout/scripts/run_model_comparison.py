@@ -24,10 +24,7 @@ from geoscout.evaluation.performance import (
     summarize_performance,
 )
 
-BENCHMARK_PATH = Path(
-    "evaluation/benchmarks/"
-    "geoscout_evidence_v2.json"
-)
+BENCHMARK_PATH = Path("evaluation/benchmarks/geoscout_evidence_v2.json")
 
 MODELS = [
     "openai/gpt-oss-20b",
@@ -146,14 +143,9 @@ def evaluate_model(
     results = []
 
     for task in tasks:
-        print(
-            f"[{model}] "
-            f"Running {task['id']}..."
-        )
+        print(f"[{model}] Running {task['id']}...")
 
-        state = agent.run(
-            task["question"]
-        )
+        state = agent.run(task["question"])
 
         observations = [
             {
@@ -167,42 +159,32 @@ def evaluate_model(
         # 1. Semantic evidence evaluation
         # --------------------------------------------------
 
-        evidence_evaluation = (
-            evaluate_semantic_evidence(
-                observations=observations,
-                requirements=task[
-                    "required_evidence"
-                ],
-            )
+        evidence_evaluation = evaluate_semantic_evidence(
+            observations=observations,
+            requirements=task["required_evidence"],
         )
 
         # --------------------------------------------------
         # 2. Semantic claim evaluation
         # --------------------------------------------------
 
-        claim_evaluation = (
-            evaluate_semantic_claims(
-                claims=task.get(
-                    "expected_claims",
-                    [],
-                ),
-                observations=observations,
-            )
+        claim_evaluation = evaluate_semantic_claims(
+            claims=task.get(
+                "expected_claims",
+                [],
+            ),
+            observations=observations,
         )
 
-        evidence_trace = build_evidence_trace(
-            claim_evaluation
-        )
+        evidence_trace = build_evidence_trace(claim_evaluation)
 
         # --------------------------------------------------
         # 3. Answer correctness
         # --------------------------------------------------
 
-        answer_correct = (
-            evaluate_answer_correctness(
-                state.final_answer,
-                task,
-            )
+        answer_correct = evaluate_answer_correctness(
+            state.final_answer,
+            task,
         )
 
         # --------------------------------------------------
@@ -210,23 +192,14 @@ def evaluate_model(
         # --------------------------------------------------
 
         grounded_correct = (
-            evidence_evaluation["grounded"]
-            and claim_evaluation["grounded"]
-            and answer_correct
+            evidence_evaluation["grounded"] and claim_evaluation["grounded"] and answer_correct
         )
 
-        performance = summarize_performance(
-            state
-        )
+        performance = summarize_performance(state)
 
-        expected_tools = (
-            extract_expected_tools(task)
-        )
+        expected_tools = extract_expected_tools(task)
 
-        actual_tools = [
-            call.tool_name
-            for call in state.tool_calls
-        ]
+        actual_tools = [call.tool_name for call in state.tool_calls]
 
         result = {
             "model": model,
@@ -234,13 +207,10 @@ def evaluate_model(
             "category": task["category"],
             "difficulty": task["difficulty"],
             "question": task["question"],
-
             "status": state.status,
             "final_answer": state.final_answer,
-
             "expected_tools": expected_tools,
             "actual_tools": actual_tools,
-
             "tool_call_arguments": [
                 {
                     "tool_name": call.tool_name,
@@ -248,68 +218,29 @@ def evaluate_model(
                 }
                 for call in state.tool_calls
             ],
-
-            "tool_execution_errors": (
-                state.tool_execution_errors
-            ),
-
-            "evidence_evaluation": (
-                evidence_evaluation
-            ),
-
-            "claim_evaluation": (
-                claim_evaluation
-            ),
-
-            "evidence_trace": [
-                trace.to_dict()
-                for trace in evidence_trace
-            ],
-
-            "evidence_supported": (
-                evidence_evaluation[
-                    "grounded"
-                ]
-            ),
-
-            "answer_correct": (
-                answer_correct
-            ),
-
-            "grounded_correct": (
-                grounded_correct
-            ),
-
+            "tool_execution_errors": (state.tool_execution_errors),
+            "evidence_evaluation": (evidence_evaluation),
+            "claim_evaluation": (claim_evaluation),
+            "evidence_trace": [trace.to_dict() for trace in evidence_trace],
+            "evidence_supported": (evidence_evaluation["grounded"]),
+            "answer_correct": (answer_correct),
+            "grounded_correct": (grounded_correct),
             "performance": performance,
         }
 
         # Diagnostic failure analysis
-        analyzed = analyze_result(
-            result
-        )
+        analyzed = analyze_result(result)
 
         result.update(
             {
-                "primary_failure": (
-                    analyzed[
-                        "primary_failure"
-                    ]
-                ),
-                "trajectory_analysis": (
-                    analyzed[
-                        "trajectory_analysis"
-                    ]
-                ),
+                "primary_failure": (analyzed["primary_failure"]),
+                "trajectory_analysis": (analyzed["trajectory_analysis"]),
             }
         )
 
         results.append(result)
 
-        status = (
-            "PASS"
-            if grounded_correct
-            else "FAIL"
-        )
+        status = "PASS" if grounded_correct else "FAIL"
 
         print(
             f"  {status} | "
@@ -339,166 +270,80 @@ def summarize_model(
             "task_count": 0,
         }
 
-    grounded = sum(
-        result["grounded_correct"]
-        for result in results
-    )
+    grounded = sum(result["grounded_correct"] for result in results)
 
-    answer_correct = sum(
-        result["answer_correct"]
-        for result in results
-    )
+    answer_correct = sum(result["answer_correct"] for result in results)
 
-    evidence_supported = sum(
-        result["evidence_supported"]
-        for result in results
-    )
+    evidence_supported = sum(result["evidence_supported"] for result in results)
 
-    claim_grounded = sum(
-        result[
-            "claim_evaluation"
-        ]["grounded"]
-        for result in results
-    )
+    claim_grounded = sum(result["claim_evaluation"]["grounded"] for result in results)
 
-    total_latency = sum(
-        result["performance"][
-            "total_latency_ms"
-        ]
-        for result in results
-    )
+    total_latency = sum(result["performance"]["total_latency_ms"] for result in results)
 
-    total_tool_calls = sum(
-        result["performance"][
-            "tool_call_count"
-        ]
-        for result in results
-    )
+    total_tool_calls = sum(result["performance"]["tool_call_count"] for result in results)
 
-    total_llm_calls = sum(
-        result["performance"][
-            "llm_call_count"
-        ]
-        for result in results
-    )
+    total_llm_calls = sum(result["performance"]["llm_call_count"] for result in results)
 
-    total_tokens = sum(
-        result["performance"][
-            "total_tokens"
-        ]
-        for result in results
-    )
+    total_tokens = sum(result["performance"]["total_tokens"] for result in results)
 
     return {
         "model": model,
         "task_count": total,
-
-        "grounded_correctness": (
-            grounded / total
-        ),
-
-        "answer_correctness": (
-            answer_correct / total
-        ),
-
-        "evidence_support_rate": (
-            evidence_supported / total
-        ),
-
-        "claim_groundedness": (
-            claim_grounded / total
-        ),
-
-        "mean_latency_ms": (
-            total_latency / total
-        ),
-
-        "mean_tool_calls": (
-            total_tool_calls / total
-        ),
-
-        "mean_llm_calls": (
-            total_llm_calls / total
-        ),
-
-        "mean_total_tokens": (
-            total_tokens / total
-        ),
+        "grounded_correctness": (grounded / total),
+        "answer_correctness": (answer_correct / total),
+        "evidence_support_rate": (evidence_supported / total),
+        "claim_groundedness": (claim_grounded / total),
+        "mean_latency_ms": (total_latency / total),
+        "mean_tool_calls": (total_tool_calls / total),
+        "mean_llm_calls": (total_llm_calls / total),
+        "mean_total_tokens": (total_tokens / total),
     }
 
 
 def main() -> None:
 
-    tasks = load_benchmark(
-        BENCHMARK_PATH
-    )
+    tasks = load_benchmark(BENCHMARK_PATH)
 
     all_results = []
     summaries = []
 
     for model in MODELS:
-
         results = evaluate_model(
             model=model,
             tasks=tasks,
         )
 
-        all_results.extend(
-            results
-        )
+        all_results.extend(results)
 
         summary = summarize_model(
             model=model,
             results=results,
         )
 
-        summaries.append(
-            summary
-        )
+        summaries.append(summary)
 
-        failure_summary = (
-            summarize_failures(
-                results
-            )
-        )
+        failure_summary = summarize_failures(results)
 
         print()
-        print(
-            f"Failure analysis: {model}"
-        )
+        print(f"Failure analysis: {model}")
 
-        for failure, count in (
-            failure_summary[
-                "failure_counts"
-            ].items()
-        ):
-            print(
-                f"  {failure}: {count}"
-            )
+        for failure, count in failure_summary["failure_counts"].items():
+            print(f"  {failure}: {count}")
 
         print()
 
-    output_dir = Path(
-        "evaluation/results"
-    )
+    output_dir = Path("evaluation/results")
 
     output_dir.mkdir(
         parents=True,
         exist_ok=True,
     )
 
-    output_path = (
-        output_dir
-        / "model_comparison_v3.json"
-    )
+    output_path = output_dir / "model_comparison_v3.json"
 
     output = {
-        "experiment": (
-            "GPT-OSS 20B vs GPT-OSS 120B"
-        ),
-        "benchmark": str(
-            BENCHMARK_PATH
-        ),
+        "experiment": ("GPT-OSS 20B vs GPT-OSS 120B"),
+        "benchmark": str(BENCHMARK_PATH),
         "evaluation_version": "semantic-v2",
         "summaries": summaries,
         "results": all_results,
@@ -514,64 +359,32 @@ def main() -> None:
     )
 
     print("=" * 70)
-    print(
-        "GeoScout Model Comparison v3"
-    )
+    print("GeoScout Model Comparison v3")
     print("=" * 70)
 
     for summary in summaries:
-
         print()
 
-        print(
-            f"Model: "
-            f"{summary['model']}"
-        )
+        print(f"Model: {summary['model']}")
 
-        print(
-            f"Grounded correctness: "
-            f"{summary['grounded_correctness']:.2%}"
-        )
+        print(f"Grounded correctness: {summary['grounded_correctness']:.2%}")
 
-        print(
-            f"Answer correctness: "
-            f"{summary['answer_correctness']:.2%}"
-        )
+        print(f"Answer correctness: {summary['answer_correctness']:.2%}")
 
-        print(
-            f"Evidence support: "
-            f"{summary['evidence_support_rate']:.2%}"
-        )
+        print(f"Evidence support: {summary['evidence_support_rate']:.2%}")
 
-        print(
-            f"Claim groundedness: "
-            f"{summary['claim_groundedness']:.2%}"
-        )
+        print(f"Claim groundedness: {summary['claim_groundedness']:.2%}")
 
-        print(
-            f"Mean latency: "
-            f"{summary['mean_latency_ms']:.2f} ms"
-        )
+        print(f"Mean latency: {summary['mean_latency_ms']:.2f} ms")
 
-        print(
-            f"Mean tool calls: "
-            f"{summary['mean_tool_calls']:.2f}"
-        )
+        print(f"Mean tool calls: {summary['mean_tool_calls']:.2f}")
 
-        print(
-            f"Mean LLM calls: "
-            f"{summary['mean_llm_calls']:.2f}"
-        )
+        print(f"Mean LLM calls: {summary['mean_llm_calls']:.2f}")
 
-        print(
-            f"Mean tokens: "
-            f"{summary['mean_total_tokens']:.2f}"
-        )
+        print(f"Mean tokens: {summary['mean_total_tokens']:.2f}")
 
     print()
-    print(
-        "Detailed results saved to:"
-    )
+    print("Detailed results saved to:")
     print(output_path)
 
 
