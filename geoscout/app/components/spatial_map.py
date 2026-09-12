@@ -162,7 +162,8 @@ def render_spatial_result(state: AgentState) -> None:
     spatial_map = folium.Map(
         location=[center_lat, center_lon],
         zoom_start=13,
-        tiles="CartoDB dark_matter",
+        tiles="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+        attr='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
         control_scale=True,
     )
 

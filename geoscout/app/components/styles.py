@@ -71,6 +71,20 @@ button[kind="primary"]:hover {
     box-shadow: 0 4px 12px rgba(53, 208, 127, 0.25) !important;
 }
 
+/* Inactive / Disabled Buttons */
+button:disabled,
+button[disabled],
+button[kind="primary"]:disabled,
+button[kind="primary"][disabled] {
+    background-color: #162638 !important;
+    color: #5C7084 !important;
+    border: 1px solid #1E3348 !important;
+    cursor: not-allowed !important;
+    opacity: 0.70 !important;
+    box-shadow: none !important;
+    pointer-events: none !important;
+}
+
 /* Text Inputs & Selectboxes */
 .stTextArea textarea, .stSelectbox select, div[data-baseweb="select"] {
     background-color: var(--gs-surface-2) !important;
@@ -82,6 +96,16 @@ button[kind="primary"]:hover {
 .stTextArea textarea:focus {
     border-color: var(--gs-accent) !important;
     box-shadow: 0 0 0 1px var(--gs-accent) !important;
+}
+
+.stTextArea textarea:disabled,
+div[data-baseweb="select"] input:disabled,
+div[aria-disabled="true"] {
+    background-color: #0B1622 !important;
+    color: #5C7084 !important;
+    border-color: #162638 !important;
+    cursor: not-allowed !important;
+    opacity: 0.75 !important;
 }
 
 /* Metrics Cards */
@@ -211,6 +235,17 @@ div[data-testid="stMetricValue"] div {
     margin-bottom: 0.65rem;
 }
 
+/* Evidence Field Grid */
+.gs-evidence-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 8px;
+    background: var(--gs-surface-2);
+    border: 1px solid var(--gs-border);
+    border-radius: 6px;
+    padding: 8px 10px;
+}
+
 /* Stepper Card */
 .gs-step-card {
     display: flex;
@@ -221,6 +256,42 @@ div[data-testid="stMetricValue"] div {
     border-radius: 6px;
     padding: 10px;
     box-sizing: border-box;
+}
+
+/* Header Badges */
+.gs-header-badges {
+    text-align: right;
+    padding-top: 8px;
+}
+
+/* Responsive Overrides */
+@media (max-width: 768px) {
+    .gs-header-badges {
+        text-align: left;
+        padding-top: 4px;
+        margin-bottom: 8px;
+    }
+    .gs-step-card {
+        min-height: auto;
+        margin-bottom: 8px;
+        padding: 8px 10px;
+    }
+    .gs-key-finding-grounded,
+    .gs-key-finding-ungrounded,
+    .gs-key-finding-failed {
+        padding: 1rem;
+        margin: 0.5rem 0;
+    }
+    .gs-evidence-card {
+        padding: 0.75rem;
+    }
+    .gs-evidence-grid {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+    div[data-testid="stMetric"] {
+        padding: 8px 10px;
+    }
 }
 </style>
 """

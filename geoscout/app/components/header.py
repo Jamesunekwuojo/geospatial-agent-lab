@@ -17,7 +17,7 @@ def render_header() -> None:
 
     with col_badges:
         st.markdown(
-            "<div style='text-align: right; padding-top: 8px;'>"
+            "<div class='gs-header-badges'>"
             "<span class='gs-badge'>RESEARCH PROTOTYPE</span>&nbsp;&nbsp;"
             "<span class='gs-badge-muted'>Baseline: GeoScout v3</span>"
             "</div>",
