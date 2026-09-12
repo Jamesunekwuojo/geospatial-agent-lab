@@ -280,7 +280,7 @@ def test_question_input_disabled_when_running(
     assert select_kwargs["disabled"] is True
 
     btn_args, btn_kwargs = mock_button.call_args
-    assert btn_args[0] == "Running Analysis..."
+    assert btn_args[0] == "Run Geospatial Analysis"
     assert btn_kwargs["disabled"] is True
 
 
