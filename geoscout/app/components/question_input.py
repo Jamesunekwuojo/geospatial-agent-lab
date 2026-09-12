@@ -53,9 +53,8 @@ def render_question_input(
         )
 
     with col_btn:
-        btn_label = "Running Analysis..." if is_running else "Run Geospatial Analysis"
         run_clicked = st.button(
-            btn_label,
+            "Run Geospatial Analysis",
             type="primary",
             use_container_width=True,
             disabled=is_running,

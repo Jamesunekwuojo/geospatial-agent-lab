@@ -73,29 +73,21 @@ def main() -> None:
     render_sidebar()
     render_header()
 
-    if "is_running" not in st.session_state:
-        st.session_state.is_running = False
+    question, run_clicked = render_question_input()
 
-    question, run_clicked = render_question_input(
-        is_running=st.session_state.is_running
-    )
-
-    if run_clicked and not st.session_state.is_running:
+    if run_clicked:
         if not question:
             st.warning("Please enter a research question before running the analysis.")
             return
 
-        st.session_state.is_running = True
-        runner = GroqAgentRunner(max_steps=10)
         with st.spinner("GeoScout is planning and executing the geospatial analysis..."):
             try:
+                runner = GroqAgentRunner(max_steps=10)
                 state = runner.run(question)
                 st.session_state.current_state = state
             except Exception as exc:
                 st.error(f"GeoScout execution failed: {exc}")
-            finally:
-                st.session_state.is_running = False
-                st.rerun()
+                return
 
     current_state = st.session_state.get("current_state")
 
