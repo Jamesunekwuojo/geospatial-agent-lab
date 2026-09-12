@@ -11,8 +11,13 @@ EXAMPLE_QUESTIONS = [
 ]
 
 
-def render_question_input(is_running: bool = False) -> tuple[str, bool]:
+def render_question_input(
+    is_running: bool | None = None, **kwargs
+) -> tuple[str, bool]:
     """Render the research question input area and run trigger."""
+    if is_running is None:
+        is_running = st.session_state.get("is_running", False)
+
     st.markdown(
         "<h3 style='font-size: 1.2rem; margin-bottom: 6px;'>Research Question</h3>",
         unsafe_allow_html=True,
