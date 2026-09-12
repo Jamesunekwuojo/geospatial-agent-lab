@@ -94,7 +94,7 @@ div[data-testid="stMetric"] {
 
 div[data-testid="stMetricLabel"] p {
     color: var(--gs-text-secondary) !important;
-    font-size: 0.82rem !important;
+    font-size: 0.80rem !important;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -103,7 +103,7 @@ div[data-testid="stMetricLabel"] p {
 div[data-testid="stMetricValue"] div {
     color: var(--gs-text-primary) !important;
     font-weight: 700;
-    font-size: 1.4rem !important;
+    font-size: 1.35rem !important;
 }
 
 /* Expanders */
@@ -120,7 +120,7 @@ div[data-testid="stMetricValue"] div {
     display: inline-block;
     padding: 3px 8px;
     border-radius: 4px;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -129,11 +129,37 @@ div[data-testid="stMetricValue"] div {
     border: 1px solid rgba(53, 208, 127, 0.3);
 }
 
+.gs-badge-warning {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background-color: rgba(244, 162, 97, 0.15);
+    color: var(--gs-warning);
+    border: 1px solid rgba(244, 162, 97, 0.35);
+}
+
+.gs-badge-error {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background-color: rgba(230, 57, 70, 0.15);
+    color: var(--gs-danger);
+    border: 1px solid rgba(230, 57, 70, 0.35);
+}
+
 .gs-badge-muted {
     display: inline-block;
     padding: 3px 8px;
     border-radius: 4px;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -142,7 +168,8 @@ div[data-testid="stMetricValue"] div {
     border: 1px solid rgba(143, 163, 184, 0.3);
 }
 
-.gs-key-finding {
+/* Key Finding Panels */
+.gs-key-finding-grounded {
     background: linear-gradient(135deg, rgba(13, 27, 42, 0.95), rgba(16, 34, 53, 0.95));
     border-left: 4px solid var(--gs-accent);
     border-top: 1px solid var(--gs-border);
@@ -150,15 +177,50 @@ div[data-testid="stMetricValue"] div {
     border-bottom: 1px solid var(--gs-border);
     border-radius: 0 8px 8px 0;
     padding: 1.25rem 1.5rem;
-    margin: 1rem 0;
+    margin: 0.75rem 0;
 }
 
+.gs-key-finding-ungrounded {
+    background: linear-gradient(135deg, rgba(13, 27, 42, 0.95), rgba(30, 24, 20, 0.95));
+    border-left: 4px solid var(--gs-warning);
+    border-top: 1px solid var(--gs-border);
+    border-right: 1px solid var(--gs-border);
+    border-bottom: 1px solid var(--gs-border);
+    border-radius: 0 8px 8px 0;
+    padding: 1.25rem 1.5rem;
+    margin: 0.75rem 0;
+}
+
+.gs-key-finding-failed {
+    background: linear-gradient(135deg, rgba(13, 27, 42, 0.95), rgba(35, 18, 22, 0.95));
+    border-left: 4px solid var(--gs-danger);
+    border-top: 1px solid var(--gs-border);
+    border-right: 1px solid var(--gs-border);
+    border-bottom: 1px solid var(--gs-border);
+    border-radius: 0 8px 8px 0;
+    padding: 1.25rem 1.5rem;
+    margin: 0.75rem 0;
+}
+
+/* Evidence Cards */
 .gs-evidence-card {
     background-color: var(--gs-surface);
     border: 1px solid var(--gs-border);
     border-radius: 6px;
-    padding: 1rem;
-    margin-bottom: 0.75rem;
+    padding: 0.85rem 1rem;
+    margin-bottom: 0.65rem;
+}
+
+/* Stepper Card */
+.gs-step-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    min-height: 110px;
+    border-radius: 6px;
+    padding: 10px;
+    box-sizing: border-box;
 }
 </style>
 """

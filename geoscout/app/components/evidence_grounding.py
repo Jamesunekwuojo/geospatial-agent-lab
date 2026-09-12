@@ -19,13 +19,22 @@ CLAIM_TEMPLATES = {
 def render_evidence_grounding(state: AgentState) -> None:
     """Render the Claim -> Evidence -> Tool grounding ledger."""
     st.markdown(
-        "<h3 style='font-size: 1.2rem; margin-bottom: 4px;'>Evidence Grounding</h3>",
+        "<h3 style='font-size: 1.15rem; margin-bottom: 2px;'>Evidence Grounding</h3>",
         unsafe_allow_html=True,
     )
     st.caption("Verifiable link between generated claims and deterministic GIS observations.")
 
     if not state.observations:
-        st.info("No tool observations were collected during this run.")
+        st.markdown(
+            "<div style='background: rgba(244, 162, 97, 0.08); border: 1px solid #F4A261; "
+            "border-radius: 6px; padding: 12px; margin-top: 6px; "
+            "font-size: 0.85rem; color: #F5F7FA;'>"
+            "<strong style='color: #F4A261;'> No GIS Evidence Collected</strong><br/>"
+            "The agent did not invoke deterministic tools for this query. "
+            "No structured spatial observations are available to ground the response."
+            "</div>",
+            unsafe_allow_html=True,
+        )
         return
 
     evidence_items = []
@@ -55,7 +64,7 @@ def render_evidence_grounding(state: AgentState) -> None:
                 )
 
     if not evidence_items:
-        st.info("Tool executed, but no supported standardized claim fields were found.")
+        st.info("Tool executed, but no standardized claim fields matched the template registry.")
         return
 
     for index, item in enumerate(evidence_items, start=1):
@@ -72,34 +81,34 @@ def render_evidence_grounding(state: AgentState) -> None:
                 "<div class='gs-evidence-card'>"
                 "<div style='display: flex; justify-content: space-between; align-items: center; "
                 "margin-bottom: 6px;'>"
-                f"<span style='font-size: 0.8rem; font-weight: 600; color: #8FA3B8;'>"
+                f"<span style='font-size: 0.76rem; font-weight: 600; color: #8FA3B8;'>"
                 f"CLAIM #{index}</span>"
                 "<span class='gs-badge'>✓ EVIDENCE SUPPORTED</span>"
                 "</div>"
-                "<div style='font-size: 1.0rem; font-weight: 600; color: #F5F7FA; "
-                "margin-bottom: 12px;'>"
+                "<div style='font-size: 0.95rem; font-weight: 600; color: #F5F7FA; "
+                "margin-bottom: 10px;'>"
                 f'"{claim_text}"'
                 "</div>"
                 "<div style='display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 8px; "
                 "background: #102235; border: 1px solid #1E3348; border-radius: 6px; "
-                "padding: 10px;'>"
+                "padding: 8px 10px;'>"
                 "<div>"
-                "<div style='font-size: 0.72rem; color: #8FA3B8; text-transform: uppercase;'>"
-                "Evidence Field</div>"
-                f"<div style='font-family: monospace; font-size: 0.85rem; color: #35D07F; "
+                "<div style='font-size: 0.70rem; color: #8FA3B8; text-transform: uppercase;'>"
+                "Field</div>"
+                f"<div style='font-family: monospace; font-size: 0.82rem; color: #35D07F; "
                 f"font-weight: 600;'>{field}</div>"
                 "</div>"
                 "<div>"
-                "<div style='font-size: 0.72rem; color: #8FA3B8; text-transform: uppercase;'>"
-                "Observed Value</div>"
-                f"<div style='font-family: monospace; font-size: 0.85rem; color: #F5F7FA; "
+                "<div style='font-size: 0.70rem; color: #8FA3B8; text-transform: uppercase;'>"
+                "Value</div>"
+                f"<div style='font-family: monospace; font-size: 0.82rem; color: #F5F7FA; "
                 f"font-weight: 600;'>{formatted_val}</div>"
                 "</div>"
                 "<div>"
-                "<div style='font-size: 0.72rem; color: #8FA3B8; text-transform: uppercase;'>"
+                "<div style='font-size: 0.70rem; color: #8FA3B8; text-transform: uppercase;'>"
                 "Source Tool</div>"
-                f"<div style='font-family: monospace; font-size: 0.85rem; color: #8FA3B8;'>"
-                f"{tool_name} (Obs #{obs_idx})</div>"
+                f"<div style='font-family: monospace; font-size: 0.82rem; color: #8FA3B8;'>"
+                f"{tool_name} (#{obs_idx})</div>"
                 "</div>"
                 "</div>"
                 "</div>"
@@ -109,18 +118,25 @@ def render_evidence_grounding(state: AgentState) -> None:
 
 def render_raw_evidence_table(state: AgentState) -> None:
     """Render raw structured observations from executed GIS tools."""
+    if not state.observations:
+        return
+
     st.markdown(
-        "<h3 style='font-size: 1.2rem; margin-bottom: 4px;'>Structured GIS Observations</h3>",
+        "<h4 style='font-size: 1.0rem; margin-top: 14px; margin-bottom: 4px; color: #8FA3B8;'>"
+        "Observed Feature Metrics</h4>",
         unsafe_allow_html=True,
     )
 
-    if not state.observations:
-        st.info("No tool observations recorded.")
-        return
-
     for obs in state.observations:
-        tool_name = getattr(obs, "tool_name", "Unknown tool")
-        result = getattr(obs, "result", {})
+        if isinstance(obs, dict):
+            tool_name = obs.get(
+                "tool",
+                obs.get("name", obs.get("tool_name", "Unknown tool")),
+            )
+            result = obs.get("output", obs.get("result", {}))
+        else:
+            tool_name = getattr(obs, "tool_name", "Unknown tool")
+            result = getattr(obs, "result", {})
 
         if isinstance(result, dict):
             preferred_fields = [
@@ -146,5 +162,5 @@ def render_raw_evidence_table(state: AgentState) -> None:
                         disp = f"{val:.4f}" if isinstance(val, float) else str(val)
                         st.metric(lbl, disp)
 
-        with st.expander(f"Raw Output: `{tool_name}`", expanded=False):
+        with st.expander(f"Inspect Raw JSON: `{tool_name}`", expanded=False):
             st.json(result)
