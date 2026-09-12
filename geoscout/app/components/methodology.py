@@ -6,7 +6,7 @@ import streamlit as st
 def render_methodology_and_limitations() -> None:
     """Render the methodology explainer and research limitations expanders."""
     with st.expander(
-        "ℹ️ How GeoScout Produced This Result (Architecture & Pipeline)",
+        "How GeoScout Produced This Result (Architecture & Pipeline)",
         expanded=False,
     ):
         st.markdown(
@@ -26,7 +26,7 @@ The interface visualizes this trace so every claim can be audited against execut
 """
         )
 
-    with st.expander("⚠️ Research Scope & Limitations", expanded=False):
+    with st.expander("Research Scope & Limitations", expanded=False):
         st.markdown(
             """
 ### Current Prototype Limitations

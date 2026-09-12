@@ -24,7 +24,8 @@ def render_telemetry(state: AgentState) -> None:
         st.metric("GIS Tool Calls", len(state.tool_calls))
 
     with col4:
-        st.metric("Total Latency", f"{state.total_latency_ms / 1000:.2f} s")
+        total_lat = state.total_latency_ms if state.total_latency_ms is not None else 0.0
+        st.metric("Total Latency", f"{total_lat / 1000:.2f} s")
 
     with col5:
         total_tokens = sum(call.total_tokens or 0 for call in state.llm_calls)
@@ -32,7 +33,7 @@ def render_telemetry(state: AgentState) -> None:
 
     if state.llm_calls:
         token_details = [
-            f"Call #{c.call_number}: {c.total_tokens or 0:,} tokens ({c.latency_ms:.1f}ms)"
+            f"Call #{c.call_number}: {c.total_tokens or 0:,} tokens ({(c.latency_ms or 0.0):.1f}ms)"
             for c in state.llm_calls
         ]
-        st.caption("🔍 **LLM breakdown:** " + " · ".join(token_details))
+        st.caption(" **LLM breakdown:** " + " · ".join(token_details))

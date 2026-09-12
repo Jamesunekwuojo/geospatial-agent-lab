@@ -47,7 +47,7 @@ def render_question_input() -> tuple[str, bool]:
 
     with col_btn:
         run_clicked = st.button(
-            "🔎 Run Geospatial Analysis",
+            " Run Geospatial Analysis",
             type="primary",
             use_container_width=True,
         )
