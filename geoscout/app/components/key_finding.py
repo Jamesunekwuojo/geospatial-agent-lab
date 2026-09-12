@@ -21,9 +21,7 @@ def render_key_finding(state: AgentState) -> None:
     else:
         card_class = "gs-key-finding-ungrounded"
         label_text = "Direct Language Model Response (Ungrounded)"
-        status_badge = (
-            "<span class='gs-badge-warning'> NO GIS EVIDENCE</span>"
-        )
+        status_badge = "<span class='gs-badge-warning'>NO GIS EVIDENCE</span>"
 
     finding_html = (
         f"<div class='{card_class}'>"
