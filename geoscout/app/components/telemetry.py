@@ -36,4 +36,4 @@ def render_telemetry(state: AgentState) -> None:
             f"Call #{c.call_number}: {c.total_tokens or 0:,} tokens ({(c.latency_ms or 0.0):.1f}ms)"
             for c in state.llm_calls
         ]
-        st.caption(" **LLM breakdown:** " + " · ".join(token_details))
+        st.caption("**LLM breakdown:** " + " · ".join(token_details))

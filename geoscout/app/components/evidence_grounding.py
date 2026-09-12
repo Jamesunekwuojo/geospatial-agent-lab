@@ -29,7 +29,7 @@ def render_evidence_grounding(state: AgentState) -> None:
             "<div style='background: rgba(244, 162, 97, 0.08); border: 1px solid #F4A261; "
             "border-radius: 6px; padding: 12px; margin-top: 6px; "
             "font-size: 0.85rem; color: #F5F7FA;'>"
-            "<strong style='color: #F4A261;'> No GIS Evidence Collected</strong><br/>"
+            "<strong style='color: #F4A261;'>No GIS Evidence Collected</strong><br/>"
             "The agent did not invoke deterministic tools for this query. "
             "No structured spatial observations are available to ground the response."
             "</div>",
