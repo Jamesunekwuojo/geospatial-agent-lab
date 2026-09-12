@@ -11,7 +11,7 @@ EXAMPLE_QUESTIONS = [
 ]
 
 
-def render_question_input() -> tuple[str, bool]:
+def render_question_input(is_running: bool = False) -> tuple[str, bool]:
     """Render the research question input area and run trigger."""
     st.markdown(
         "<h3 style='font-size: 1.2rem; margin-bottom: 6px;'>Research Question</h3>",
@@ -32,6 +32,7 @@ def render_question_input() -> tuple[str, bool]:
         height=90,
         label_visibility="collapsed",
         key="question_input",
+        disabled=is_running,
     )
 
     col_select, col_btn = st.columns([3, 2])
@@ -43,13 +44,16 @@ def render_question_input() -> tuple[str, bool]:
             key="example_select_widget",
             on_change=_sync_example_question,
             label_visibility="collapsed",
+            disabled=is_running,
         )
 
     with col_btn:
+        btn_label = "Running Analysis..." if is_running else "Run Geospatial Analysis"
         run_clicked = st.button(
-            "Run Geospatial Analysis",
+            btn_label,
             type="primary",
             use_container_width=True,
+            disabled=is_running,
         )
 
     return question.strip(), run_clicked

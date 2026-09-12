@@ -89,9 +89,7 @@ def render_evidence_grounding(state: AgentState) -> None:
                 "margin-bottom: 10px;'>"
                 f'"{claim_text}"'
                 "</div>"
-                "<div style='display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 8px; "
-                "background: #102235; border: 1px solid #1E3348; border-radius: 6px; "
-                "padding: 8px 10px;'>"
+                "<div class='gs-evidence-grid'>"
                 "<div>"
                 "<div style='font-size: 0.70rem; color: #8FA3B8; text-transform: uppercase;'>"
                 "Field</div>"

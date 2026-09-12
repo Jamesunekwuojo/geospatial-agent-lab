@@ -254,3 +254,73 @@ def test_empty_state_and_sidebar(mock_markdown):
     render_empty_state()
     with patch("streamlit.sidebar"):
         render_sidebar()
+
+
+@patch("streamlit.button")
+@patch("streamlit.selectbox")
+@patch("streamlit.text_area")
+@patch("streamlit.markdown")
+@patch("streamlit.columns")
+def test_question_input_disabled_when_running(
+    mock_cols, mock_markdown, mock_text_area, mock_selectbox, mock_button
+):
+    """Verify that inputs and run button are disabled when is_running=True."""
+    from app.components.question_input import render_question_input
+
+    mock_cols.return_value = [MagicMock(), MagicMock()]
+    mock_text_area.return_value = "How many cells are degraded?"
+    mock_button.return_value = False
+
+    # When is_running=True
+    render_question_input(is_running=True)
+    _, text_kwargs = mock_text_area.call_args
+    assert text_kwargs["disabled"] is True
+
+    _, select_kwargs = mock_selectbox.call_args
+    assert select_kwargs["disabled"] is True
+
+    btn_args, btn_kwargs = mock_button.call_args
+    assert btn_args[0] == "Running Analysis..."
+    assert btn_kwargs["disabled"] is True
+
+
+def test_repeated_execution_state_isolation():
+    """Verify that successive runs produce independent, un-duplicated state."""
+    # Run 1
+    state1 = AgentState(
+        question="Query 1",
+        tool_calls=[ToolCall(tool_call_id="c1", tool_name="t1", arguments={})],
+        tool_executions=[
+            ToolExecution(tool_call_id="c1", tool_name="t1", success=True, latency_ms=10.0)
+        ],
+        observations=[
+            ToolObservation(tool_call_id="c1", tool_name="t1", result={"degraded_cells": 9})
+        ],
+        llm_calls=[LLMCall(call_number=1, latency_ms=100.0, total_tokens=150)],
+        final_answer="Answer 1",
+    )
+    assert len(state1.tool_calls) == 1
+    assert state1.final_answer == "Answer 1"
+
+    # Run 2 (Simulating a second click with a fresh runner)
+    state2 = AgentState(
+        question="Query 2",
+        tool_calls=[ToolCall(tool_call_id="c2", tool_name="t2", arguments={})],
+        tool_executions=[
+            ToolExecution(tool_call_id="c2", tool_name="t2", success=True, latency_ms=12.0)
+        ],
+        observations=[
+            ToolObservation(tool_call_id="c2", tool_name="t2", result={"mean_change": -0.05})
+        ],
+        llm_calls=[LLMCall(call_number=1, latency_ms=110.0, total_tokens=160)],
+        final_answer="Answer 2",
+    )
+
+    # State 2 should contain strictly 1 tool call, 1 execution, 1 obs, 1 LLM call
+    assert len(state2.tool_calls) == 1
+    assert len(state2.tool_executions) == 1
+    assert len(state2.observations) == 1
+    assert len(state2.llm_calls) == 1
+    assert state2.tool_calls[0].tool_call_id == "c2"
+    assert state2.observations[0].result == {"mean_change": -0.05}
+    assert state2.final_answer == "Answer 2"
